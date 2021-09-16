@@ -20,7 +20,7 @@ define('DB_TABLE_TYPES_SOCIETES', 'type_societe');
 
 
 // get main classes
-include_once 'db/classes/casier.class.php';
+include_once 'db/classes/casier.class.inc.php';
 
 // get main objects
 $oCasier = new Casier();
