@@ -1,12 +1,12 @@
-<?php
+<?php 
 
-class Casier{
+class Etat_Document{
 
     const errmessage = "Une erreur s'est produite, signalez la à l'administrateur \n";
 
     public function db_get_all(){
         global $conn;
-        $request = "SELECT * FROM ".DB_TABLE_CASIER.";";
+        $request = "SELECT * FROM ".DB_TABLE_ETAT_DOCUMENT.";";
 
         try{
             $sql = $conn->query($request);
@@ -16,17 +16,17 @@ class Casier{
         }
     }
 
-    public function db_get_by_id($id=0){
-        $id = (int) $id;
-        if(!$id){
+    public function db_get_by_id($etatdoc_id=0){
+        $etatdoc_id = (int) $etatdoc_id;
+        if(!$etatdoc_id){
             return false;
         }
 
         global $conn;
 
-        $request = "SELECT * FROM ".DB_TABLE_CASIER." WHERE cas_ID = :id";
+        $request = "SELECT * FROM ".DB_TABLE_ETAT_DOCUMENT." WHERE eta_ID = :id";
         $sql = $conn->prepare($request);
-        $sql->bindValue(':id', $id, PDO::PARAM_INT);
+        $sql->bindValue(':id', $etatdoc_id, PDO::PARAM_INT);
 
         try{
             $sql->execute();
@@ -43,7 +43,7 @@ class Casier{
         }
 
         global $conn;
-        $request = "INSERT INTO ".DB_TABLE_CASIER." (cas_lib) VALUES(:libelle);";
+        $request = "INSERT INTO ".DB_TABLE_ETAT_DOCUMENT." (eta_lib) VALUES(:libelle);";
         $sql = $conn->prepare($request);
         $sql->bindValue(':libelle', $libelle, PDO::PARAM_STR);
 
@@ -55,18 +55,18 @@ class Casier{
         }
     }
 
-    public function db_update_lib($casier_id=0, $newlib=''){
-        $casier_id = (int) $casier_id;
-        if(!$casier_id || !$newlib){
+    public function db_update_lib($etatdoc_id=0, $newlib=''){
+        $etatdoc_id = (int) $etatdoc_id;
+        if(!$etatdoc_id || !$newlib){
             return false;
         }
 
         global $conn;
 
-        $request = "UPDATE ".DB_TABLE_CASIER." SET cas_lib = :libelle WHERE cas_ID = :id";
+        $request = "UPDATE ".DB_TABLE_ETAT_DOCUMENT." SET eta_lib = :libelle WHERE eta_ID = :id";
         $sql = $conn->prepare($request);
         $sql->bindValue(':libelle', $newlib, PDO::PARAM_STR);
-        $sql->bindValue(':id', $casier_id, PDO::PARAM_INT);
+        $sql->bindValue(':id', $etatdoc_id, PDO::PARAM_INT);
         try{
             $sql->execute();
             return true;
@@ -75,18 +75,18 @@ class Casier{
         }
     }
 
-    public function db_soft_delete_one($casier_id=0){
-        $casier_id = (int) $casier_id;
+    public function db_soft_delete_one($etatdoc_id=0){
+        $etatdoc_id = (int) $etatdoc_id;
 
-        if(!$casier_id) {
+        if(!$etatdoc_id) {
             return false;
         }
 
         global $conn;
 
-        $request = "UPDATE ".DB_TABLE_CASIER." SET cas_is_visible = 0 WHERE cas_ID = :id;";
+        $request = "UPDATE ".DB_TABLE_ETAT_DOCUMENT." SET eta_is_visible = 0 WHERE eta_ID = :id;";
         $sql = $conn->prepare($request);
-        $sql->bindValue(':id', $casier_id, PDO::PARAM_INT);
+        $sql->bindValue(':id', $etatdoc_id, PDO::PARAM_INT);
         try{
             $sql->execute();
             return true;
@@ -110,7 +110,7 @@ class Casier{
 
         $list_id = implode(',', $id_array);
 
-        $request = "UPDATE ".DB_TABLE_CASIER." SET cas_is_visible = 0 WHERE cas_ID IN (:list_id)";
+        $request = "UPDATE ".DB_TABLE_ETAT_DOCUMENT." SET eta_is_visible = 0 WHERE eta_ID IN (:list_id)";
         $sql = $conn->prepare($request);
         $sql->bindValue(':list_id', $list_id, PDO::PARAM_STR);
         try{
@@ -124,7 +124,7 @@ class Casier{
     public function db_soft_delete_all(){
         global $conn;
 
-        $request = "UPDATE ".DB_TABLE_CASIER." SET cas_is_visible = 0";
+        $request = "UPDATE ".DB_TABLE_ETAT_DOCUMENT." SET eta_is_visible = 0";
         $sql = $conn->prepare($request);
         try{
             $sql->execute();

@@ -1,12 +1,12 @@
 <?php
 
-class Casier{
+class Categorie{
 
     const errmessage = "Une erreur s'est produite, signalez la à l'administrateur \n";
 
     public function db_get_all(){
         global $conn;
-        $request = "SELECT * FROM ".DB_TABLE_CASIER.";";
+        $request = "SELECT * FROM ".DB_TABLE_CATEGORIE.";";
 
         try{
             $sql = $conn->query($request);
@@ -16,17 +16,17 @@ class Casier{
         }
     }
 
-    public function db_get_by_id($id=0){
-        $id = (int) $id;
-        if(!$id){
+    public function db_get_by_id($categorie_id=0){
+        $categorie_id = (int) $categorie_id;
+        if(!$categorie_id){
             return false;
         }
 
         global $conn;
 
-        $request = "SELECT * FROM ".DB_TABLE_CASIER." WHERE cas_ID = :id";
+        $request = "SELECT * FROM ".DB_TABLE_CATEGORIE." WHERE cat_ID = :id";
         $sql = $conn->prepare($request);
-        $sql->bindValue(':id', $id, PDO::PARAM_INT);
+        $sql->bindValue(':id', $categorie_id, PDO::PARAM_INT);
 
         try{
             $sql->execute();
@@ -36,16 +36,17 @@ class Casier{
         }
     }
 
-    public function db_create($libelle=''){
+    public function db_create($nom='', $description=''){
 
-        if(!$libelle){
+        if(!$nom || !$description){
             return false;
         }
 
         global $conn;
-        $request = "INSERT INTO ".DB_TABLE_CASIER." (cas_lib) VALUES(:libelle);";
+        $request = "INSERT INTO ".DB_TABLE_CATEGORIE." (cat_nom, cat_decription) VALUES(:nom, :description);";
         $sql = $conn->prepare($request);
-        $sql->bindValue(':libelle', $libelle, PDO::PARAM_STR);
+        $sql->bindValue(':nom', $nom, PDO::PARAM_STR);
+        $sql->bindValue(':description', $description, PDO::PARAM_STR);
 
         try{
             $sql->execute();
@@ -55,18 +56,38 @@ class Casier{
         }
     }
 
-    public function db_update_lib($casier_id=0, $newlib=''){
-        $casier_id = (int) $casier_id;
-        if(!$casier_id || !$newlib){
+    public function db_update_nom($categorie_id=0, $newnom=''){
+        $categorie_id = (int) $categorie_id;
+        if(!$categorie_id || !$newnom){
             return false;
         }
 
         global $conn;
 
-        $request = "UPDATE ".DB_TABLE_CASIER." SET cas_lib = :libelle WHERE cas_ID = :id";
+        $request = "UPDATE ".DB_TABLE_CATEGORIE." SET cat_nom = :nom WHERE cat_ID = :id";
         $sql = $conn->prepare($request);
-        $sql->bindValue(':libelle', $newlib, PDO::PARAM_STR);
-        $sql->bindValue(':id', $casier_id, PDO::PARAM_INT);
+        $sql->bindValue(':nom', $newnom, PDO::PARAM_STR);
+        $sql->bindValue(':id', $categorie_id, PDO::PARAM_INT);
+        try{
+            $sql->execute();
+            return true;
+        }catch(PDOException $e){
+            return $this->errmessage.$e->getMessage();
+        }
+    }
+
+    public function db_update_description($categorie_id=0, $newdescription=''){
+        $categorie_id = (int) $categorie_id;
+        if(!$categorie_id || !$newdescription){
+            return false;
+        }
+
+        global $conn;
+
+        $request = "UPDATE ".DB_TABLE_CATEGORIE." SET cat_description = :description WHERE cat_ID = :id";
+        $sql = $conn->prepare($request);
+        $sql->bindValue(':description', $newdescription, PDO::PARAM_STR);
+        $sql->bindValue(':id', $categorie_id, PDO::PARAM_INT);
         try{
             $sql->execute();
             return true;
@@ -84,7 +105,7 @@ class Casier{
 
         global $conn;
 
-        $request = "UPDATE ".DB_TABLE_CASIER." SET cas_is_visible = 0 WHERE cas_ID = :id;";
+        $request = "UPDATE ".DB_TABLE_CATEGORIE." SET cat_is_visible = 0 WHERE cat_ID = :id;";
         $sql = $conn->prepare($request);
         $sql->bindValue(':id', $casier_id, PDO::PARAM_INT);
         try{
@@ -110,7 +131,7 @@ class Casier{
 
         $list_id = implode(',', $id_array);
 
-        $request = "UPDATE ".DB_TABLE_CASIER." SET cas_is_visible = 0 WHERE cas_ID IN (:list_id)";
+        $request = "UPDATE ".DB_TABLE_CATEGORIE." SET cat_is_visible = 0 WHERE cat_ID IN (:list_id)";
         $sql = $conn->prepare($request);
         $sql->bindValue(':list_id', $list_id, PDO::PARAM_STR);
         try{
@@ -124,7 +145,7 @@ class Casier{
     public function db_soft_delete_all(){
         global $conn;
 
-        $request = "UPDATE ".DB_TABLE_CASIER." SET cas_is_visible = 0";
+        $request = "UPDATE ".DB_TABLE_CATEGORIE." SET cat_is_visible = 0";
         $sql = $conn->prepare($request);
         try{
             $sql->execute();
