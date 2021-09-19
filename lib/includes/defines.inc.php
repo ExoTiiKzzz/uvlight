@@ -30,6 +30,9 @@ include_once DB_CLASS_DIR.'tarif.class.inc.php';
 include_once DB_CLASS_DIR.'type_reglement.class.inc.php';
 include_once DB_CLASS_DIR.'type_societe.class.inc.php';
 include_once DB_CLASS_DIR.'article.class.inc.php';
+include_once DB_CLASS_DIR.'articlequantite.class.inc.php';
+include_once DB_CLASS_DIR.'communes.class.inc.php';
+include_once DB_CLASS_DIR.'compose.class.inc.php';
 
 // get main objects
 $oCasier = new Casier();
@@ -39,4 +42,6 @@ $oTarif = new Tarif();
 $oTypeReglement = new Type_Reglement();
 $oTypeSociete = new Type_Societe();
 $oArticle = new Article();
+$oCommunes = new Communes();
+$oCompose = new Compose();
 ?>
