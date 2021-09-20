@@ -5,7 +5,7 @@
 define('DB_TABLE_ARTICLE', 'article');
 define('DB_TABLE_CASIER', 'casier');
 define('DB_TABLE_CATEGORIE', 'categorie');
-define('DB_TABLE_COMMUNES', 'communes');
+define('DB_TABLE_COMMUNES', 'cities');
 define('DB_TABLE_COMPOSE', 'compose');
 define('DB_TABLE_DEPEND', 'depend');
 define('DB_TABLE_DOCUMENT', 'document');
@@ -17,6 +17,8 @@ define('DB_TABLE_TARIF', 'tarif');
 define('DB_TABLE_TIERS', 'tiers');
 define('DB_TABLE_TYPE_REGLEMENT', 'type_reglement');
 define('DB_TABLE_TYPE_SOCIETE', 'type_societe');
+define('DB_TABLE_REGION', 'regions');
+define('DB_TABLE_DEPARTEMENT', 'departments');
 
 //define paths
 define('DB_CLASS_DIR', 'db/classes/');
@@ -33,6 +35,8 @@ include_once DB_CLASS_DIR.'article.class.inc.php';
 include_once DB_CLASS_DIR.'articlequantite.class.inc.php';
 include_once DB_CLASS_DIR.'communes.class.inc.php';
 include_once DB_CLASS_DIR.'compose.class.inc.php';
+include_once DB_CLASS_DIR.'region.class.inc.php';
+include_once DB_CLASS_DIR.'departement.class.inc.php';
 
 // get main objects
 $oCasier = new Casier();
@@ -44,4 +48,19 @@ $oTypeSociete = new Type_Societe();
 $oArticle = new Article();
 $oCommunes = new Communes();
 $oCompose = new Compose();
+$oRegion = new Region();
+$oDepartement = new Departement();
+
+try {
+    $server = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "glbi";
+
+    // connect to DB
+    $conn = new PDO("mysql:host=$server;dbname=$dbname","$username","$password");
+}
+catch (PDOException $e) {
+    //throw $th;
+}
 ?>

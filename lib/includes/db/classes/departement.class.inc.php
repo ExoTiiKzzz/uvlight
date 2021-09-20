@@ -1,12 +1,14 @@
-<?php
+<?php 
 
-class Casier{
+class Departement{
 
     const errmessage = "Une erreur s'est produite, signalez la à l'administrateur \n";
 
     public function db_get_all(){
         global $conn;
-        $request = "SELECT * FROM ".DB_TABLE_CASIER." WHERE cas_is_visible=1;";
+        $request = "SELECT * FROM ".DB_TABLE_DEPARTEMENT." 
+        INNER JOIN ".DB_TABLE_REGION." ON ".DB_TABLE_DEPARTEMENT.".d_region_code = ".DB_TABLE_REGION.".code
+        WHERE ".DB_TABLE_DEPARTEMENT.".is_visible = 1 ORDER BY d_name ";
 
         try{
             $sql = $conn->query($request);
@@ -24,7 +26,7 @@ class Casier{
 
         global $conn;
 
-        $request = "SELECT * FROM ".DB_TABLE_CASIER." WHERE cas_ID = :id";
+        $request = "SELECT * FROM ".DB_TABLE_DEPARTEMENT." WHERE d_id = :id";
         $sql = $conn->prepare($request);
         $sql->bindValue(':id', $id, PDO::PARAM_INT);
 
@@ -36,16 +38,19 @@ class Casier{
         }
     }
 
-    public function db_create($libelle=''){
-
-        if(!$libelle){
+    public function db_create($code=0, $libelle='', $region_id=0){
+        $code = (int) $code;
+        if(!$libelle || !$code){
             return false;
         }
 
         global $conn;
-        $request = "INSERT INTO ".DB_TABLE_CASIER." (cas_lib) VALUES(:libelle);";
+        $request = "INSERT INTO ".DB_TABLE_DEPARTEMENT." (d_code, d_name, d_region_code, d_slug) VALUES(:code, :libelle, :region_id, :slug);";
         $sql = $conn->prepare($request);
+        $sql->bindValue(':code', $code, PDO::PARAM_INT);
         $sql->bindValue(':libelle', $libelle, PDO::PARAM_STR);
+        $sql->bindValue(':slug', strtolower($libelle), PDO::PARAM_STR);
+        $sql->bindValue(':region_id', $region_id, PDO::PARAM_INT);
 
         try{
             $sql->execute();
@@ -55,18 +60,20 @@ class Casier{
         }
     }
 
-    public function db_update_lib($casier_id=0, $newlib=''){
-        $casier_id = (int) $casier_id;
-        if(!$casier_id || !$newlib){
+    public function db_update_one($departement_id=0, $newlib=''){
+       $departement_id = (int) $departement_id;
+        if(!$departement_id){
             return false;
         }
 
         global $conn;
 
-        $request = "UPDATE ".DB_TABLE_CASIER." SET cas_lib = :libelle WHERE cas_ID = :id";
+        $request = "UPDATE ".DB_TABLE_DEPARTEMENT." SET d_name = :libelle, d_slug = :slug WHERE d_id = :id";
         $sql = $conn->prepare($request);
+        $slug = strtolower($newlib);
         $sql->bindValue(':libelle', $newlib, PDO::PARAM_STR);
-        $sql->bindValue(':id', $casier_id, PDO::PARAM_INT);
+        $sql->bindValue(':slug', $slug, PDO::PARAM_STR);
+        $sql->bindValue(':id', $departement_id, PDO::PARAM_INT);
         try{
             $sql->execute();
             return true;
@@ -75,18 +82,18 @@ class Casier{
         }
     }
 
-    public function db_soft_delete_one($casier_id=0){
-        $casier_id = (int) $casier_id;
+    public function db_soft_delete_one($departement_id=0){
+        $departement_id = (int) $departement_id;
 
-        if(!$casier_id) {
+        if(!$departement_id) {
             return false;
         }
 
         global $conn;
 
-        $request = "UPDATE ".DB_TABLE_CASIER." SET cas_is_visible = 0 WHERE cas_ID = :id;";
+        $request = "UPDATE ".DB_TABLE_DEPARTEMENT." SET is_visible = 0 WHERE d_id = :id;";
         $sql = $conn->prepare($request);
-        $sql->bindValue(':id', $casier_id, PDO::PARAM_INT);
+        $sql->bindValue(':id', $departement_id, PDO::PARAM_INT);
         try{
             $sql->execute();
             return true;
@@ -110,7 +117,7 @@ class Casier{
 
         $list_id = implode(',', $id_array);
 
-        $request = "UPDATE ".DB_TABLE_CASIER." SET cas_is_visible = 0 WHERE cas_ID IN (:list_id)";
+        $request = "UPDATE ".DB_TABLE_DEPARTEMENT." SET cas_is_visible = 0 WHERE cas_ID IN (:list_id)";
         $sql = $conn->prepare($request);
         $sql->bindValue(':list_id', $list_id, PDO::PARAM_STR);
         try{
@@ -124,7 +131,7 @@ class Casier{
     public function db_soft_delete_all(){
         global $conn;
 
-        $request = "UPDATE ".DB_TABLE_CASIER." SET cas_is_visible = 0";
+        $request = "UPDATE ".DB_TABLE_DEPARTEMENT." SET cas_is_visible = 0";
         $sql = $conn->prepare($request);
         try{
             $sql->execute();
@@ -134,4 +141,5 @@ class Casier{
         }
     }
 }
+
 ?>
