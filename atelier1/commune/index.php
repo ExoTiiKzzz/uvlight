@@ -16,9 +16,6 @@ require '../../lib/includes/defines.inc.php';
 <?php
     if(!isset($_GET["nav"]) || $_GET["nav"] === "read"){
 
-        $data = $oCommunes->db_get_all();
-        // var_dump($data);
-
   ?>
     <a href="index.php?nav=create">Créer une nouvelle commune</a>
 
@@ -32,25 +29,6 @@ require '../../lib/includes/defines.inc.php';
             <th>Longitude</th>
             <th>Actions</th>
         </thead>
-        <tbody>
-            <?php 
-                foreach ($data as $key) {
-                    $id = $key["c_id"];
-                    echo "<tr>
-                    <td><center>".$key["insee_code"]."</center></td>
-                    <td><center>".$key["zip_code"]."</center></td>
-                    <td><center>".$key["d_name"]."</center></td>
-                    <td><center>".$key["c_name"]."</center></td>
-                    <td><center>".$key["gps_lat"]."</center></td>
-                    <td><center>".$key["gps_lng"]."</center></td>
-                    <td style='display:flex; justify-content: space-evenly;'>
-                        <a href='index.php?nav=update&id=$id'>Modifier</a>
-                        <a href='index.php?nav=delete&id=$id'>Supprimer</a>
-                    </td>
-                    </tr>";
-                }
-            ?>
-        </tbody>
     </table>
 
     <!-- jQuery Library -->
@@ -61,7 +39,26 @@ require '../../lib/includes/defines.inc.php';
 
     <script> //initialisation datatable
         $(document).ready(function(){
-            $('#table').DataTable();
+            $('#table').DataTable({
+                'processing': true,
+                'serverSide': true,
+                'serverMethod': 'post',
+                'ajax': {
+                    'url':'ajaxfile.php'
+                },
+                'columns': [
+                    { data: 'insee_code' },
+                    { data: 'zip_code' },
+                    { data: 'd_name' },
+                    { data: 'c_name' },
+                    { data: 'gps_lat' },
+                    { data: 'gps_lng' },
+                    { data: 'actions' }
+                ],
+                deferRender:    true,
+                scrollCollapse: true,
+                scroller:       true
+            });
         });
     </script>
 
@@ -94,19 +91,23 @@ require '../../lib/includes/defines.inc.php';
         $data = $oCommunes->db_get_by_id($_GET["id"]);
         ?>
             <form action="trait.php" method="post">
-                <input type="text" name="departement_name" value="<?php echo $data["d_name"]; ?>">
-                <input type="hidden" name="departement_id" value="<?php echo $_GET["id"]; ?>">
+                <input type="hidden" name="city_id" value="<?php echo $data["c_id"] ?>">
+                <input placeholder="Nom de la commune" type="text" name="city_name" value="<?php echo $data["c_name"] ?>">
+                <input placeholder="Code INSEE" type="text" name="insee_code" value="<?php echo $data["insee_code"] ?>">
+                <input placeholder="Code ZIP" type="text" name="zip_code" value="<?php echo $data["zip_code"] ?>">
+                <input placeholder="latitude" type="text" name="lat" value="<?php echo $data["gps_lat"] ?>">
+                <input placeholder="longitude" type="text" name="lng" value="<?php echo $data["gps_lng"] ?>">
                 <button name="update" type="submit">Enregistrer</button>
             </form>
         <?php
 
     }
     elseif($_GET["nav"] === "delete"){
-        $data = $oDepartement->db_get_by_id($_GET["id"]);
+        $data = $oCommunes->db_get_by_id($_GET["id"]);
         ?>
             <form action="trait.php" method="post">
-                <input disabled type="text" name="departement_name" value="<?php echo $data["d_name"]; ?>">
-                <input type="hidden" name="departement_id" value="<?php echo $_GET["id"]; ?>">
+                <input disabled type="text" name="city_name" value="<?php echo $data["c_name"]; ?>">
+                <input type="hidden" name="city_id" value="<?php echo $_GET["id"]; ?>">
                 <button name="delete" type="submit">Supprimer</button>
             </form>
         <?php

@@ -39,8 +39,8 @@ class Communes{
 	public function db_create($inseecode=0, $zipcode=0 , $libelle='', $departement_code=0, $lat = '', $lng = ''){
 
         global $conn;
-        $request = "INSERT INTO ".DB_TABLE_COMMUNES." (department_code, insee_code, zip_code, c_name, gps_lat, gps_lng) 
-		VALUES(:department_code, :insee_code, :zip_code, :name, :lat, :lng);";
+        $request = "INSERT INTO ".DB_TABLE_COMMUNES." (department_code, insee_code, zip_code, c_name, c_slug , gps_lat, gps_lng) 
+		VALUES(:department_code, :insee_code, :zip_code, :name, :slug, :lat, :lng);";
         $sql = $conn->prepare($request);
         $sql->bindValue(':department_code', $departement_code, PDO::PARAM_STR);
         $sql->bindValue(':insee_code', $inseecode, PDO::PARAM_STR);
@@ -58,20 +58,23 @@ class Communes{
         }
     }
 
-    public function db_update_one($departement_id=0, $newlib=''){
-       $departement_id = (int) $departement_id;
-        if(!$departement_id){
+    public function db_update_one($commune_id=0, $newlib='', $inseecode='', $zipcode='', $lat='', $lng=''){
+       $commune_id = (int) $commune_id;
+        if(!$commune_id){
             return false;
         }
 
         global $conn;
 
-        $request = "UPDATE ".DB_TABLE_COMMUNES." SET d_name = :libelle, d_slug = :slug WHERE d_id = :id";
+        $request = "UPDATE ".DB_TABLE_COMMUNES." SET c_name = :name, c_slug = :slug, insee_code = :insee_code, zip_code= :zip_code, gps_lat= :lat, gps_lng=:lng  WHERE c_id = :commune_id";
         $sql = $conn->prepare($request);
-        $slug = strtolower($newlib);
-        $sql->bindValue(':libelle', $newlib, PDO::PARAM_STR);
-        $sql->bindValue(':slug', $slug, PDO::PARAM_STR);
-        $sql->bindValue(':id', $departement_id, PDO::PARAM_INT);
+        $sql->bindValue(':commune_id', $commune_id, PDO::PARAM_STR);
+        $sql->bindValue(':insee_code', $inseecode, PDO::PARAM_STR);
+        $sql->bindValue(':zip_code', $zipcode, PDO::PARAM_STR);
+        $sql->bindValue(':name', $newlib, PDO::PARAM_STR);
+        $sql->bindValue(':slug', strtolower($newlib), PDO::PARAM_STR);
+        $sql->bindValue(':lat', $lat, PDO::PARAM_STR);
+        $sql->bindValue(':lng', $lng, PDO::PARAM_STR);
         try{
             $sql->execute();
             return true;
@@ -80,18 +83,18 @@ class Communes{
         }
     }
 
-    public function db_soft_delete_one($departement_id=0){
-        $departement_id = (int) $departement_id;
+    public function db_soft_delete_one($commune_id=0){
+        $commune_id = (int) $commune_id;
 
-        if(!$departement_id) {
+        if(!$commune_id) {
             return false;
         }
 
         global $conn;
 
-        $request = "UPDATE ".DB_TABLE_COMMUNES." SET is_visible = 0 WHERE d_id = :id;";
+        $request = "UPDATE ".DB_TABLE_COMMUNES." SET c_is_visible = 0 WHERE c_id = :id;";
         $sql = $conn->prepare($request);
-        $sql->bindValue(':id', $departement_id, PDO::PARAM_INT);
+        $sql->bindValue(':id', $commune_id, PDO::PARAM_INT);
         try{
             $sql->execute();
             return true;

@@ -30,7 +30,7 @@ class Compose{
 		$sql->bindValue(':article_id', $article_id, PDO::PARAM_INT);
 
 		try{
-			$sql = $conn->excute($request);
+			$sql->execute();
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}catch(PDOException $e){
 			return $this->errmessage.$e->getMessage();
@@ -51,7 +51,7 @@ class Compose{
 		$sql->bindValue(':produit_id', $produit_id, PDO::PARAM_INT);
 
 		try{
-			$sql = $conn->excute($request);
+			$sql->execute();
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}catch(PDOException $e){
 			return $this->errmessage.$e->getMessage();
