@@ -8,10 +8,10 @@ if(isset($_POST["create"])){
     if($req){
         echo $_POST["departement_code"] ,$_POST["departement_name"], $_POST["region_id"];
         ?>
-            <!-- <script>
+            <script>
                 alert("Cela a fonctionné")
                 window.location.replace("http://localhost/uvlight/atelier1/departement/index.php?nav=read");
-            </script> -->
+            </script>
         <?php
     }
 }elseif(isset($_POST["update"])){

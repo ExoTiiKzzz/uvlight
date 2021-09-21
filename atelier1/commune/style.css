@@ -1,0 +1,68 @@
+.table{
+    margin-bottom: 100px;
+}
+table thead{
+    background:#E8F4FA;
+    color: #213140;
+}
+table td, th {
+    text-align: center;
+    border: none !important;
+}
+table td a:hover{
+    text-decoration: none;
+}
+table th{
+    text-align: center;
+    cursor: pointer;
+}
+.dataTables_wrapper{
+    color: #213140;
+    width: 100%;
+}
+.dataTables_length{
+    display:inline-block;
+}
+.dataTables_length select{
+    outline: none;
+    background: none;
+    border: none;
+}
+.dataTables_filter{
+    display:inline-block;
+    float: right;
+}
+.dataTables_filter i {
+    color: #213140;
+}
+.dataTables_filter input{
+    border-radius: 6px;
+    padding: 5px;
+    outline: none;
+    border: 1px solid #E8F4FA;
+    color: #213140;
+    margin-left: 10px;
+}
+.dataTables_info{
+    display:none;
+}
+.dataTables_paginate{
+    display:inline-block;
+    float:right;
+}
+.dataTables_paginate a{
+    font-weight: 500;
+    margin:0 10px;
+    cursor: pointer;
+    text-decoration:none;
+    color: #213140;
+}
+.dataTables_paginate a i {
+    color: #213140;
+}
+.fa-trash-alt{
+    color:red;
+}
+.fa-share-square{
+    color: blue;
+}

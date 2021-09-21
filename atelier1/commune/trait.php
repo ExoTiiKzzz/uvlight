@@ -9,7 +9,7 @@ if(isset($_POST["create"])){
         ?>
             <script>
                 alert("Cela a fonctionné")
-                window.location.replace("http://localhost/uvlight/uvlight/atelier1/commune/index.php?nav=read");
+                window.location.replace("http://localhost/uvlight/atelier1/commune/index.php?nav=read");
             </script>
         <?php
     }
@@ -19,7 +19,7 @@ if(isset($_POST["create"])){
         ?>
             <script>
                 alert("Cela a fonctionné")
-                window.location.replace("http://localhost/uvlight/uvlight/atelier1/commune/index.php?nav=read");
+                window.location.replace("http://localhost/uvlight/atelier1/commune/index.php?nav=read");
             </script>
         <?php
     }
@@ -29,7 +29,7 @@ if(isset($_POST["create"])){
         ?>
             <script>
                 alert("Cela a fonctionné")
-                window.location.replace("http://localhost/uvlight/uvlight/atelier1/commune/index.php?nav=read");
+                window.location.replace("http://localhost/uvlight/atelier1/commune/index.php?nav=read");
             </script>
         <?php
     }

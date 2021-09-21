@@ -57,8 +57,8 @@ $data = array();
 
 foreach($empRecords as $row){
     $id = $row["c_id"];
-    $actionrow = "<div style='display: flex; justify-content: space-evenly'><a href='index.php?nav=update&id=$id'>Modifier</a><a href='index.php?nav=delete&id=$id'>Supprimer</a></div>";
-   $data[] = array(
+    $actionrow = "<div style='display: flex; justify-content: space-evenly'><a href='index.php?nav=update&id=$id'><i class='fas fa-edit'></i></a><a href='index.php?nav=delete&id=$id'><i class='fas fa-trash-alt'></i></a></div>";
+    $data[] = array(
       "insee_code"=>$row['insee_code'],
       "zip_code"=>$row['zip_code'],
       "c_name"=>$row['c_name'],

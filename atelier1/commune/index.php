@@ -8,7 +8,16 @@ require '../../lib/includes/defines.inc.php';
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.2/datatables.min.css"/>
+    <script src="autocomplete.js"></script>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
+    <!-- jQuery Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
+
+    <!-- Datatable JS -->
+    <script type="text/javascript" src="../script/jquery.dataTables.min.js"></script>
     <title>Departement</title>
 </head>
 <body>
@@ -17,7 +26,8 @@ require '../../lib/includes/defines.inc.php';
     if(!isset($_GET["nav"]) || $_GET["nav"] === "read"){
 
   ?>
-    <a href="index.php?nav=create">Créer une nouvelle commune</a>
+  <div class="container pt-5">
+    <a class="btn btn-success mb-4" href="index.php?nav=create">Créer une nouvelle commune</a>
 
     <table id="table">
         <thead>
@@ -30,12 +40,8 @@ require '../../lib/includes/defines.inc.php';
             <th>Actions</th>
         </thead>
     </table>
-
-    <!-- jQuery Library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-    <!-- Datatable JS -->
-    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.2/datatables.min.js"></script>
+  </div>
+    
 
     <script> //initialisation datatable
         $(document).ready(function(){
@@ -75,13 +81,9 @@ require '../../lib/includes/defines.inc.php';
                 <input placeholder="Code ZIP" type="text" name="zip_code">
                 <input placeholder="latitude" type="text" name="lat">
                 <input placeholder="longitude" type="text" name="lng">
-                <select name="departement_id" id="departement">
-                    <?php 
-                        foreach ($departements as $key) {
-                            echo "<option value=".$key["d_code"].">".$key["d_name"]."</option>";
-                        }
-                    ?>
-                </select>
+                <label for="">Departement</label>
+                    <input type="text" id="departement" class="form-control" name='departement' onkeyup="autocomplet()">
+                    <datalist id="departement_list" type="text"  placeholder="Departement" required></datalist>
                 <button name="create" type="submit">Enregistrer</button>
             </form>
 
