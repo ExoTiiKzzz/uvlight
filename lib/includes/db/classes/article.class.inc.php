@@ -146,9 +146,8 @@ class Article{
 		global $conn;
 
 		$request = "UPDATE ".DB_TABLE_ARTICLE." SET art_is_visible = 0";
-		$sql = $conn->prepare($request);
 		try{
-			$sql->query($request);
+			$conn->query($request);
 			return true;
 		}catch(PDOException $e){
 			return $this->errmessage.$e->getMessage();

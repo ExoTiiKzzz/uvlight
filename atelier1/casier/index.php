@@ -9,6 +9,7 @@ require '../../lib/includes/defines.inc.php';
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.2/datatables.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
     <title>Casiers</title>
 </head>
 <body>
@@ -16,22 +17,25 @@ require '../../lib/includes/defines.inc.php';
 <?php
     if(!isset($_GET["nav"]) || $_GET["nav"] === "read"){
 
-        $data = $oRegion->db_get_all();
+        $data = $oCasier->db_get_all();
 
   ?>
     <a href="index.php?nav=create">Créer un nouveau casier</a>
 
     <table id="table">
         <thead>
-            <th>ID</th>
-            <th>Lib</th>
-            <th>Actions</th>
+            <th>Selectionner</th>
+            <th style='text-align :center'>ID</th>
+            <th style='text-align :center'>Lib</th>
+            <th style='text-align :center'>Actions</th>
         </thead>
         <tbody>
             <?php 
                 foreach ($data as $key) {
                     $id = $key["cas_ID"];
                     echo "<tr>
+                    <td style='width: 5%'>
+                    <input type='checkbox' data-index=".$id."></td>
                     <td><center>".$id."</center></td>
                     <td><center>".$key["cas_lib"]."</center></td>
                     <td style='display:flex; justify-content: space-evenly;'>
@@ -43,6 +47,11 @@ require '../../lib/includes/defines.inc.php';
             ?>
         </tbody>
     </table>
+    <div class="operations-div" style="display: flex; justify-content: space-evenly">
+        <button style="" class="btn btn-danger delete">
+            Supprimer les éléments selectionnés.
+        </button>
+    </div>
 
     <!-- jQuery Library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
