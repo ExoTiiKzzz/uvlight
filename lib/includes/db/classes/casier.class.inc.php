@@ -108,13 +108,12 @@ class Casier{
 
         global $conn;
 
-        $list_id = implode(',', $id_array);
+        $variables = $id_array;
+        $placeholders = str_repeat ('?, ',  count ($variables) - 1) . '?';
 
-        $request = "UPDATE ".DB_TABLE_CASIER." SET cas_is_visible = 0 WHERE cas_ID IN (:list_id)";
-        $sql = $conn->prepare($request);
-        $sql->bindValue(':list_id', $list_id, PDO::PARAM_STR);
+        $sql = $conn -> prepare ("UPDATE ".DB_TABLE_CASIER." SET cas_is_visible = 0 WHERE cas_ID IN($placeholders)");
         try{
-            $sql->execute();
+            $sql->execute($variables);
             return true;
         }catch(PDOException $e){
             return $this->errmessage.$e->getMessage();

@@ -10,99 +10,117 @@ require '../../lib/includes/defines.inc.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.2/datatables.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="../static/css/table.css">
     <title>Casiers</title>
 </head>
 <body>
-
+    <script> 
+        const url = "trait.php";
+    </script>
 <?php
-    if(!isset($_GET["nav"]) || $_GET["nav"] === "read"){
 
         $data = $oCasier->db_get_all();
 
   ?>
-    <a href="index.php?nav=create">Créer un nouveau casier</a>
+  <form action="trait.php" method="post">
+        <div class="form-group row col-4 p-4">
+            <input class="form-control col-6 mr-3" type="text" name="casier_name" placeholder="Nom du casier">
+            <button class="btn btn-success col-5" name="create" type="submit">Créer un casier</button>
+        </div>
+    </form>
 
-    <table id="table">
-        <thead>
-            <th>Selectionner</th>
-            <th style='text-align :center'>ID</th>
-            <th style='text-align :center'>Lib</th>
-            <th style='text-align :center'>Actions</th>
-        </thead>
-        <tbody>
-            <?php 
-                foreach ($data as $key) {
-                    $id = $key["cas_ID"];
-                    echo "<tr>
-                    <td style='width: 5%'>
-                    <input type='checkbox' data-index=".$id."></td>
-                    <td><center>".$id."</center></td>
-                    <td><center>".$key["cas_lib"]."</center></td>
-                    <td style='display:flex; justify-content: space-evenly;'>
-                        <a href='index.php?nav=update&id=$id'>Modifier</a>
-                        <a href='index.php?nav=delete&id=$id'>Supprimer</a>
-                    </td>
-                    </tr>";
-                }
-            ?>
-        </tbody>
-    </table>
+    <div class="table-container p-3">
+        <table id="table">
+            <thead>
+                <th>Selectionner</th>
+                <th style='text-align :center'>ID</th>
+                <th style='text-align :center'>Lib</th>
+                <th style='text-align :center'>Actions</th>
+            </thead>
+            <tbody>
+                <?php 
+                    foreach ($data as $key) {
+                        $id = $key["cas_ID"]; ?>
+                        <tr data-value="<?php echo $id ?>">
+                        <td style='width: 5%'>
+                        <input type='checkbox' class='checkbox' data-index="<?php echo $id ?>" checked='false'></td>
+                        <td><center><?php echo $id ?></center></td>
+                        <td><center><?php echo $key["cas_lib"] ?></center></td>
+                        <td style='display:flex; justify-content: space-evenly;'>
+                            <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modal<?php echo $id ?>'>
+                                Modifier
+                            </button>
+                            <form action="trait.php" method="post">
+                                <input type="hidden" name="casier_id" value="<?php echo $id ?>">
+                                <button type="submit" name="delete" class="delete-btn btn btn-danger">Supprimer</button>
+                            </form>
+                        </td>
+                        </tr>
+                        <?php
+                    }
+                ?>
+            </tbody>
+        </table>
+        <input type="checkbox" class="select-all" id="select-all">
+        <label for="select-all" class="form-check-label">Tout sélectionner</label>
+
+    
     <div class="operations-div" style="display: flex; justify-content: space-evenly">
-        <button style="" class="btn btn-danger delete">
+        <button class="btn btn-danger delete-all" style="display: none">
             Supprimer les éléments selectionnés.
         </button>
     </div>
+  </div>
+    
+
+    <?php 
+    
+        foreach($data as $key){ ?>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modal<?php echo $key["cas_ID"] ?>" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier le casier</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="trait.php" method="post">
+                            <div class="modal-body form-group">
+                                <input class="col-8 form-control" style="margin: 0 auto" type="text" name="casier_name" value="<?php echo $key["cas_lib"]; ?>">
+                                <input type="hidden" name="casier_id" value="<?php echo $key["cas_ID"]; ?>">
+                            </div>
+                        
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" name="update" class="btn btn-primary">Modifier</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        
+        <?php    
+        }
+
+    ?>
 
     <!-- jQuery Library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <!-- Datatable JS -->
-    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.2/datatables.min.js"></script>
+    <script src="../script/jquery.dataTables.min.js"></script>
+
+    <script src="../script/checkboxes.js"></script>
+    <script src="../script/index.js"></script>
 
     <script> //initialisation datatable
         $(document).ready(function(){
             $('#table').DataTable();
         });
     </script>
-
-    <?php
-    }
-    elseif($_GET['nav'] === "create"){
-        ?>
-            <h1>Créer une région</h1>
-
-            <form action="trait.php" method="post">
-                <input type="text" name="casier_name">
-                <button name="create" type="submit">Enregistrer</button>
-            </form>
-
-        <?php
-    }
-
-    elseif($_GET["nav"] === "update"){
-        $data = $oCasier->db_get_by_id($_GET["id"]);
-        ?>
-            <form action="trait.php" method="post">
-                <input type="text" name="casier_name" value="<?php echo $data["cas_lib"]; ?>">
-                <input type="hidden" name="casier_id" value="<?php echo $_GET["id"]; ?>">
-                <button name="update" type="submit">Enregistrer</button>
-            </form>
-        <?php
-
-    }
-    elseif($_GET["nav"] === "delete"){
-        $data = $oCasier->db_get_by_id($_GET["id"]);
-        ?>
-            <form action="trait.php" method="post">
-                <input disabled type="text" name="casier_name" value="<?php echo $data["cas_lib"]; ?>">
-                <input type="hidden" name="casier_id" value="<?php echo $_GET["id"]; ?>">
-                <button name="delete" type="submit">Supprimer</button>
-            </form>
-        <?php
-
-    }
-    ?>
-
-    
 </body>
 </html>
