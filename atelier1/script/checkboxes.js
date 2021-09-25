@@ -25,6 +25,8 @@ checkboxes.forEach(element => {
         checkboxes.forEach(el => {
             if(el.checked){
                 checked = true;
+            }else{
+                checkboxall.checked = false;
             }
         })
         if(!checked){

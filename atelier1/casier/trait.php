@@ -7,7 +7,7 @@ if(isset($_POST["create"])){
     if(empty($_POST["casier_name"])){
         ?>
             <script>
-                window.location.replace("http://localhost/uvlight/atelier1/casier/index.php?nav=read");
+                window.location.replace("http://localhost/uvlight/atelier1/casier/index.php");
             </script>
         <?php
     }
@@ -15,7 +15,7 @@ if(isset($_POST["create"])){
     if($req){
         ?>
             <script>
-                window.location.replace("http://localhost/uvlight/atelier1/casier/index.php?nav=read");
+                window.location.replace("http://localhost/uvlight/atelier1/casier/index.php");
             </script>
         <?php
     }
@@ -24,7 +24,7 @@ if(isset($_POST["create"])){
     if($req){
         ?>
             <script>
-                window.location.replace("http://localhost/uvlight/atelier1/casier/index.php?nav=read");
+                window.location.replace("http://localhost/uvlight/atelier1/casier/index.php");
             </script>
         <?php
     }

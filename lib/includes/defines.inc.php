@@ -19,6 +19,7 @@ define('DB_TABLE_TYPE_REGLEMENT', 'type_reglement');
 define('DB_TABLE_TYPE_SOCIETE', 'type_societe');
 define('DB_TABLE_REGION', 'regions');
 define('DB_TABLE_DEPARTEMENT', 'departments');
+define('DB_TABLE_USERS', 'users');
 
 //define paths
 define('DB_CLASS_DIR', 'db/classes/');
@@ -37,6 +38,8 @@ include_once DB_CLASS_DIR.'communes.class.inc.php';
 include_once DB_CLASS_DIR.'compose.class.inc.php';
 include_once DB_CLASS_DIR.'region.class.inc.php';
 include_once DB_CLASS_DIR.'departement.class.inc.php';
+include_once DB_CLASS_DIR.'user.class.inc.php';
+include_once DB_CLASS_DIR.'login.class.inc.php';
 
 // get main objects
 $oCasier = new Casier();
@@ -50,6 +53,8 @@ $oCommunes = new Communes();
 $oCompose = new Compose();
 $oRegion = new Region();
 $oDepartement = new Departement();
+$oUser = new User();
+$oLogin = new Login();
 
 try {
     $server = "localhost";
@@ -61,6 +66,6 @@ try {
     $conn = new PDO("mysql:host=$server;dbname=$dbname","$username","$password");
 }
 catch (PDOException $e) {
-    //throw $th;
+    throw $e;
 }
 ?>
