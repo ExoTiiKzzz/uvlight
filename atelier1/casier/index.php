@@ -43,19 +43,19 @@ require '../../lib/includes/defines.inc.php';
                     foreach ($data as $key) {
                         $id = $key["cas_ID"]; ?>
                         <tr data-value="<?php echo $id ?>">
-                            <td style='width: 5%'>
-                            <input type='checkbox' class='checkbox' data-index="<?php echo $id ?>" checked='false'></td>
-                            <td><center><?php echo $id ?></center></td>
-                            <td><center><?php echo $key["cas_lib"] ?></center></td>
-                            <td style='display:flex; justify-content: space-evenly;'>
-                                <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modal<?php echo $id ?>'>
-                                    Modifier
-                                </button>
-                                <form action="trait.php" method="post">
-                                    <input type="hidden" name="casier_id" value="<?php echo $id ?>">
-                                    <button type="submit" name="delete" class="delete-btn btn btn-danger">Supprimer</button>
-                                </form>
-                            </td>
+                        <td style='width: 5%'>
+                        <input type='checkbox' class='checkbox' data-index="<?php echo $id ?>" checked='false'></td>
+                        <td><center><?php echo $id ?></center></td>
+                        <td><center><?php echo $key["cas_lib"] ?></center></td>
+                        <td style='display:flex; justify-content: space-evenly;'>
+                            <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modal<?php echo $id ?>'>
+                                Modifier
+                            </button>
+                            <form action="trait.php" method="post">
+                                <input type="hidden" name="casier_id" value="<?php echo $id ?>">
+                                <button type="submit" name="delete" class="delete-btn btn btn-danger">Supprimer</button>
+                            </form>
+                        </td>
                         </tr>
                         <?php
                     }
