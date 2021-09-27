@@ -8,7 +8,7 @@ class Login{
             return false;
         }
         global $conn;
-        $request = "SELECT use_password FROM users WHERE use_name = :username";
+        $request = "SELECT use_ID, use_password FROM users WHERE use_name = :username";
         $sql = $conn->prepare($request);
         $sql->bindValue(":username", $username, PDO::PARAM_STR);
         $sql->execute();
@@ -24,17 +24,21 @@ class Login{
         $password = $start.$password.$end;
 
         if(password_verify($password, $res["use_password"])){
+            if(!isset($_COOKIE["user_jwt"])){
+                $user_id = $res["use_ID"];
+                $this->create_jwt($user_id);
+            }
             return true;
         }else{
             return false;
         }
     }
 
-    public function create_jwt($infos=[]){
-        if(!is_array($infos) || empty($infos)){
+    public function create_jwt($user_id=0){
+        $user_id = (int) $user_id;
+        if(!$user_id){
             return false;
         }
-        $user_id = $infos["user_id"];
 
         global $oUser;
 
@@ -56,17 +60,17 @@ class Login{
         $base64UrlSignature = base64UrlEncode($signature);
         $jwt = $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
 
-        setcookie("jwt", $jwt, time()+3600*24*365*8, "/");
+        setcookie("user_jwt", $jwt, time()+3600*24*365*8, "/");
     }
 
     public function validate_token(){
         $secret = getenv('SECRET');
 
-        if (! isset($_COOKIE["jwt"])) {
+        if (!isset($_COOKIE["user_jwt"])) {
             return false;
         }
 
-        $jwt = $_COOKIE["jwt"];
+        $jwt = $_COOKIE["user_jwt"];
         $tokenParts = explode('.', $jwt);
         $header = base64_decode($tokenParts[0]);
         $payload = base64_decode($tokenParts[1]);
@@ -94,6 +98,25 @@ class Login{
         } 
 
         return true;
+    }
+
+    public function get_user_id_jwt(){
+        if (!isset($_COOKIE["user_jwt"])) {
+            return false;
+        }
+
+        $jwt = $_COOKIE["user_jwt"];
+        $tokenParts = explode('.', $jwt);
+
+        $payload = base64_decode($tokenParts[1]);
+
+        $user_id = json_decode($payload)->user_id;
+
+        if($user_id){
+            return $user_id;
+        }else{
+            return false;
+        }
     }
 
 }

@@ -22,17 +22,24 @@ checkboxes.forEach(element => {
     element.checked = false;
     element.addEventListener("change", () => {
         var checked = false;
+        var allchecked = true;
         checkboxes.forEach(el => {
             if(el.checked){
                 checked = true;
             }else{
                 checkboxall.checked = false;
+                allchecked = false;
             }
         })
         if(!checked){
             deleteBtn.style.display = 'none';
         }else{
             deleteBtn.style.display = 'inline-block';
+        }
+        if(allchecked){
+            checkboxall.checked = true;
+        }else{
+            checkboxall.checked = false;
         }
     });
 });
@@ -57,6 +64,7 @@ deleteBtn.addEventListener("click", () => {
             body : formData
         }
     ).then(response => response.json() ).then(result => {
+        console.log(result);
         if(result == "ok"){
             checkedboxes.forEach(el => {
                 var id = el;
