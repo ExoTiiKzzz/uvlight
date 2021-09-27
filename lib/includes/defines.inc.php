@@ -17,6 +17,7 @@ define('DB_TABLE_TARIF', 'tarif');
 define('DB_TABLE_TIERS', 'tiers');
 define('DB_TABLE_TYPE_REGLEMENT', 'type_reglement');
 define('DB_TABLE_TYPE_SOCIETE', 'type_societe');
+define('DB_TABLE_TYPE_TIERS', 'type_tiers');
 define('DB_TABLE_REGION', 'regions');
 define('DB_TABLE_DEPARTEMENT', 'departments');
 define('DB_TABLE_USERS', 'users');
@@ -40,6 +41,9 @@ include_once DB_CLASS_DIR.'region.class.inc.php';
 include_once DB_CLASS_DIR.'departement.class.inc.php';
 include_once DB_CLASS_DIR.'user.class.inc.php';
 include_once DB_CLASS_DIR.'login.class.inc.php';
+include_once DB_CLASS_DIR.'tiers.class.inc.php';
+include_once DB_CLASS_DIR.'type_tiers.class.inc.php';
+include_once DB_CLASS_DIR.'../../../../server/bootstrap.php';
 
 // get main objects
 $oCasier = new Casier();
@@ -48,6 +52,7 @@ $oEtatDocument = new Etat_Document();
 $oTarif = new Tarif();
 $oTypeReglement = new Type_Reglement();
 $oTypeSociete = new Type_Societe();
+$oTypeTiers = new Type_Tiers();
 $oArticle = new Article();
 $oCommunes = new Communes();
 $oCompose = new Compose();
@@ -55,12 +60,24 @@ $oRegion = new Region();
 $oDepartement = new Departement();
 $oUser = new User();
 $oLogin = new Login();
+$oTiers = new Tiers();
 
-try {
+$isProd = false;
+
+if(!$isProd){
     $server = "localhost";
     $username = "root";
     $password = "";
     $dbname = "glbi";
+}else{
+    $server = "db5005005670.hosting-data.io";
+    $username = "dbu361051";
+    $password = "Hippo14campes440!";
+    $dbname = "dbs4185065";
+}
+
+try {
+    
 
     // connect to DB
     $conn = new PDO("mysql:host=$server;dbname=$dbname","$username","$password");

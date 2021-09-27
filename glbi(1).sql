@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.3
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 25, 2021 at 09:07 AM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.11
+-- Generation Time: Sep 26, 2021 at 03:37 PM
+-- Server version: 10.4.20-MariaDB
+-- PHP Version: 7.4.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `glbi`
+-- Database: `dbs4185065`
 --
 
 -- --------------------------------------------------------
@@ -67,9 +67,10 @@ INSERT INTO `casier` (`cas_ID`, `cas_lib`, `cas_is_visible`) VALUES
 (14, 'fdfaz', 0),
 (15, 'dfaf', 0),
 (16, 'djudbajd', 0),
-(17, 'jdabjadvad', 1),
+(17, 'B4750zaaaa', 0),
 (18, 'jadajdv', 0),
-(19, 'casier', 0);
+(19, 'casier', 0),
+(20, 'test', 1);
 
 -- --------------------------------------------------------
 
@@ -90,7 +91,7 @@ CREATE TABLE `categorie` (
 --
 
 CREATE TABLE `cities` (
-  `c_id` int(10) UNSIGNED NOT NULL,
+  `c_id` int(10) NOT NULL,
   `department_code` varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL,
   `insee_code` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `zip_code` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -36313,6 +36314,32 @@ CREATE TABLE `tarif` (
   `tar_lib` varchar(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `tarif`
+--
+
+INSERT INTO `tarif` (`tar_ID`, `tar_lib`) VALUES
+(1, '1'),
+(2, '2'),
+(3, '3'),
+(4, '4'),
+(5, '5'),
+(6, '6'),
+(7, '7'),
+(8, '8'),
+(9, '9'),
+(10, '10'),
+(11, '11'),
+(12, '12'),
+(13, '13'),
+(14, '14'),
+(15, '15'),
+(16, '16'),
+(17, '17'),
+(18, '18'),
+(19, '19'),
+(20, '20');
+
 -- --------------------------------------------------------
 
 --
@@ -36321,9 +36348,8 @@ CREATE TABLE `tarif` (
 
 CREATE TABLE `tiers` (
   `tie_ID` int(11) NOT NULL,
-  `tie_code` varchar(10) NOT NULL,
   `tie_adresse` varchar(150) NOT NULL,
-  `tie_tel` varchar(10) NOT NULL,
+  `tie_tel` varchar(15) NOT NULL,
   `tie_email` varchar(50) NOT NULL,
   `tie_raison_sociale` varchar(50) NOT NULL,
   `tie_IBAN` varchar(34) NOT NULL,
@@ -36333,11 +36359,20 @@ CREATE TABLE `tiers` (
   `tie_num_compte` varchar(11) NOT NULL,
   `tie_cle_rib` varchar(2) NOT NULL,
   `tie_domiciliation` varchar(100) NOT NULL,
-  `fk_com_ID` int(11) NOT NULL,
+  `fk_com_ID` int(10) NOT NULL,
   `fk_typre_ID` int(11) NOT NULL,
   `fk_tar_id` int(11) NOT NULL,
-  `fk_typso_ID` int(11) NOT NULL
+  `fk_typso_ID` int(11) NOT NULL,
+  `fk_typti_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tiers`
+--
+
+INSERT INTO `tiers` (`tie_ID`, `tie_adresse`, `tie_tel`, `tie_email`, `tie_raison_sociale`, `tie_IBAN`, `tie_BIC`, `tie_code_banque`, `tie_code_guichet`, `tie_num_compte`, `tie_cle_rib`, `tie_domiciliation`, `fk_com_ID`, `fk_typre_ID`, `fk_tar_id`, `fk_typso_ID`, `fk_typti_ID`) VALUES
+(14, '14 rue du calvados', '01 23 45 67 89', 'mail@mail.fr', 'C\'est partisqdvas', '451ad51as54eae', '1asa', 'adse', 'sad', 'as', 'ss', 'Quelque part', 4595, 3, 14, 5, 2),
+(15, '14 rue du calvadosss', '01 23 45 67 89', 'mail@mail.fr', 'C\'est parti', '451ad51as54eae', '1asa', 'adse', 'sad', 'as', 'ss', 'Quelque part', 29900, 3, 14, 5, 2);
 
 -- --------------------------------------------------------
 
@@ -36347,8 +36382,17 @@ CREATE TABLE `tiers` (
 
 CREATE TABLE `type_reglement` (
   `typre_ID` int(11) NOT NULL,
-  `typre_lib` int(11) NOT NULL
+  `typre_lib` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `type_reglement`
+--
+
+INSERT INTO `type_reglement` (`typre_ID`, `typre_lib`) VALUES
+(1, 'Prélévement'),
+(2, 'Chèque'),
+(3, 'Virements');
 
 -- --------------------------------------------------------
 
@@ -36358,8 +36402,48 @@ CREATE TABLE `type_reglement` (
 
 CREATE TABLE `type_societe` (
   `typso_ID` int(11) NOT NULL,
-  `typso_lib` varchar(10) NOT NULL
+  `typso_lib` varchar(70) NOT NULL,
+  `typso_acronym` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `type_societe`
+--
+
+INSERT INTO `type_societe` (`typso_ID`, `typso_lib`, `typso_acronym`) VALUES
+(1, 'Entreprise individuelle ou unipersonnelle à responsabilité limitée', 'EURL'),
+(2, 'Société à Responsabilité Limitée', 'SARL'),
+(3, 'Société en Nom Collectif', 'SNC'),
+(4, 'Société Anonyme', 'SA'),
+(5, 'Société en Commandité Simple', 'SCS'),
+(6, 'Société en Commandite par Action', 'SCA'),
+(7, 'Groupement d’Intérêt Economique', 'GIE'),
+(8, 'Société d’Exercice Libéral à Responsabilité Limitée', 'SELARL'),
+(9, 'Société par Actions Simplifiée', 'SAS'),
+(10, 'Société par Actions Simplifiée Unipersonnelle', 'SASU'),
+(11, 'Société Civile Professionnelle', 'SCP'),
+(12, 'Auto Entrepreneur', 'Auto'),
+(13, 'Micro Entreprise', 'Micro');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `type_tiers`
+--
+
+CREATE TABLE `type_tiers` (
+  `typti_ID` int(11) NOT NULL,
+  `typti_lib` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `type_tiers`
+--
+
+INSERT INTO `type_tiers` (`typti_ID`, `typti_lib`) VALUES
+(1, 'Client'),
+(2, 'Fournisseur'),
+(3, 'Les deux');
 
 -- --------------------------------------------------------
 
@@ -36371,6 +36455,8 @@ CREATE TABLE `users` (
   `use_ID` int(11) NOT NULL,
   `use_name` varchar(50) NOT NULL,
   `use_password` varchar(255) NOT NULL,
+  `use_firstname` varchar(30) NOT NULL,
+  `use_lastname` varchar(30) NOT NULL,
   `fk_fonction_id` int(11) NOT NULL,
   `use_is_visible` int(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -36379,11 +36465,12 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`use_ID`, `use_name`, `use_password`, `fk_fonction_id`, `use_is_visible`) VALUES
-(1, 'coucou', '$2y$10$otS9lO2t1NY3.gxxla5RR.2X.KhX4Kesy/xpbT9QQ6Y0nwNvL1Ani', 8, 1),
-(2, 'lalalala', '$2y$10$PDfkTvaHdGitLAXt9YaWCOeEvtN2kQg0UB48poGJbvhy9S6nIF8L2', 8, 1),
-(3, 'uhdabh', '$2y$10$IPDvGVgv5Yh1RwLLpTilgO5mc64O3vR3ctVMcKBGS6uCwPtxBzK7C', 8, 1),
-(4, 'nnbn', '$2y$10$ggEkmbEokj854i4We9PNiu9B3vo4aSnNfLDzOAyvHvipKjrGkd4UO', 8, 1);
+INSERT INTO `users` (`use_ID`, `use_name`, `use_password`, `use_firstname`, `use_lastname`, `fk_fonction_id`, `use_is_visible`) VALUES
+(1, 'coucou', '$2y$10$otS9lO2t1NY3.gxxla5RR.2X.KhX4Kesy/xpbT9QQ6Y0nwNvL1Ani', 'un', 'ein', 8, 1),
+(2, 'lalalala', '$2y$10$PDfkTvaHdGitLAXt9YaWCOeEvtN2kQg0UB48poGJbvhy9S6nIF8L2', 'deux', 'zwei', 8, 1),
+(3, 'uhdabh', '$2y$10$IPDvGVgv5Yh1RwLLpTilgO5mc64O3vR3ctVMcKBGS6uCwPtxBzK7C', 'trois', 'drei', 8, 1),
+(4, 'nnbn', '$2y$10$ggEkmbEokj854i4We9PNiu9B3vo4aSnNfLDzOAyvHvipKjrGkd4UO', 'quatre', 'viez', 8, 1),
+(5, 'cool', '$2y$10$4rzC7QKjmKF9yyNundAefOYPuE3glpPSdF512JwGRcpAVll.kY3wO', 'cinq', 'funf', 8, 1);
 
 --
 -- Indexes for dumped tables
@@ -36393,7 +36480,8 @@ INSERT INTO `users` (`use_ID`, `use_name`, `use_password`, `fk_fonction_id`, `us
 -- Indexes for table `article`
 --
 ALTER TABLE `article`
-  ADD PRIMARY KEY (`art_ID`);
+  ADD PRIMARY KEY (`art_ID`),
+  ADD KEY `fk_appartient` (`fk_cat_ID`);
 
 --
 -- Indexes for table `casier`
@@ -36482,10 +36570,11 @@ ALTER TABLE `tarif`
 --
 ALTER TABLE `tiers`
   ADD PRIMARY KEY (`tie_ID`),
-  ADD KEY `situe` (`fk_com_ID`),
   ADD KEY `codetarif` (`fk_tar_id`),
   ADD KEY `reglement` (`fk_typre_ID`),
-  ADD KEY `societe` (`fk_typso_ID`);
+  ADD KEY `societe` (`fk_typso_ID`),
+  ADD KEY `se_situe` (`fk_com_ID`),
+  ADD KEY `type_tiers` (`fk_typti_ID`);
 
 --
 -- Indexes for table `type_reglement`
@@ -36498,6 +36587,12 @@ ALTER TABLE `type_reglement`
 --
 ALTER TABLE `type_societe`
   ADD PRIMARY KEY (`typso_ID`);
+
+--
+-- Indexes for table `type_tiers`
+--
+ALTER TABLE `type_tiers`
+  ADD PRIMARY KEY (`typti_ID`);
 
 --
 -- Indexes for table `users`
@@ -36519,7 +36614,7 @@ ALTER TABLE `article`
 -- AUTO_INCREMENT for table `casier`
 --
 ALTER TABLE `casier`
-  MODIFY `cas_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `cas_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `categorie`
@@ -36531,7 +36626,7 @@ ALTER TABLE `categorie`
 -- AUTO_INCREMENT for table `cities`
 --
 ALTER TABLE `cities`
-  MODIFY `c_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35855;
+  MODIFY `c_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35855;
 
 --
 -- AUTO_INCREMENT for table `communes`
@@ -36567,25 +36662,37 @@ ALTER TABLE `regions`
 -- AUTO_INCREMENT for table `tarif`
 --
 ALTER TABLE `tarif`
-  MODIFY `tar_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `tar_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `tiers`
 --
 ALTER TABLE `tiers`
-  MODIFY `tie_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `tie_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `type_reglement`
+--
+ALTER TABLE `type_reglement`
+  MODIFY `typre_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `type_societe`
 --
 ALTER TABLE `type_societe`
-  MODIFY `typso_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `typso_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `type_tiers`
+--
+ALTER TABLE `type_tiers`
+  MODIFY `typti_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `use_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `use_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
@@ -36615,8 +36722,9 @@ ALTER TABLE `departments`
 ALTER TABLE `tiers`
   ADD CONSTRAINT `codetarif` FOREIGN KEY (`fk_tar_id`) REFERENCES `tarif` (`tar_ID`),
   ADD CONSTRAINT `reglement` FOREIGN KEY (`fk_typre_ID`) REFERENCES `type_reglement` (`typre_ID`),
-  ADD CONSTRAINT `situe` FOREIGN KEY (`fk_com_ID`) REFERENCES `communes` (`com_ID`),
-  ADD CONSTRAINT `societe` FOREIGN KEY (`fk_typso_ID`) REFERENCES `type_societe` (`typso_ID`);
+  ADD CONSTRAINT `se_situe` FOREIGN KEY (`fk_com_ID`) REFERENCES `cities` (`c_id`),
+  ADD CONSTRAINT `societe` FOREIGN KEY (`fk_typso_ID`) REFERENCES `type_societe` (`typso_ID`),
+  ADD CONSTRAINT `type_tiers` FOREIGN KEY (`fk_typti_ID`) REFERENCES `type_tiers` (`typti_ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

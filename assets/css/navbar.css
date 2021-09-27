@@ -1,0 +1,55 @@
+*, ::after, ::before{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    height: 10vh;
+    padding: 30px 10%;
+    color: #213140;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: #E8F4FA;
+    border-bottom: 1px solid #d2d9dd;
+
+}
+header ul a{
+    text-decoration: none;
+    font-family: 'Lato', sans-serif;
+}
+
+header ul .fas{
+  color: #213140;
+}
+
+header ul a:hover{
+  text-decoration: none;
+}
+
+header ul{
+  height: 6vh;
+  margin: -2vh 0 0 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+.menu {
+  float: right;
+}
+a i{
+    transform: scale(1.7);
+    margin: 0 30px;
+}
+
+.logout{
+    cursor: pointer;
+}
+
+body{
+    margin-top: 100px;
+}

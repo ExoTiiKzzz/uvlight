@@ -17,6 +17,18 @@ class Communes{
 		}
 	}
 
+    public function db_get_all_names(){
+		global $conn;
+
+		$request = "SELECT DISTINCT c_ID, c_name, zip_code FROM ".DB_TABLE_COMMUNES." WHERE c_is_visible = 1;";
+		try{
+			$sql = $conn->query($request);
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}catch(PDOException $e){
+			return $this->errmessage.$e->getMessage();
+		}
+	}
+
 	public function db_get_by_id($commune_id=0){
 		$commune_id = (int) $commune_id;
 		if(!$commune_id){
