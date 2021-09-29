@@ -8,18 +8,17 @@ require '../../lib/includes/defines.inc.php';
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/table.css">
-    <link rel="stylesheet" href="../../assets/css/loader.css">
+
+    <!-- jQuery Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
     <link href='//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="../static/css/table.css">
+    <link rel="stylesheet" href="../../assets/css/loader.css">
     <title>Tiers</title>
 </head>
 <body>
-    <div class="loader">
-        <h2>Chargement...</h2>
-        <img src="../../assets/img/svg/loader.svg">
-    </div>
     <style>
         <?php 
         require '../../assets/css/navbar.css';
@@ -46,14 +45,19 @@ require '../../lib/includes/defines.inc.php';
   ?>
     <header>
         <ul class="menu">
-            <a data-toggle="tooltip" data-placement="bottom" title="Accueil" href="../../"><i class="fas fa-home"></i></a>
-            <a data-toggle="tooltip" data-placement="bottom" title="Tiers" href="./"><i class="fas fa-user"></i></a>
+            <a data-toggle="tooltip" data-placement="bottom" title="Accueil" href="arthurlecompte.com/uvlight/"><i class="fas fa-home"></i></a>
+            <a data-toggle="tooltip" data-placement="bottom" title="Tiers" href="arthurlecompte.com/uvlight/atelier1/tiers/"><i class="fas fa-user"></i></a>
             <a data-toggle="tooltip" data-placement="bottom" title="Produits" href="#">Produits(Pas encore dispo)</a>
             <a class="logout" data-toggle="tooltip" data-placement="bottom" title="Se déconnecter"><i class="fas fa-power-off"></i></a>
         </ul>
     </header>
 
-    
+    <aside>
+        <div class="loader">
+            <h2>Chargement...</h2>
+            <img src="../../assets/img/svg/loader.svg">
+        </div>
+    </aside>
     <main style="display: none">
         <datalist id="suggestionList">
             <?php 
@@ -85,23 +89,23 @@ require '../../lib/includes/defines.inc.php';
                         foreach ($data as $key) {
                             $id = $key["tie_ID"]; ?>
                             <tr data-value="<?php echo $id ?>">
-                                <td style='width: 5%'>
-                                <input type='checkbox' class='checkbox' data-index="<?php echo $id ?>" checked='false'></td>
-                                <td><center><?php echo $id ?></center></td>
-                                <td><center><?php echo $key["tie_raison_sociale"] ?></center></td>
-                                <td><center><?php echo $key["typso_acronym"] ?></center></td>
-                                <td><center><?php echo $key["c_name"] ?></center></td>
-                                <td><center><?php echo $key["tie_tel"] ?></center></td>
-                                <td><center><?php echo $key["tar_lib"] ?></center></td>
-                                <td style='display:flex; justify-content: space-evenly;'>
-                                    <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modal<?php echo $id ?>'>
-                                        Voir plus
-                                    </button>
-                                    <form action="trait.php" method="post">
-                                        <input type="hidden" name="tiers_id" value="<?php echo $id ?>">
-                                        <button type="submit" name="delete" class="delete-btn btn btn-danger">Supprimer</button>
-                                    </form>
-                                </td>
+                            <td style='width: 5%'>
+                            <input type='checkbox' class='checkbox' data-index="<?php echo $id ?>" checked='false'></td>
+                            <td><center><?php echo $id ?></center></td>
+                            <td><center><?php echo $key["tie_raison_sociale"] ?></center></td>
+                            <td><center><?php echo $key["typso_acronym"] ?></center></td>
+                            <td><center><?php echo $key["c_name"] ?></center></td>
+                            <td><center><?php echo $key["tie_tel"] ?></center></td>
+                            <td><center><?php echo $key["tar_lib"] ?></center></td>
+                            <td style='display:flex; justify-content: space-evenly;'>
+                                <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modal<?php echo $id ?>'>
+                                    Voir plus
+                                </button>
+                                <form action="trait.php" method="post">
+                                    <input type="hidden" name="tiers_id" value="<?php echo $id ?>">
+                                    <button type="submit" name="delete" class="delete-btn btn btn-danger">Supprimer</button>
+                                </form>
+                            </td>
                             </tr>
                             <?php
                         }
@@ -383,8 +387,6 @@ require '../../lib/includes/defines.inc.php';
     
 
     <!-- Datatable JS -->
-    <!-- jQuery Library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="../script/jquery.dataTables.min.js"></script>
 
     <script src="../script/checkboxes.js"></script>
@@ -435,8 +437,9 @@ require '../../lib/includes/defines.inc.php';
 
         //datalist cities
         $(document).ready(function(){
-            var villeinputs = document.querySelectorAll('.villeinput[list], .villeinputupdate[list]');
-            villeinputs.forEach(element => {
+            var test = document.querySelectorAll('.villeinput[list], .villeinputupdate[list]');
+            console.log(test)
+            test.forEach(element => {
                 element.addEventListener('input', function(e) {
                     var input = e.target,
                         list = input.getAttribute('list'),
@@ -456,8 +459,9 @@ require '../../lib/includes/defines.inc.php';
                     }
                 });
             });
-            document.querySelector(".loader").style.display = "none";
+
             document.querySelector("main").style.display = "block";
+            document.querySelector(".loader").style.display = "none";
         });
         
 

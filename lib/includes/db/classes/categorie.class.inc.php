@@ -6,7 +6,7 @@ class Categorie{
 
     public function db_get_all(){
         global $conn;
-        $request = "SELECT * FROM ".DB_TABLE_CATEGORIE.";";
+        $request = "SELECT * FROM ".DB_TABLE_CATEGORIE." WHERE cat_is_visible = 1;";
 
         try{
             $sql = $conn->query($request);
@@ -43,7 +43,7 @@ class Categorie{
         }
 
         global $conn;
-        $request = "INSERT INTO ".DB_TABLE_CATEGORIE." (cat_nom, cat_decription) VALUES(:nom, :description);";
+        $request = "INSERT INTO ".DB_TABLE_CATEGORIE." (cat_nom, cat_description) VALUES(:nom, :description);";
         $sql = $conn->prepare($request);
         $sql->bindValue(':nom', $nom, PDO::PARAM_STR);
         $sql->bindValue(':description', $description, PDO::PARAM_STR);
@@ -56,36 +56,17 @@ class Categorie{
         }
     }
 
-    public function db_update_nom($categorie_id=0, $newnom=''){
+    public function db_update($categorie_id=0, $newnom='', $newdescription=''){
         $categorie_id = (int) $categorie_id;
-        if(!$categorie_id || !$newnom){
+        if(!$categorie_id || !$newnom || !$newdescription){
             return false;
         }
 
         global $conn;
 
-        $request = "UPDATE ".DB_TABLE_CATEGORIE." SET cat_nom = :nom WHERE cat_ID = :id";
+        $request = "UPDATE ".DB_TABLE_CATEGORIE." SET cat_nom = :nom, cat_description = :description WHERE cat_ID = :id";
         $sql = $conn->prepare($request);
         $sql->bindValue(':nom', $newnom, PDO::PARAM_STR);
-        $sql->bindValue(':id', $categorie_id, PDO::PARAM_INT);
-        try{
-            $sql->execute();
-            return true;
-        }catch(PDOException $e){
-            return $this->errmessage.$e->getMessage();
-        }
-    }
-
-    public function db_update_description($categorie_id=0, $newdescription=''){
-        $categorie_id = (int) $categorie_id;
-        if(!$categorie_id || !$newdescription){
-            return false;
-        }
-
-        global $conn;
-
-        $request = "UPDATE ".DB_TABLE_CATEGORIE." SET cat_description = :description WHERE cat_ID = :id";
-        $sql = $conn->prepare($request);
         $sql->bindValue(':description', $newdescription, PDO::PARAM_STR);
         $sql->bindValue(':id', $categorie_id, PDO::PARAM_INT);
         try{
@@ -129,13 +110,12 @@ class Categorie{
 
         global $conn;
 
-        $list_id = implode(',', $id_array);
+        $variables = $id_array;
+        $placeholders = str_repeat ('?, ',  count ($variables) - 1) . '?';
 
-        $request = "UPDATE ".DB_TABLE_CATEGORIE." SET cat_is_visible = 0 WHERE cat_ID IN (:list_id)";
-        $sql = $conn->prepare($request);
-        $sql->bindValue(':list_id', $list_id, PDO::PARAM_STR);
+        $sql = $conn -> prepare ("UPDATE ".DB_TABLE_CATEGORIE." SET cat_is_visible = 0 WHERE cat_ID IN($placeholders)");
         try{
-            $sql->execute();
+            $sql->execute($variables);
             return true;
         }catch(PDOException $e){
             return $this->errmessage.$e->getMessage();

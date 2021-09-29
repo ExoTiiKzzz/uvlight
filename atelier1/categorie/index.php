@@ -1,0 +1,173 @@
+<?php 
+require '../../lib/includes/defines.inc.php';
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.2/datatables.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
+    <link rel="stylesheet" href="../static/css/table.css">
+    <title>Catégories</title>
+</head>
+<body>
+    <script> 
+        const url = "trait.php";
+    </script>
+<?php
+
+        $data = $oCategorie->db_get_all();
+
+  ?>
+
+<button type='button' class='mt-4 ml-3 btn btn-success' data-toggle='modal' data-target='#createmodal'> Créer une catégorie </button>
+<!-- modal pour créer une catégorie -->
+<div class="modal fade" id="createmodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifier le categorie</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="trait.php" method="post" onsubmit="return checkForm(0)">
+                <div class="mx-auto modal-body col-10">
+                    <div class="form-group">
+                        <div data-index="0" class="alert alert-danger" style="display: none">Le nom de la catégorie doit faire entre 1 et 50 charactères maximum</div>
+                        <input placeholder="Nom de la catégorie" class="form-control name_input" data-index="0" 
+                        style="margin: 0 auto" type="text" name="categorie_name">
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Description de la catégorie" class="form-control" rows="3" name="categorie_description"></textarea>
+                    </div>                    
+                </div>
+            
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="submit" name="create" class="btn btn-primary">Créer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <div class="table-container p-3">
+        <table id="table">
+            <thead>
+                <th>Selectionner</th>
+                <th style='text-align :center'>ID</th>
+                <th style='text-align :center'>Lib</th>
+                <th style='text-align :center'>Description</th>
+                <th style='text-align :center'>Actions</th>
+            </thead>
+            <tbody>
+                <?php 
+                    foreach ($data as $key) {
+                        $id = $key["cat_ID"]; ?>
+                        <tr data-value="<?php echo $id ?>">
+                            <td style='width: 5%'>
+                                <input type='checkbox' class='checkbox' data-index="<?php echo $id ?>" checked='false'>
+                            </td>
+                            <td>
+                                <center><?php echo $id ?></center>
+                            </td>
+                            <td>
+                                <center><?php echo $key["cat_nom"] ?></center>
+                            </td>
+                            <td>
+                                <center><?php echo $key["cat_description"] ?></center>
+                            </td>
+                            <td style='display:flex; justify-content: space-evenly;'>
+                                <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modal<?php echo $id ?>'>
+                                    Modifier
+                                </button>
+                                <form action="trait.php" method="post">
+                                    <input type="hidden" name="categorie_id" value="<?php echo $id ?>">
+                                    <button type="submit" name="delete" class="delete-btn btn btn-danger">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                ?>
+            </tbody>
+        </table>
+        <input type="checkbox" class="select-all" id="select-all">
+        <label for="select-all" class="form-check-label">Tout sélectionner</label>
+
+    
+    <div class="operations-div" style="display: flex; justify-content: space-evenly">
+        <button class="btn btn-danger delete-all" style="display: none">
+            Supprimer les éléments selectionnés.
+        </button>
+    </div>
+  </div>
+    
+
+    <?php 
+    
+        foreach($data as $key){ ?>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modal<?php echo $key["cat_ID"] ?>" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier le categorie</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="trait.php" method="post" class="update_form" data-index="<?php echo $key["cat_ID"] ?>" onsubmit="return checkForm(<?php echo $key['cat_ID'] ?>)">
+                            <div class="mx-auto modal-body form-group col-8">
+                                <div data-index="<?php echo $key["cat_ID"] ?>" class="alert alert-danger" style="display: none">Le nom de la catégorie doit faire entre 1 et 50 charactères maximum</div>
+                                <input class="form-control name_input" data-index="<?php echo $key["cat_ID"] ?>" style="margin: 0 auto" type="text" name="categorie_name" value="<?php echo $key["cat_nom"]; ?>">
+                                <textarea placeholder="Description de la catégorie" class="form-control" rows="3" name="categorie_description"><?php echo $key["cat_description"] ?></textarea>
+                                <input type="hidden" name="categorie_id" value="<?php echo $key["cat_ID"] ?>">
+                            </div>
+                        
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                <button type="submit" name="update" class="btn btn-primary">Modifier</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        
+        <?php    
+        }
+
+    ?>
+
+    <!-- jQuery Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Datatable JS -->
+    <script src="../script/jquery.dataTables.min.js"></script>
+
+    <script src="../script/checkboxes.js"></script>
+    <script src="../script/index.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <script> //initialisation datatable
+        $(document).ready(function(){
+            $('#table').DataTable();
+        });
+
+        function checkForm(formid){
+            if(0 > document.querySelector(".name_input[data-index='"+formid+"']").value.length > 50){
+                document.querySelector(".alert-danger[data-index='"+formid+"']").style.display = "block";
+                return false;
+            }else{
+                return true;
+            }
+        }
+    </script>
+</body>
+</html>

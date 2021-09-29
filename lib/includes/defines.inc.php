@@ -62,7 +62,7 @@ $oUser = new User();
 $oLogin = new Login();
 $oTiers = new Tiers();
 
-$isProd = true;
+$isProd = false;
 
 if(!$isProd){
     $server = "localhost";
