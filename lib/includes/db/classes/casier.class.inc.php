@@ -100,7 +100,7 @@ class Casier{
             return false;
         }
 
-        foreach ($id_array as $key => $value) {
+        foreach ($id_array as $key) {
             if(is_nan($id_array[$key]) || !$id_array[$key]){
                 return false;
             }

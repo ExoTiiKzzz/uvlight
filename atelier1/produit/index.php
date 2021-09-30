@@ -30,12 +30,16 @@ require '../../lib/includes/defines.inc.php';
         foreach ($articles as $key) {
             $liste_articles .= "<option value=".$key["art_ID"].">".$key["art_nom"]."</option>";
         }
+        $liste_casiers = "";
+        foreach ($casiers as $key) {
+            $liste_casiers .= "<option value=".$key["cas_ID"].">".$key["cas_lib"]."</option>";
+        }
 
 ?>
     <button type='button' class='mt-4 ml-3 btn btn-success' data-toggle='modal' data-target='#createmodal'> Créer un produit </button>
     <!-- modal pour créer une catégorie -->
     <div class="modal fade" id="createmodal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Créer un article</h5>
@@ -51,13 +55,21 @@ require '../../lib/includes/defines.inc.php';
                                 <input placeholder="Nom du produit" class="form-control name_input"
                                 style="margin: 0 auto" type="text" name="produit_name" required>
                             </div>
+                            <div class="form-group">
+                                <textarea class="form-control" placeholder="Commentaire pour le produit" rows="3" name="commentaire"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <select name="casier" class="form-control">
+                                    <?php echo $liste_casiers ?>
+                                </select>
+                            </div>
                             <div class="row">
-                                <div class="form-group col-6">
+                                <div class="form-group col-7">
                                     <select type="text" class="form-control" placeholder="Article" name="article[]" required autocomplete="off" required>
                                     <?php echo $liste_articles ?>
                                     </select>
                                 </div>
-                                <div class="form-group col-6">
+                                <div class="form-group col-3">
                                     <input placeholder="Quantité" class="form-control" name="quantite[]">
                                 </div>
 
@@ -65,7 +77,7 @@ require '../../lib/includes/defines.inc.php';
                             </div>
                         </div>
                         
-                        <button class="btn btn-success add_article">Ajouter un article</button>
+                        <div class="btn btn-success add_article">Ajouter un article</div>
 
                     </div>
                 
@@ -241,9 +253,9 @@ require '../../lib/includes/defines.inc.php';
             var formGroup = document.createElement('div');
             formGroup.classList.add('row');
             formGroup.dataset.rowindex = index;
-            formGroup.innerHTML = "<div class='form-group col-5'> <select type='text' class='form-control' placeholder='Article' name='article[]' required autocomplete='off' required>"
-                + "<?php echo $liste_articles ?></select></div><div class='form-group col-5'><input placeholder='Quantité' class='form-control' name='produit_quantite[]'</div>"
-                +"<button class='btn btn-danger' onclick='deleterow("+index+")'>X</button>";
+            formGroup.innerHTML = "<div class='form-group col-7'> <select type='text' class='form-control' placeholder='Article' name='article[]' required autocomplete='off' required>"
+                + "<?php echo $liste_articles ?></select></div><div class='form-group row col-3'><input placeholder='Quantité' class='col col-8 mr-2 form-control' name='quantite[]'>"
+                +"<button class='col btn btn-danger' onclick='deleterow("+index+")'>X</button></div>";
                 
             mainForm.appendChild(formGroup);
         })

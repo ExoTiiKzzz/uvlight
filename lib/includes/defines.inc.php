@@ -21,6 +21,7 @@ define('DB_TABLE_TYPE_TIERS', 'type_tiers');
 define('DB_TABLE_REGION', 'regions');
 define('DB_TABLE_DEPARTEMENT', 'departments');
 define('DB_TABLE_USERS', 'users');
+define('DB_TABLE_PRODUIT', 'produit');
 
 //define paths
 define('DB_CLASS_DIR', 'db/classes/');
@@ -43,6 +44,7 @@ include_once DB_CLASS_DIR.'user.class.inc.php';
 include_once DB_CLASS_DIR.'login.class.inc.php';
 include_once DB_CLASS_DIR.'tiers.class.inc.php';
 include_once DB_CLASS_DIR.'type_tiers.class.inc.php';
+include_once DB_CLASS_DIR.'produit.class.inc.php';
 include_once DB_CLASS_DIR.'../../../../server/bootstrap.php';
 
 // get main objects
@@ -61,6 +63,7 @@ $oDepartement = new Departement();
 $oUser = new User();
 $oLogin = new Login();
 $oTiers = new Tiers();
+$oProduit = new Produit();
 
 $isProd = false;
 

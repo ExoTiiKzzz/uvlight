@@ -29,24 +29,23 @@
     
 
     <form class="log-form">
-        <div class="indication">
+        <div class="indication goodlogin">
             Login / Mot de passe correct : cool / glbipassword
         </div>
         <div class="alert alert-danger" role="alert" style="display: none"></div>
         <div class="log-section">
-            <input placeholder="Nom d'utilisateur" type="text" name="username" class="log-input" readonly onfocus="this.removeAttribute('readonly');" required>
+            <input placeholder="Nom d'utilisateur" type="text" name="username" class="log-input username_input" readonly onfocus="this.removeAttribute('readonly');" required>
         </div>
         <div class="log-section">
-            <input placeholder="Mot de passe" type="password" name="password" class="log-input" readonly onfocus="this.removeAttribute('readonly');" required>
+            <input placeholder="Mot de passe" type="password" name="password" class="log-input password_input " readonly onfocus="this.removeAttribute('readonly');" required>
         </div>
         <div class="log-section">
-            <button type="submit" class="log-button" name="login">Login</button>
+            <button type="submit" class="log-button sub_btn" name="login">Login</button>
         </div>
     </form>
 
     <script src="./script/js/subform.js"></script>
     <script src="./script/js/logincheckjwt.js"></script>
     <script src="./script/js/https.js"></script>
-    <script src="./script/js/index.js"></script>
 </body>
 </html>

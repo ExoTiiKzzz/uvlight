@@ -4,23 +4,24 @@ require '../../lib/includes/defines.inc.php';
 
 
 if(isset($_POST["create"])){
-    if(empty($_POST["article_name"]) || empty($_POST["categorie"]) || empty($_POST["casier"])){
+    if(empty($_POST["produit_name"]) || empty($_POST["article"]) || empty($_POST["quantite"]) || !is_array($_POST["article"]) || !is_array($_POST["quantite"]) ){
         ?>
             <script>
                 window.location.replace("index.php");
             </script>
         <?php
     }
-    $req = $oArticle->db_create($_POST["article_name"], $_POST["article_commentaire"], $_POST["categorie"], $_POST["casier"]);
-    if($req){
+    $req = $oProduit->db_create($_POST["produit_name"], $_POST["commentaire"], $_POST["casier"], $_POST["article"], $_POST["quantite"]);
+    var_dump($req);
+    // if($req){
         ?>
-            <script>
+            <!-- <script>
                 window.location.replace("index.php");
-            </script>
+            </script> -->
         <?php
-    }else{
-        var_dump($req);
-    }
+    // }else{
+    //     var_dump($req);
+    // }
 }elseif(isset($_POST["update"])){
     $req = $oArticle->db_update($_POST["article_id"], $_POST["article_name"], $_POST["article_commentaire"], $_POST["categorie"], $_POST["casier"]);
     if($req){
