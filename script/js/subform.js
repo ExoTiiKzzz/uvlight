@@ -1,6 +1,6 @@
 const subButton = document.querySelector(".sub_btn");
 const url = "lib/includes/db/classes/trait.php";
-const errorAlert = document.querySelector(".alert-danger");
+const errorAlert = document.querySelector(".error-input");
 
 
 subButton.addEventListener("click", (e) =>{
