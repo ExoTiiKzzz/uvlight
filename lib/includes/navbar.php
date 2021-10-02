@@ -1,14 +1,36 @@
 <?php
-function navbar(){
-        $path = "arthurlecompte.com/uvlight/atelier1/";
+function navbar($path){
         ?>
         <header>
-            <ul class="menu">
-                <a data-toggle="tooltip" data-placement="bottom" title="Accueil" href="<?php echo $path ?>"><i class="fas fa-home"></i></a>
-                <a data-toggle="tooltip" data-placement="bottom" title="Tiers" href="<?php echo $path ?>tiers/"><i class="fas fa-user"></i></a>
-                <a data-toggle="tooltip" data-placement="bottom" title="Produits" href="#">Produits(pas encore dispo)</a>
-                <a class="logout" data-toggle="tooltip" data-placement="bottom" title="Se déconnecter"><i class="fas fa-power-off"></i></a>
-            </ul>
+            <nav>
+                <div class="logo">
+                    <a href=""><img src="<?php echo $path ?>uvlight/assets/img/svg/Logo_login.svg"></a>
+                </div>
+                <ul class="nav">
+                    <div class="profile-pic">
+
+                    </div>
+                    <div class="list-item">
+                        <li class="ul-el"><a href="<?php echo $path ?>uvlight/">Dashboard</a></li>
+                        <li class="dropdown-container ul-el">
+                            <div class="button">
+                                <a href="#">Test<i class="fas fa-chevron-down"></i></a>
+                            </div>
+                            <div class="dropdown">
+                                <ul>
+                                    <li><a href="#">Test</a></li>
+                                    <li><a href="#">Test</a></li>
+                                    <li><a href="#">Test</a></li>
+                                    <li><a href="#">Test</a></li>
+                                    <li><a href="#">Test</a></li>
+                                </ul>
+                            </div> 
+                        </li>
+                        <li class="ul-el"><span href="#"><i class="far fa-power-off logout"></i></span></li>
+                    </div>
+                    
+                </ul>
+            </nav>
         </header>
     <?php
 }

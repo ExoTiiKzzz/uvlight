@@ -72,11 +72,13 @@ if(!$isProd){
     $username = "root";
     $password = "";
     $dbname = "glbi";
+    $path = "/";
 }else{
     $server = "db5005005670.hosting-data.io";
     $username = "dbu361051";
     $password = "Hippo14campes440!";
     $dbname = "dbs4185065";
+    $path = "https://arthurlecompte.com/";
 }
 
 try {

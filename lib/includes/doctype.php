@@ -1,5 +1,5 @@
 <?php
-function doctype($title){
+function doctype($title, $path){
     $doctype = '<!DOCTYPE html>
     <html lang="fr" dir="ltr">
     <head>
@@ -15,6 +15,9 @@ function doctype($title){
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <link rel="stylesheet" href="'.$path.'uvlight/assets/css/main.css">
+        <link rel="stylesheet" href="'.$path.'uvlight/assets/css/navbar.css">
+        <link rel="stylesheet" href="'.$path.'uvlight/assets/css/sidenav.css">
 
     
     </head>';

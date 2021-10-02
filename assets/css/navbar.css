@@ -1,55 +1,170 @@
-*, ::after, ::before{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 10vh;
+  background: var(--dark);
 }
 
-header {
-    height: 10vh;
-    padding: 30px 10%;
-    color: #213140;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 10;
-    background: #E8F4FA;
-    border-bottom: 1px solid #d2d9dd;
-
-}
-header ul a{
-    text-decoration: none;
-    font-family: 'Lato', sans-serif;
+header a, header span{
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 300ms ease-in-out;
+  width: 100%;
+  padding: 0 10px;
 }
 
-header ul .fas{
-  color: #213140;
-}
-
-header ul a:hover{
+header a:hover{
   text-decoration: none;
 }
 
 header ul{
-  height: 6vh;
-  margin: -2vh 0 0 0;
+  list-style: none;
+}
+
+header li{
+  width: 100%;
+}
+
+header nav{
+  height: 100%;
+  padding: 0 40px;
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 }
-.menu {
-  float: right;
-}
-a i{
-    transform: scale(1.7);
-    margin: 0 30px;
+
+header nav .logo{
+  height: 100%;
 }
 
-.logout{
-    cursor: pointer;
+header nav .logo a{
+  display: inline-block;
+  height: 100%;
 }
 
-body{
-    margin-top: 100px;
+header nav .logo a img{
+  height: 100%;
+}
+
+header nav ul{
+  height: 100%;
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header nav ul .list-item{
+  height: 100%;
+  width: 50%;
+  font-weight: 600;
+  font-size: 1.6em;
+  text-transform: uppercase;
+  color: var(--white);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  transition: all 300ms ease-in-out;
+}
+
+header nav ul li.ul-el{
+  width: calc(10/3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  cursor: pointer;
+}
+
+header nav ul li.ul-el a:hover{
+  background: var(--white);
+  color: var(--dark);
+} 
+
+
+.fa-chevron-down{
+  margin-left: 8px;
+  transition: all 300ms ease-in-out;
+}
+
+.fa-chevron-down.active{
+  transform: rotate3d(1, 0, 0, 0.5turn);
+}
+
+.dropdown-container{
+  position: relative;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  height: 100% !important;
+  width: 100%;
+}
+
+.dropdown-container .button{
+  height: 100%;
+  width: 100%;
+  background: var(--dark);
+  z-index: 5;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 300ms ease-in-out;
+}
+
+.dropdown-container .button.active{
+  background: var(--white);
+  color: var(--dark);
+}
+
+.dropdown-container .dropdown{
+  z-index: 2;
+  height: 100%;
+  display: block;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: -150%;
+  bottom: 0;
+  transform: translateY(-50%);
+  transition: all 300ms ease-in-out;
+}
+
+.dropdown-container .dropdown.active{
+  transform: translateY(250%);
+}
+
+.dropdown-container .dropdown ul{
+  border-top: 1px solid var(--white);
+  height: 300%;
+  background-color: var(--dark);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.dropdown-container .dropdown ul li{
+  height: 20%;
+}
+
+.dropdown-container .dropdown ul li:hover{
+  border: 5px solid var(--dark);
+}
+
+.main-container{
+  margin-top: 10vh;
+  padding: 0 30px;
+}
+
+@media screen and (max-width: 1200px) {
+    header nav ul .list-item{
+      width: 70%;
+    }
 }
