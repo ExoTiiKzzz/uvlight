@@ -51,7 +51,7 @@ require '../../lib/includes/defines.inc.php';
                             <select type="text" class="form-control" placeholder="Code tarif" name="categorie" required autocomplete="off" required>
                                 <?php 
                                 foreach ($categories as $subkey) {?>
-                                    <option value="<?php echo $subkey["cat_ID"] ?>"><?php echo $subkey["cat_nom"] ?></option>
+                                    <option value="<?php echo $subkey["cat_ID"] ?>"><?php echo $subkey["cat_nom"] ?></option>   
                                 <?php
                                 }
                                 ?>
