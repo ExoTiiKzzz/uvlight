@@ -6,7 +6,9 @@ class Produit{
 
     public function db_get_all(){
 		global $conn;
-		$request = "SELECT * FROM ".DB_TABLE_PRODUIT." WHERE pro_is_visible = 1";
+		$request = "SELECT * FROM ".DB_TABLE_PRODUIT."
+					INNER JOIN ".DB_TABLE_CASIER." ON ".DB_TABLE_PRODUIT.".fk_cas_ID = ".DB_TABLE_CASIER.".cas_ID
+					WHERE pro_is_visible = 1";
 
 		try{
 			$sql = $conn->query($request);

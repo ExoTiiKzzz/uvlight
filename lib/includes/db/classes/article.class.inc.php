@@ -36,6 +36,27 @@ class Article{
 		}
 	}
 
+	public function db_get_article_by_produit_id($produit_id=0){
+		$produit_id = (int) $produit_id;
+		if(!$produit_id){
+			return false;
+		}
+		global $conn;
+
+		$request = "SELECT * FROM ".DB_TABLE_COMPOSE."
+					INNER JOIN ".DB_TABLE_ARTICLE." ON ".DB_TABLE_COMPOSE.".art_ID = ".DB_TABLE_ARTICLE.".art_ID 
+					INNER JOIN ".DB_TABLE_CASIER." ON ".DB_TABLE_ARTICLE.".fk_cas_ID = ".DB_TABLE_CASIER.".cas_ID
+					WHERE ".DB_TABLE_COMPOSE.".pro_ID = :id";
+		$sql = $conn->prepare($request);
+		$sql->bindValue(':id', $produit_id, PDO::PARAM_INT);
+		try{
+			$sql->execute();
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}catch(PDOException $e){
+			return $this->errmessage.$e->getMessage();
+		}
+	}
+
 	public function db_create($article_nom='', $article_commentaire='', $fk_categorie_id=0, $fk_casier_id=0){
 		$fk_categorie_id = (int) $fk_categorie_id;
 		$fk_casier_id = (int) $fk_casier_id;

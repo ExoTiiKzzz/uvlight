@@ -40,7 +40,6 @@
 </body>
 <script src="./script/js/indexcheckjwt.js"></script>
 <script src="./script/js/index.js"></script>
-<script src="./script/js/navbar.js"></script>
 <script src="./script/js/sidenav.js"></script>
 
 </html>
