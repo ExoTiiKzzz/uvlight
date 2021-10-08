@@ -126,12 +126,12 @@ echo navbar("../../../");
                                 </td>
                                 <td>
                                     <center>
-                                    <button type='button' class='btn btn-secondary' data-toggle='modal' data-target='#seearticles<?php echo $id ?>'>
-                                        Voir les articles (<?php echo count($articles_by_id) ?>)
+                                    <button type='button' class='btn btn-secondary seeArticleBtn' data-toggle='modal' data-index="<?php echo $id ?>" data-target='#seearticles'>
+                                        Voir les articles (<span class="countArticles" data-index="<?php echo $id; ?>"><?php echo count($articles_by_id) ?></span>)
                                     </button></center>
                                 </td>
                                 <td style='display:flex; justify-content: space-evenly;'>
-                                    <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#update<?php echo $id ?>'>
+                                    <button type='button' class='btn btn-primary updateBtn' data-toggle='modal' data-index="<?php echo $id ?>" data-target='#update'>
                                         Modifier
                                     </button>
                                     <form action="trait.php" method="post">
@@ -156,144 +156,87 @@ echo navbar("../../../");
         </div>
     </div>
     </div>
-    
-    
-
-    <?php 
-    
-        foreach($data as $key){ 
-            
-            $articles_produit = $oArticle->db_get_article_by_produit_id($key["pro_ID"]);
-            ?>
 
             
 
             
 
-            <!-- Modal -->
-            <div class="modal fade" id="update<?php echo $key["pro_ID"] ?>" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title"><?php echo $key["pro_lib"] ?></h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form action="trait.php" method="post" class="update_form">
-                            <div class="mx-auto modal-body col-10">
-                                <div class="main-form">
-                                    <div class="form-group">
-                                        <div class="alert alert-danger" style="display: none">Le nom du produit doit faire entre 1 et 50 charactères maximum</div>
-                                        <input placeholder="Nom du produit" class="form-control name_input"
-                                        style="margin: 0 auto" type="text" name="produit_name" required value="<?php echo $key['pro_lib'] ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <textarea class="form-control" placeholder="Commentaire pour le produit" rows="3" name="commentaire"><?php echo $key['pro_commentaire'] ?></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <select name="article" class="form-control">
-                                            <?php 
-                                                foreach ($casiers as $subkey) {?>
-                                                    <option value="<?php echo $subkey['cas_ID'] ?>" <?php if($subkey['cas_ID'] === $key["fk_cas_ID"]) echo 'selected' ?>> <?php echo $subkey["cas_lib"] ?></option>
-                                                <?php
-                                                }
-                                            ?>
-                                        </select>
-                                    </div>
-                                    <?php 
-                                    
-                                    foreach ($articles_produit as $article) {
-                                        
-                                        ?>
-                                        <div class="row">
-                                            <div class="form-group col-7">
-                                                <select type="text" class="form-control" placeholder="Article" name="article[]" required autocomplete="off" required>
-                                                <?php
-                                                    foreach ($articles as $subkey) {?>
-                                                        <option value="<?php echo $subkey['art_ID'] ?>" <?php if($subkey['art_ID'] === $article['art_ID']){ echo 'selected';} ?>> <?php echo $subkey["art_nom"] ?></option>
-                                                    <?php
-                                                    }
-                                                ?>
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-3">
-                                                <input placeholder="Quantité" class="form-control" name="quantite[]" value="<?php echo $article["compo_quantite"] ?>">
-                                            </div>
-                                            <div class="col-2">
-                                                <button class="btn btn-danger">X</button>
-                                            </div>
-                                        </div>
-                                    
-                                    <?php
-                                    }
-                                    ?>
-                                </div>
-
-                            </div>
-                        
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                                <button type="submit" name="create" class="btn btn-primary">Créer</button>
-                            </div>
-                        </form>
-                    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="update" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title updateTitle"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </div>
-
-
-            <!-- Modal -->
-            <div class="modal fade" id="seearticles<?php echo $key["pro_ID"] ?>" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title"><?php echo $key["pro_lib"] ?></h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="mx-auto modal-body col-10">
-                            <div class="row">
-                                <div class="col-7">
-                                    Article : 
-                                </div>
-                                <div class="col-3">
-                                    Casier : 
-                                </div>
-                                <div class="col-2">
-                                    Quantité :
-                                </div>
+                <form action="trait.php" method="post" class="update_form">
+                    <div class="mx-auto modal-body col-10">
+                        <div class="main-form">
+                            <div class="form-group">
+                                <div class="alert alert-danger" style="display: none">Le nom du produit doit faire entre 1 et 50 charactères maximum</div>
+                                <input placeholder="Nom du produit" class="form-control name_input updateProduitName"
+                                style="margin: 0 auto" type="text" name="produit_name" required value="">
                             </div>
-                            <?php 
-                                foreach ($articles_produit as $subkey) {
-                                    ?>
-                                    <div class="form-group row">
-                                        <div class="col-7">
-                                            <input type="text" class="form-control" readonly value="<?php echo $subkey["art_nom"] ?>">
-                                        </div>
-                                        <div class="col-3">
-                                            <input type="text" class="form-control" readonly value="<?php echo $subkey["cas_lib"] ?>">
-                                        </div>
-                                        <div class="col-2">
-                                            <input type="text" class="form-control" readonly value="<?php echo $subkey["compo_quantite"] ?>">
-                                        </div>
-                                    </div>
-                                    <?php
-                                }                            
-                            ?>
+                            <div class="form-group">
+                                <textarea class="form-control updateComment" placeholder="Commentaire pour le produit" rows="3" name="commentaire"></textarea>
+                            </div>
+                            <div class="updateContainer">
+
+                            </div>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-success updateAddBtn">Ajouter un article</button>
+                            </div>
                         </div>
-                        
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+                    </div>
+                
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <button type="submit" name="create" class="btn btn-primary">Créer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="seearticles" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><?php echo $key["pro_lib"] ?></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="mx-auto modal-body col-10">
+                    <div class="row">
+                        <div class="col-7">
+                            Article : 
+                        </div>
+                        <div class="col-3">
+                            Casier : 
+                        </div>
+                        <div class="col-2">
+                            Quantité :
                         </div>
                     </div>
+                    <div class="articles-container">
+
+                    </div>
+                    
+                            
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
-        
-        <?php    
-        }
-
-    ?>
+        </div>
+    </div>
 
     <!-- jQuery Library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -341,6 +284,213 @@ echo navbar("../../../");
                 
             mainForm.appendChild(formGroup);
         })
+
+
+        const seeArticleBtns = document.querySelectorAll(".seeArticleBtn");
+        const articleContainer = document.querySelector(".articles-container")
+
+
+        seeArticleBtns.forEach(element => {
+            element.addEventListener("click", (e) => {
+                const index = e.target.dataset.index;
+                articleContainer.innerHTML = "";
+                var formData = new FormData();
+                formData.append("getarticles", "1");
+                formData.append("index", index);
+                fetch(url, 
+                    {
+                        method : "POST",
+                        body: formData
+                    }
+                )
+                .then(result => result.json())
+                .then(text => {
+                    if(text.error){
+                        console.log(text.errortext);
+                    }else{
+                        const allArticles = document.createElement("div");
+                        text.content.forEach(subel => {
+                            const nomArticle = subel.art_nom;
+                            const casier = subel.cas_lib;
+                            const quantite = subel.compo_quantite;
+
+                            const el = document.createElement("div");
+                            el.innerHTML = '<div class="form-group row">'+
+                                                '<div class="col-7">'+
+                                                    '<input type="text" class="form-control" readonly value="'+nomArticle+'">'+
+                                                '</div>'+
+                                                '<div class="col-3">'+
+                                                    '<input type="text" class="form-control" readonly value="'+casier+'">'+
+                                                '</div>'+
+                                                '<div class="col-2">'+
+                                                    '<input type="text" class="form-control" readonly value="'+quantite+'">'+
+                                                '</div>'+
+                                           ' </div>';
+                            
+                            allArticles.appendChild(el);
+                        });
+                        articleContainer.appendChild(allArticles);
+                    }
+                });
+            })
+        });
+
+        const updateBtns = document.querySelectorAll(".updateBtn");
+        const updateContainer = document.querySelector(".updateContainer");
+        const articleListe = "<?php echo $liste_articles;?>";
+
+        updateBtns.forEach(element => {
+            element.addEventListener("click", (e) => {
+                const index = e.target.dataset.index;
+                updateContainer.innerHTML = "";
+                var formData = new FormData();
+                formData.append("getarticles", "1");
+                formData.append("index", index);
+                fetch(url, 
+                    {
+                        method : "POST",
+                        body: formData
+                    }
+                )
+                .then(result => result.json())
+                .then(text => {
+                    if(text.error){
+                        console.log(text.errortext);
+                    }else{
+                        const nomProduit = text.produit.pro_lib;
+                        const commentaire = text.produit.pro_commentaire;
+                        const produitId = text.produit.pro_ID;
+                        document.querySelector(".updateTitle").innerHTML = nomProduit;
+                        document.querySelector(".updateProduitName").value = nomProduit;
+                        document.querySelector(".updateComment").innerHTML = commentaire;
+
+                        text.content.forEach(subel => {
+                            const nomArticle = subel.art_nom;
+                            const quantite = subel.compo_quantite;
+                            const articleId = subel.art_ID;
+
+                            const el = document.createElement("div");
+                            el.dataset.updateRowIndex=articleId;
+                            el.innerHTML = '<div class="form-group row">'+
+                                                '<div class="col-4">'+
+                                                    '<input type="text" class="form-control" name="article[]" readonly value="'+nomArticle+'">'+
+                                                '</div>'+
+                                                '<div class="col-4">'+
+                                                    '<select class="form-control articleSelect" data-index="'+articleId+'" onchange=changearticle('+produitId+','+articleId+')>'+
+                                                        articleListe + 
+                                                    '</select>'+
+                                                '</div>'+
+                                                '<div class="form-group col-3">'+
+                                                    '<input placeholder="Quantité" class="form-control" name="quantite[]" value="'+quantite+'">'+
+                                                '</div>'+
+                                                '<div class="col-1">'+
+                                                    '<button type="button" class="btn btn-danger" onclick="deleteRow('+produitId+','+articleId+')">X</button>'+
+                                                '</div>'+
+                                            '</div>';
+                            
+                            document.querySelector(".updateAddBtn").dataset.index = produitId;
+                            updateContainer.appendChild(el);
+                        });
+                    }
+                });
+            })
+        });
+
+        const updateAddBtn = document.querySelector(".updateAddBtn");
+        updateAddBtn.addEventListener("click", () => {
+            const produitId = updateAddBtn.dataset.index;
+            var formData = new FormData();
+            formData.append("addNewArt", "1");
+            formData.append("produit_id", produitId);
+            fetch(url,
+                {
+                    method: "POST",
+                    body: formData
+                }
+            )
+            .then(result => result.json())
+            .then(text => {
+                if(text.error){
+                    console.log(text.errortext);
+                }else{
+                    const articleId = 0;
+                    const el = document.createElement("div");
+                    el.dataset.updateRowIndex=articleId;
+                    el.innerHTML = '<div class="form-group row">'+
+                                        '<div class="col-4">'+
+                                            '<input type="text" class="form-control" name="article[]" readonly>'+
+                                        '</div>'+
+                                        '<div class="col-4">'+
+                                            '<select class="form-control articleSelect" data-index="'+articleId+'" onchange=changearticle('+produitId+','+articleId+')>'+
+                                                articleListe + 
+                                            '</select>'+
+                                        '</div>'+
+                                        '<div class="form-group col-3">'+
+                                            '<input placeholder="Quantité" class="form-control" name="quantite[]">'+
+                                        '</div>'+
+                                        '<div class="col-1">'+
+                                            '<button type="button" class="btn btn-danger" onclick="deleteRow('+produitId+','+articleId+')">X</button>'+
+                                        '</div>'+
+                                    '</div>';
+                    updateContainer.appendChild(el);
+                    var newCount = parseInt(document.querySelector(".countArticles[data-index='"+produitId+"']").innerHTML) + 1;
+                    document.querySelector(".countArticles[data-index='"+produitId+"']").innerHTML = newCount
+                    updateAddBtn.style.display = "none";
+                }
+            })
+            
+        })
+
+        function changearticle(produit_id, article_id){
+            const new_article_id = document.querySelector(".articleSelect[data-index='"+article_id+"']").value;
+
+            var formData = new FormData();
+            formData.append("updatearticle","1");
+            formData.append("produit_id", produit_id);
+            formData.append("old_article_id", article_id);
+            formData.append("new_article_id", new_article_id);
+
+            fetch(url,
+                {
+                    method: "POST",
+                    body: formData
+                }
+            )
+            .then(response => response.json())
+            .then(text => {
+                if(text.error){
+                    console.log(text.errortext);
+                }else{
+                    
+                }
+            })
+
+        }   
+
+        function deleteRow(produit_id, index){
+            var formData = new FormData();
+            formData.append("delete_article", "1");
+            formData.append("produit_id", produit_id);
+            formData.append("index", index);
+            fetch(url, 
+                {
+                    method : "POST",
+                    body : formData
+                }
+            )
+            .then(result => result.json())
+            .then(text => {
+                console.log(text)
+                if(text.error){
+                    console.log(text.errortext);
+                }else{
+                    const row = document.querySelector("div[data-update-row-index='"+index+"']");
+                    document.querySelector(".updateContainer").removeChild(row);
+                    var newCount = parseInt(document.querySelector(".countArticles[data-index='"+produit_id+"']").innerHTML) - 1;
+                    document.querySelector(".countArticles[data-index='"+produit_id+"']").innerHTML = newCount;
+                }
+            })
+        }
     </script>
 </body>
 </html>

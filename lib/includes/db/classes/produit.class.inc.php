@@ -26,7 +26,7 @@ class Produit{
 
 		global $conn;
 
-		$request = "SELECT * FROM ".DB_TABLE_ARTICLE." WHERE art_ID = :id";
+		$request = "SELECT * FROM ".DB_TABLE_PRODUIT." WHERE pro_ID = :id";
 		$sql = $conn->prepare($request);
 		$sql->bindValue(':id', $produit_id, PDO::PARAM_INT);
 		try{

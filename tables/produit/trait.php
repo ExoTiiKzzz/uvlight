@@ -56,6 +56,59 @@ if(isset($_POST["create"])){
         $response = "pb";
     }
     echo json_encode($response);
+}elseif(isset($_POST["getarticles"])){
+
+    $id = (int) $_POST["index"];
+
+    if(!$id){
+        $response["error"] = true;
+        $response["errortext"] = "Veuillez saisir une valeure correcte";
+    }
+
+    $res = $oArticle->db_get_article_by_produit_id($id);
+    if($res){
+        $response["error"] = false;
+        $response["produit"] = $oProduit->db_get_by_id($id);
+        $response["content"] = $res;
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = "Une erreur s'est produite, veuillez reessayer";
+    }
+    echo json_encode($response);
+}elseif(isset($_POST["delete_article"])){
+
+    $id = (int) $_POST["index"];
+    $pro_id = (int) $_POST["produit_id"];
+
+    if(!$id || !$pro_id){
+        $response["error"] = true;
+        $response["errortext"] = "Veuillez saisir une valeure correcte";
+    }
+
+    $res = $oCompose->db_delete_article_from_produit($pro_id, $id);
+    if($res){
+        $response["error"] = false;
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = $res;
+    }
+    echo json_encode($response);
+}elseif(isset($_POST["addNewArt"])){
+    $pro_id = (int) $_POST["produit_id"];
+
+    if(!$pro_id){
+        $response["error"] = true;
+        $response["errortext"] = "Veuillez saisir une valeure correcte";
+    }
+
+    $res = $oCompose->db_soft_create_one($pro_id);
+    if($res){
+        $response["error"] = false;
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = $res;
+    }
+    echo json_encode($response);
 }else{
     header("location: index.php");
 }

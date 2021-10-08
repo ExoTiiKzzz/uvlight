@@ -95,6 +95,47 @@ class Compose{
 			return $this->errmessage.$e->getMessage();
 		}
 	}
+
+	public function db_soft_create_one($produit_id=0){
+		$produit_id = (int) $produit_id;
+
+		if(!$produit_id){
+			return false;
+		}
+		global $conn;
+		$request = "INSERT INTO ".DB_TABLE_COMPOSE."(pro_ID, art_ID, compo_quantite) VALUES (:produit_id, 0, 0)";
+		$sql = $conn->prepare($request);
+		$sql->bindValue(":produit_id", $produit_id, PDO::PARAM_INT);
+		try{
+			$sql->execute();
+			return true;
+		}catch(PDOException $e){
+			return $this->errmessage.$e->getMessage();
+		}
+	}
+
+	public function db_delete_article_from_produit($produit_id=0, $article_id=0){
+		$produit_id = (int) $produit_id;
+		$article_id = (int) $article_id;
+
+		if(!$produit_id && !is_numeric($article_id)){
+			return false;
+		}
+
+		global $conn;
+		$request = "DELETE FROM ".DB_TABLE_COMPOSE." WHERE pro_ID = :produit_id AND art_ID = :article_id";
+		$sql = $conn->prepare($request);
+		$sql->bindValue(":produit_id", $produit_id, PDO::PARAM_INT);
+		$sql->bindValue(":article_id", $article_id, PDO::PARAM_INT);
+
+		try{
+			$sql->execute();
+			return true;
+		}catch(PDOException $e){
+			return $this->errmessage.$e->getMessage();
+		}
+
+	}
 }
 
 ?>
