@@ -1,4 +1,4 @@
-const deleteBtns = document.querySelectorAll(".delete-btn, .delete-all");
+const deleteBtns = document.querySelectorAll(".delete-btn");
 
 deleteBtns.forEach(element => {
     element.addEventListener("click", (e) => {

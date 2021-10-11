@@ -207,7 +207,7 @@ echo navbar("../../../");
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><?php echo $key["pro_lib"] ?></h5>
+                    <h5 class="modal-title seearticletitle"><?php echo $key["pro_lib"] ?></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -293,6 +293,22 @@ echo navbar("../../../");
         seeArticleBtns.forEach(element => {
             element.addEventListener("click", (e) => {
                 const index = e.target.dataset.index;
+                var proFormData = new FormData();
+                document.querySelector(".seearticletitle").innerHTML = "";
+                proFormData.append("get_produit", "1");
+                proFormData.append("produit_id", index);
+                fetch(url, {
+                    method: "POST",
+                    body: proFormData
+                })
+                .then(response => response.json())
+                .then(produit => {
+                    if(produit.error){
+                        console.log(error.text)
+                    } else{
+                        document.querySelector(".seearticletitle").innerHTML = produit.content.pro_lib;
+                    }
+                });
                 articleContainer.innerHTML = "";
                 var formData = new FormData();
                 formData.append("getarticles", "1");
@@ -373,15 +389,15 @@ echo navbar("../../../");
                             el.dataset.updateRowIndex=articleId;
                             el.innerHTML = '<div class="form-group row">'+
                                                 '<div class="col-4">'+
-                                                    '<input type="text" class="form-control" name="article[]" readonly value="'+nomArticle+'">'+
+                                                    '<input type="text" class="form-control articleName"  data-articleid="'+articleId+'" readonly value="'+nomArticle+'">'+
                                                 '</div>'+
                                                 '<div class="col-4">'+
-                                                    '<select class="form-control articleSelect" data-index="'+articleId+'" onchange=changearticle('+produitId+','+articleId+')>'+
+                                                    '<select class="form-control articleSelect" data-index="'+articleId+'" data-oldindex="'+articleId+'" onfocusout=changearticle('+produitId+','+articleId+')>'+
                                                         articleListe + 
                                                     '</select>'+
                                                 '</div>'+
                                                 '<div class="form-group col-3">'+
-                                                    '<input placeholder="Quantité" class="form-control" name="quantite[]" value="'+quantite+'">'+
+                                                    '<input placeholder="Quantité" class="form-control articleQuantite" data-index="'+articleId+'" data-oldindex="'+articleId+'" onfocusout=changearticle('+produitId+','+articleId+') value="'+quantite+'">'+
                                                 '</div>'+
                                                 '<div class="col-1">'+
                                                     '<button type="button" class="btn btn-danger" onclick="deleteRow('+produitId+','+articleId+')">X</button>'+
@@ -418,15 +434,15 @@ echo navbar("../../../");
                     el.dataset.updateRowIndex=articleId;
                     el.innerHTML = '<div class="form-group row">'+
                                         '<div class="col-4">'+
-                                            '<input type="text" class="form-control" name="article[]" readonly>'+
+                                            '<input type="text" class="form-control articleName" readonly data-articleid="'+articleId+'">'+
                                         '</div>'+
                                         '<div class="col-4">'+
-                                            '<select class="form-control articleSelect" data-index="'+articleId+'" onchange=changearticle('+produitId+','+articleId+')>'+
+                                            '<select class="form-control articleSelect" data-index="'+articleId+'" data-oldindex="'+articleId+'" onfocusout=changearticle('+produitId+','+articleId+')>'+
                                                 articleListe + 
                                             '</select>'+
                                         '</div>'+
                                         '<div class="form-group col-3">'+
-                                            '<input placeholder="Quantité" class="form-control" name="quantite[]">'+
+                                            '<input placeholder="Quantité" class="form-control articleQuantite" data-index="'+articleId+'" data-oldindex="'+articleId+'" onfocusout=changearticle('+produitId+','+articleId+')>'+
                                         '</div>'+
                                         '<div class="col-1">'+
                                             '<button type="button" class="btn btn-danger" onclick="deleteRow('+produitId+','+articleId+')">X</button>'+
@@ -442,13 +458,16 @@ echo navbar("../../../");
         })
 
         function changearticle(produit_id, article_id){
-            const new_article_id = document.querySelector(".articleSelect[data-index='"+article_id+"']").value;
-
+            const new_article_id = document.querySelector(".articleSelect[data-oldindex='"+article_id+"']").value;
+            const oldarticle = document.querySelector(".articleSelect[data-oldindex='"+article_id+"']").dataset.index;
+            var quantite = document.querySelector(".articleQuantite[data-oldindex='"+article_id+"']").value;
+            if(!quantite) quantite = 0;
             var formData = new FormData();
             formData.append("updatearticle","1");
             formData.append("produit_id", produit_id);
-            formData.append("old_article_id", article_id);
+            formData.append("old_article_id", oldarticle);
             formData.append("new_article_id", new_article_id);
+            formData.append("quantite", quantite);
 
             fetch(url,
                 {
@@ -461,7 +480,11 @@ echo navbar("../../../");
                 if(text.error){
                     console.log(text.errortext);
                 }else{
-                    
+                    document.querySelector(".articleSelect[data-oldindex='"+article_id+"']").dataset.index = new_article_id;
+
+                    if(oldarticle === 0){
+                        addArticleBtn.style.display = "inline-block";
+                    }
                 }
             })
 
@@ -480,7 +503,6 @@ echo navbar("../../../");
             )
             .then(result => result.json())
             .then(text => {
-                console.log(text)
                 if(text.error){
                     console.log(text.errortext);
                 }else{

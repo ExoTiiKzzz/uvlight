@@ -45,34 +45,65 @@ checkboxes.forEach(element => {
 });
 
 deleteBtn.addEventListener("click", () => {
-    var checkedboxes = [];
-    checkboxes.forEach(checkbox => {
-        if(checkbox.checked){
-            var checkid = checkbox.dataset.index;
-            checkedboxes.push(checkid);
-        }
-    });
-    finalArray = JSON.stringify(checkedboxes);
-    var formData = new FormData();
-    formData.append("multi_delete", "");
-    formData.append("array", finalArray);
-
-    fetch(
-        url, 
-        { 
-            method : 'POST',
-            body : formData
-        }
-    ).then(response => response.json() ).then(result => {
-        console.log(result);
-        if(result == "ok"){
-            checkedboxes.forEach(el => {
-                var id = el;
-                document.querySelector('tr[data-value="'+id+'"]').style.display = "none";
-                document.querySelector('.checkbox[data-index="'+id+'"]').checked = false;
-                deleteBtn.style.display = "none";
-            });
-        }
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
     })
+      
+    swalWithBootstrapButtons.fire({
+        title: 'Etes-vous sûr?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, supprimer les donées !',
+        cancelButtonText: 'Non, annuler !',
+        reverseButtons: true
+    }).then((result) => {
+    if (result.isConfirmed) {
+        var checkedboxes = [];
+        checkboxes.forEach(checkbox => {
+            if(checkbox.checked){
+                var checkid = checkbox.dataset.index;
+                checkedboxes.push(checkid);
+            }
+        });
+        finalArray = JSON.stringify(checkedboxes);
+        var formData = new FormData();
+        formData.append("multi_delete", "");
+        formData.append("array", finalArray);
+
+        fetch(
+            url,
+            { 
+                method : 'POST',
+                body : formData
+            }
+        ).then(response => response.json() ).then(result => {
+            console.log(result);
+            if(result == "ok"){
+                checkedboxes.forEach(el => {
+                    var id = el;
+                    document.querySelector('tr[data-value="'+id+'"]').style.display = "none";
+                    document.querySelector('.checkbox[data-index="'+id+'"]').checked = false;
+                    deleteBtn.style.display = "none";
+                });
+            }
+        })
+        swalWithBootstrapButtons.fire(
+        'Supprimé',
+        'Les données ont été suprimées',
+        'success'
+        )
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire(
+            'Annulé',
+            'Vos données n\' ont pas été supprimées',
+            'error'
+        )
+    }
+    })
+    
 })
 

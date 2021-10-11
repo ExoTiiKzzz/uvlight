@@ -109,6 +109,34 @@ if(isset($_POST["create"])){
         $response["errortext"] = $res;
     }
     echo json_encode($response);
+}elseif(isset($_POST["get_produit"])){
+    $pro_id = (int) $_POST["produit_id"];
+
+    if(!$pro_id){
+        $response["error"] = true;
+        $response["errortext"] = "Veuillez saisir une valeure correcte";
+    }
+
+    $res = $oProduit->db_get_by_id($pro_id);
+    if($res){
+        $response["error"] = false;
+        $response["content"] = $res;
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = $res;
+    }
+    echo json_encode($response);
+}elseif(isset($_POST["updatearticle"])){
+
+    $res = $oCompose->db_update_compo($_POST["produit_id"], $_POST["old_article_id"], $_POST["new_article_id"], $_POST["quantite"]);
+    if($res){
+        $response["error"] = false;
+        $response["content"] = $res;
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = $res;
+    }
+    echo json_encode($response);
 }else{
     header("location: index.php");
 }

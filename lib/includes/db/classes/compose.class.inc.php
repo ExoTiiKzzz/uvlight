@@ -136,6 +136,29 @@ class Compose{
 		}
 
 	}
+
+	public function db_update_compo($produit_id, $old_article_id, $new_article_id, $quantite){
+		$produit_id = (int) $produit_id;
+
+		if(!$produit_id || !is_numeric($old_article_id) || !is_numeric($new_article_id) || !is_numeric($quantite)){
+			return false;
+		}
+
+		global $conn;
+		$request = "UPDATE ".DB_TABLE_COMPOSE." SET art_ID = :new_article_ID, compo_quantite = :quantite WHERE pro_ID = :produit_ID AND art_ID = :old_article_ID";
+		$sql = $conn->prepare($request);
+		$sql->bindValue(":new_article_ID", $new_article_id, PDO::PARAM_INT);
+		$sql->bindValue(":quantite", $quantite, PDO::PARAM_INT);
+		$sql->bindValue(":produit_ID", $produit_id, PDO::PARAM_INT);
+		$sql->bindValue(":old_article_ID", $old_article_id, PDO::PARAM_INT);
+
+		try{
+			$sql->execute();
+			return $sql->queryString;
+		}catch(PDOException $e){
+			return $this->errmessage.$e->getMessage();
+		}
+	}
 }
 
 ?>

@@ -7,7 +7,7 @@ class Article{
     public function db_get_all(){
 		global $conn;
 		$request = "SELECT * FROM ".DB_TABLE_ARTICLE." INNER JOIN ".DB_TABLE_CATEGORIE." ON ".DB_TABLE_ARTICLE.".fk_cat_ID = ".DB_TABLE_CATEGORIE.".cat_ID 
-					INNER JOIN ".DB_TABLE_CASIER." ON ".DB_TABLE_ARTICLE.".fk_cas_ID = ".DB_TABLE_CASIER.".cas_ID WHERE art_is_visible = 1 ;";
+					INNER JOIN ".DB_TABLE_CASIER." ON ".DB_TABLE_ARTICLE.".fk_cas_ID = ".DB_TABLE_CASIER.".cas_ID WHERE art_is_visible = 1 AND art_ID != 0 ;";
 
 		try{
 			$sql = $conn->query($request);
