@@ -112,7 +112,7 @@ table{
     width: 100%;
 }
 
-.dataTables_length label select option{
-    background: transparent;
+.dataTables_length label select{
+    background: #213140;
     color: #fff;
 }
