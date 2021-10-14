@@ -246,9 +246,11 @@ echo navbar("../../../");
                                     <input type="hidden" name="tiers_id" value="<?php echo $id ?>">
                                     <div class="row form-group">
                                         <div class="col">
+                                            <label class="form-label">Raison sociales</label>
                                             <input type="text" class="form-control" placeholder="Raison sociale" name="raison_sociale" required value="<?php echo $key["tie_raison_sociale"] ?>">
                                         </div>
                                         <div class="col">
+                                            <label class="form-label">Type société</label>
                                             <select type="text" class="form-control" placeholder="Type société" name="type_societe" required autocomplete="off">
                                                 <?php 
                                                 foreach ($types_societes as $subkey) {?>
@@ -262,25 +264,30 @@ echo navbar("../../../");
 
                                     <div class="row form-group">
                                         <div class="col">
+                                            <label class="form-label">Téléphone</label>
                                             <input type="text" class="form-control" placeholder="Telephone" name="telephone" required value="<?php echo $key["tie_tel"] ?>">
                                         </div>
                                         <div class="col">
+                                            <label class="form-label">Adresse mail</label>
                                             <input type="email" class="form-control" placeholder="Adresse mail" name="email" required value="<?php echo $key["tie_email"] ?>">
                                         </div>
                                     </div>
                                     
                                     
                                     <div class="form-group">
+                                        <label class="form-label">Adresse</label>
                                         <input type="text" class="form-control" placeholder="Adresse" name="adresse" required value="<?php echo $key["tie_adresse"] ?>">
                                     </div>
                                     
                                     <div class="row form-group">
                                         <div class="col">
+                                            <label class="form-label">Ville</label>
                                             <input class="villeinputupdate form-control" list="suggestionList" id="villeinputupdate<?php echo $id ?>" placeholder="Ville" autocomplete="off" value="<?php echo $key["fk_com_ID"]." ".$key["zip_code"]." ".$key["c_name"] ?>">
                                                 
                                             <input type="hidden" name="ville" id="villeinputupdate<?php echo $id ?>-hidden" required value="<?php echo $key["fk_com_ID"] ?>">
                                         </div>
                                         <div class="col">
+                                            <label class="form-label">Tiers</label>
                                             <select type="text" class="form-control" placeholder="Type tiers" name="type_tiers" required autocomplete="off">
                                                 <?php 
                                                 foreach ($types_tiers as $subkey) {?>
@@ -295,6 +302,7 @@ echo navbar("../../../");
 
                                     <div class="row form-group">
                                         <div class="col">
+                                            <label class="form-label">Type de réglement</label>
                                             <select type="text" class="form-control" placeholder="Type réglement" name="type_reglement" required autocomplete="off">
                                                 <?php 
                                                 foreach ($types_reglement as $subkey) {?>
@@ -307,33 +315,40 @@ echo navbar("../../../");
                                             </select>   
                                         </div>
                                         <div class="col">
+                                            <label class="form-label">IBAN</label>
                                             <input type="text" class="form-control" placeholder="IBAN" name="iban" required value="<?php echo $key["tie_IBAN"] ?>">
                                         </div>
                                     </div>
 
                                     <div class="row form-group">
                                         <div class="col">
+                                            <label class="form-label">BIC</label>
                                             <input type="text" class="form-control" placeholder="BIC" name="bic" required value="<?php echo $key["tie_BIC"] ?>">
                                         </div>
                                         <div class="col">
+                                            <label class="form-label">Code Banque</label>
                                             <input type="text" class="form-control" placeholder="Code Banque" name="code_banque" required value="<?php echo $key["tie_code_banque"] ?>">
                                         </div>
                                     </div>
 
                                     <div class="row form-group">
                                         <div class="col">
+                                            <label class="form-label">Code guichet</label>
                                             <input type="text" class="form-control" placeholder="Code guichet" name="code_guichet" required value="<?php echo $key["tie_code_guichet"] ?>">
                                         </div>
                                         <div class="col">
+                                            <label class="form-label">Numéro compte</label>
                                             <input type="text" class="form-control" placeholder="Numéro compte" name="numero_compte" required value="<?php echo $key["tie_num_compte"] ?>">
                                         </div>
                                     </div>
                                     
                                     <div class="row form-group">
                                         <div class="col">
+                                            <label class="form-label">Cle RIB</label>
                                             <input type="text" class="form-control" placeholder="Cle RIB" name="cle_rib" required value="<?php echo $key["tie_cle_rib"] ?>">
                                         </div>
                                         <div class="col">
+                                            <label class="form-label">Code Tarif</label>
                                             <select type="text" class="form-control" placeholder="Code tarif" name="code_tarif" required autocomplete="off">
                                                 <?php 
                                                 foreach ($tarifs as $subkey) {?>
@@ -346,6 +361,7 @@ echo navbar("../../../");
                                     </div>
 
                                     <div class="form-group">
+                                        <label class="form-label">Domicialitation</label>
                                         <input type="text" class="form-control" placeholder="Domiciliation" name="domiciliation" required value="<?php echo $key["tie_domiciliation"] ?>">
                                     </div>
                                     <center><button type="submit" name="update" class="btn btn-success btn-lg">Sauvegarder</button></center>

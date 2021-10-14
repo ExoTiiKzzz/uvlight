@@ -1,0 +1,30 @@
+.form-label{
+    margin-bottom: -5px; 
+    color: #fff;
+}
+
+.modal-header{
+    background: #3f3f3f;
+    color: #fff;
+}
+
+.modal-body{
+    background: #3f3f3f;
+}
+
+.close{
+    color: #fff;
+}
+
+.close span{
+    color: #fff;
+}
+
+.modal input, .modal select{
+    background: #ddd1d1;
+    margin: 10px 0 0 0;
+}
+
+.modal input::placeholder, .modal select::placeholder{
+    color: #000;
+}
