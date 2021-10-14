@@ -48,7 +48,7 @@ deleteBtn.addEventListener("click", () => {
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
           confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger'
+          cancelButton: 'btn btn-danger mr-4'
         },
         buttonsStyling: false
     })
@@ -59,7 +59,7 @@ deleteBtn.addEventListener("click", () => {
         showCancelButton: true,
         confirmButtonText: 'Oui, supprimer les donées !',
         cancelButtonText: 'Non, annuler !',
-        reverseButtons: true
+        reverseButtons: true,
     }).then((result) => {
     if (result.isConfirmed) {
         var checkedboxes = [];
@@ -92,15 +92,23 @@ deleteBtn.addEventListener("click", () => {
             }
         })
         swalWithBootstrapButtons.fire(
-        'Supprimé',
-        'Les données ont été suprimées',
-        'success'
+            {
+                title: 'Supprimé',
+                text:  'Les données ont été suprimées',
+                showConfirmButton: false,
+                timer: 2000,
+                icon: 'success'
+            }
         )
     } else if (result.dismiss === Swal.DismissReason.cancel) {
         swalWithBootstrapButtons.fire(
-            'Annulé',
-            'Vos données n\' ont pas été supprimées',
-            'error'
+            {
+                title: 'Annulé',
+                text:  'Vos données n\' ont pas été supprimées',
+                showConfirmButton: false,
+                timer: 2000,
+                icon: 'error'
+            }
         )
     }
     })

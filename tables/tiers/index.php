@@ -1,27 +1,19 @@
 <?php 
 require '../../lib/includes/defines.inc.php';
+require '../../lib/includes/doctype.php';
+require '../../lib/includes/navbar.php';
+require '../../lib/includes/sidenav.php';
+
+echo doctype("Produits", "../../../");
+echo sidenav("../../../");
+echo navbar("../../../");
+
 ?>
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- jQuery Library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
-    <link href='//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="../static/css/table.css">
-    <link rel="stylesheet" href="../../assets/css/loader.css">
-    <title>Tiers</title>
-</head>
-<body>
     <style>
         <?php 
-        require '../../assets/css/navbar.css';
+        require '../static/css/table.css';
         ?> 
     </style>
     <script> 
@@ -43,22 +35,7 @@ require '../../lib/includes/defines.inc.php';
 
 
   ?>
-    <header>
-        <ul class="menu">
-            <a data-toggle="tooltip" data-placement="bottom" title="Accueil" href="arthurlecompte.com/uvlight/"><i class="fas fa-home"></i></a>
-            <a data-toggle="tooltip" data-placement="bottom" title="Tiers" href="arthurlecompte.com/uvlight/atelier1/tiers/"><i class="fas fa-user"></i></a>
-            <a data-toggle="tooltip" data-placement="bottom" title="Produits" href="#">Produits(Pas encore dispo)</a>
-            <a class="logout" data-toggle="tooltip" data-placement="bottom" title="Se déconnecter"><i class="fas fa-power-off"></i></a>
-        </ul>
-    </header>
-
-    <aside>
-        <div class="loader">
-            <h2>Chargement...</h2>
-            <img src="../../assets/img/svg/loader.svg">
-        </div>
-    </aside>
-    <main style="display: none">
+    <main class="main-container sidenav-open">
         <datalist id="suggestionList">
             <?php 
             echo $citiesdatalist;                                        
