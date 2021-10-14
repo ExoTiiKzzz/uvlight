@@ -135,7 +135,7 @@ echo navbar("../../../");
                                         Modifier
                                     </button>
                                     <form action="trait.php" method="post">
-                                        <input type="hidden" name="article_id" value="<?php echo $id ?>">
+                                        <input type="hidden" name="produit_id" value="<?php echo $id ?>">
                                         <button type="submit" name="delete" class="delete-btn btn btn-danger">Supprimer</button>
                                     </form>
                                 </td>

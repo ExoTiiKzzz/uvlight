@@ -32,7 +32,7 @@ if(isset($_POST["create"])){
         <?php
     }
 }elseif(isset($_POST["delete"])){
-    $req = $oArticle->db_soft_delete_one($_POST["article_id"]);
+    $req = $oProduit->db_soft_delete_one($_POST["produit_id"]);
     if($req){
         ?>
             <script>
@@ -49,7 +49,7 @@ if(isset($_POST["create"])){
         array_push($ids, $id);
     }
 
-    $res = $oArticle->db_soft_delete_multi($ids);
+    $res = $oProduit->db_soft_delete_multi($ids);
     if($res){
         $response = "ok";
     }else{
