@@ -111,3 +111,8 @@ table{
 .dataTables_wrapper{
     width: 100%;
 }
+
+.dataTables_length label select option{
+    background: transparent;
+    color: #fff;
+}
