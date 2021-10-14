@@ -109,9 +109,9 @@ class Produit{
 
 		global $conn;
 
-		$request = "UPDATE ".DB_TABLE_ARTICLE." SET art_is_visible = 0 WHERE art_ID=:article_id";
+		$request = "UPDATE ".DB_TABLE_PRODUIT." SET pro_is_visible = 0 WHERE pro_ID=:produit_id";
 		$sql = $conn->prepare($request);
-		$sql->bindValue(':article_id', $produit_id, PDO::PARAM_INT);
+		$sql->bindValue(':produit_id', $produit_id, PDO::PARAM_INT);
 		try{
 			$sql->execute();
 			return true;
@@ -133,13 +133,12 @@ class Produit{
 
         global $conn;
 
-        $list_id = implode(',', $id_array);
+        $variables = $id_array;
+        $placeholders = str_repeat ('?, ',  count ($variables) - 1) . '?';
 
-        $request = "UPDATE ".DB_TABLE_ARTICLE." SET art_is_visible = 0 WHERE art_ID IN (:list_id)";
-        $sql = $conn->prepare($request);
-        $sql->bindValue(':list_id', $list_id, PDO::PARAM_STR);
+        $sql = $conn -> prepare ("UPDATE ".DB_TABLE_PRODUIT." SET pro_is_visible = 0 WHERE pro_ID IN($placeholders)");
         try{
-            $sql->execute();
+            $sql->execute($variables);
             return true;
         }catch(PDOException $e){
             return $this->errmessage.$e->getMessage();
