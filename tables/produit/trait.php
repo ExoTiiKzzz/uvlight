@@ -32,14 +32,23 @@ if(isset($_POST["create"])){
         <?php
     }
 }elseif(isset($_POST["delete"])){
-    $req = $oProduit->db_soft_delete_one($_POST["produit_id"]);
-    if($req){
-        ?>
-            <script>
-                window.location.replace("index.php");
-            </script>
-        <?php
+    $id = (int) $_POST["id"];
+
+    if(!$id){
+        $response["error"] = true;
+        $response["errortext"] = "Veuillez saisir une valeure correcte";
+        echo json_encode($response);
+        die;
     }
+
+    $res = $oProduit->db_soft_delete_one($id);
+    if($res){
+        $response["error"] = false;
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = "Une erreur s'est produite, veuillez reessayer";
+    }
+    echo json_encode($response);
 }elseif(isset($_POST["multi_delete"])){
     $array = $_POST["array"];
     $finalarray = json_decode($array, true);
@@ -63,6 +72,8 @@ if(isset($_POST["create"])){
     if(!$id){
         $response["error"] = true;
         $response["errortext"] = "Veuillez saisir une valeure correcte";
+        echo json_encode($response);
+        die;
     }
 
     $res = $oArticle->db_get_article_by_produit_id($id);
