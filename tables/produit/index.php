@@ -26,14 +26,18 @@ echo navbar("../../../");
 
         $articles = $oArticle->db_get_all();
 
-        $liste_articles = "";
+        $liste_articles = "<datalist id='liste_articles'>";
         foreach ($articles as $key) {
-            $liste_articles .= "<option value=".$key["art_ID"].">".$key["art_nom"]."</option>";
+            $liste_articles .= "<option>".$key["art_nom"]."</option>";
         }
-        $liste_casiers = "";
+        $liste_articles .= "</datalist>";
+        $liste_casiers = "<datalist id='liste_casiers'>";
         foreach ($casiers as $key) {
-            $liste_casiers .= "<option value=".$key["cas_ID"].">".$key["cas_lib"]."</option>";
+            $liste_casiers .= "<option>".$key["cas_lib"]."</option>";
         }
+        $liste_casiers.= "</datalist>";
+        echo $liste_casiers;
+        echo $liste_articles;
 
 ?>
 
@@ -54,25 +58,23 @@ echo navbar("../../../");
                             <div class="main-form">
                                 <div class="form-group">
                                     <div class="alert alert-danger" style="display: none">Le nom du produit doit faire entre 1 et 50 charactères maximum</div>
-                                    <input placeholder="Nom du produit" class="form-control name_input"
+                                    <input placeholder="Nom du produit" class="form-control name_input createLib"
                                     style="margin: 0 auto" type="text" name="produit_name" required>
                                 </div>
                                 <div class="form-group">
-                                    <textarea class="form-control" placeholder="Commentaire pour le produit" rows="3" name="commentaire"></textarea>
+                                    <textarea class="form-control createComment" placeholder="Commentaire pour le produit" rows="3" name="commentaire"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <select name="casier" class="form-control">
+                                    <select name="casier" class="form-control createCas" required>
                                         <?php echo $liste_casiers ?>
                                     </select>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-7">
-                                        <select type="text" class="form-control" placeholder="Article" name="article[]" required autocomplete="off" required>
-                                        <?php echo $liste_articles ?>
-                                        </select>
+                                        <input class="form-control createArtLib" list="liste_articles" placeholder="Article" name="article[]" required autocomplete="off" required>
                                     </div>
                                     <div class="form-group col-3">
-                                        <input placeholder="Quantité" class="form-control" name="quantite[]">
+                                        <input placeholder="Quantité" class="form-control createArtQte" name="quantite[]" required>
                                     </div>
 
                                     
@@ -85,7 +87,7 @@ echo navbar("../../../");
                     
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                            <button type="submit" name="create" class="btn btn-primary">Créer</button>
+                            <button type="button" name="create" class="btn btn-primary createBtn">Créer</button>
                         </div>
                     </form>
                 </div>
@@ -99,7 +101,6 @@ echo navbar("../../../");
                     <th style='text-align :center'>ID</th>
                     <th style='text-align :center'>Nom</th>
                     <th style='text-align :center'>Commentaire</th>
-                    <th style='text-align :center'>Casier</th>
                     <th style='text-align :center'>Nombre d'articles</th>
                     <th style='text-align :center'>Actions</th>
                 </thead>
@@ -121,9 +122,7 @@ echo navbar("../../../");
                                 <td>
                                     <center><?php echo $key["pro_commentaire"] ?></center>
                                 </td>
-                                <td>
-                                    <center><?php echo $key["cas_lib"] ?></center>
-                                </td>
+                                <!-- casier à rajouter -->
                                 <td>
                                     <center>
                                     <button type='button' class='btn btn-secondary seeArticleBtn' data-toggle='modal' data-index="<?php echo $id ?>" data-target='#seearticles'>
@@ -171,15 +170,16 @@ echo navbar("../../../");
                     </button>
                 </div>
                 <form action="trait.php" method="post" class="update_form">
+                    <input type="hidden" class="updateId">
                     <div class="mx-auto modal-body col-10">
                         <div class="main-form">
                             <div class="form-group">
                                 <div class="alert alert-danger" style="display: none">Le nom du produit doit faire entre 1 et 50 charactères maximum</div>
-                                <input placeholder="Nom du produit" class="form-control name_input updateProduitName"
-                                style="margin: 0 auto" type="text" name="produit_name" required value="">
+                                <input placeholder="Nom du produit" class="form-control name_input updateLib"
+                                style="margin: 0 auto" type="text" required value="">
                             </div>
                             <div class="form-group">
-                                <textarea class="form-control updateComment" placeholder="Commentaire pour le produit" rows="3" name="commentaire"></textarea>
+                                <textarea class="form-control updateComment" placeholder="Commentaire" rows="3"></textarea>
                             </div>
                             <div class="updateContainer">
 
@@ -192,8 +192,8 @@ echo navbar("../../../");
                     </div>
                 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                        <button type="submit" name="create" class="btn btn-primary">Créer</button>
+                        <button type="button" class="btn btn-secondary updateCloseBtn" data-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-primary updateRowBtn">Modifier</button>
                     </div>
                 </form>
             </div>
@@ -244,14 +244,16 @@ echo navbar("../../../");
     <script src="../script/jquery.dataTables.min.js"></script>
 
     <script src="../script/checkboxes.js"></script>
-    <script src="../script/index.js"></script>
+    <script src="../script/deleteRow.js"></script>
+    <script src="../script/updateRow.js"></script>
     <script src="../../script/js/sidenav.js"></script>
     <script src="./js/index.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <script> //initialisation datatable
+        var table = $('#table');
         $(document).ready(function(){
-            $('#table').DataTable();
+            table.dataTable();
         });
 
     </script>

@@ -4,33 +4,39 @@ require '../../lib/includes/defines.inc.php';
 
 
 if(isset($_POST["create"])){
-    if(empty($_POST["produit_name"]) || empty($_POST["article"]) || empty($_POST["quantite"]) || !is_array($_POST["article"]) || !is_array($_POST["quantite"]) ){
-        ?>
-            <script>
-                window.location.replace("index.php");
-            </script>
-        <?php
+    $articlesarray = explode(",", $_POST["articles"]);
+    $quantitesarray = explode(",", $_POST["quantites"]);
+
+    $res = $oProduit->db_create($_POST["lib"], $_POST["comment"], $_POST["cas"], $articlesarray, $quantitesarray);
+    if($res != false){
+        $response["error"] = false;
+        $response["existingid"] = $oProduit->db_get_one();
+        $response["createdid"] = $res;
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = $res;
     }
-    $req = $oProduit->db_create($_POST["produit_name"], $_POST["commentaire"], $_POST["casier"], $_POST["article"], $_POST["quantite"]);
-    var_dump($req);
-    // if($req){
-        ?>
-            <!-- <script>
-                window.location.replace("index.php");
-            </script> -->
-        <?php
-    // }else{
-    //     var_dump($req);
-    // }
+    echo json_encode($response);
+    
 }elseif(isset($_POST["update"])){
-    $req = $oArticle->db_update($_POST["article_id"], $_POST["article_name"], $_POST["article_commentaire"], $_POST["categorie"], $_POST["casier"]);
-    if($req){
-        ?>
-            <script>
-                window.location.replace("index.php");
-            </script>
-        <?php
+    $id = (int) $_POST["id"];
+
+    if(!$id){
+        $response["error"] = true;
+        $response["errortext"] = "Veuillez saisir une valeure correcte";
+        echo json_encode($response);
+        die;
     }
+
+    $res = $oProduit->db_update($_POST["id"], $_POST["lib"], $_POST["comment"]);
+    if($res === true){
+        $response["error"] = false;
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = "Une erreur s'est produite, veuillez reessayer";
+    }
+    echo json_encode($response);
+
 }elseif(isset($_POST["delete"])){
     $id = (int) $_POST["id"];
 
@@ -79,12 +85,12 @@ if(isset($_POST["create"])){
     $res = $oArticle->db_get_article_by_produit_id($id);
     if($res){
         $response["error"] = false;
-        $response["produit"] = $oProduit->db_get_by_id($id);
         $response["content"] = $res;
     }else{
         $response["error"] = true;
-        $response["errortext"] = "Une erreur s'est produite, veuillez reessayer";
+        $response["errortext"] = "article";
     }
+    $response["produit"] = $oProduit->db_get_by_id($id);
     echo json_encode($response);
 }elseif(isset($_POST["delete_article"])){
 

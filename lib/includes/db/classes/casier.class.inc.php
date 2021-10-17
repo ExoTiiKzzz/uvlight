@@ -36,6 +36,24 @@ class Casier{
         }
     }
 
+	public function db_get_by_lib($casier_lib=''){
+		if(!$casier_lib){
+			return false;
+		}
+
+		global $conn;
+
+		$request = "SELECT * FROM ".DB_TABLE_CASIER." WHERE cas_lib = :lib";
+		$sql = $conn->prepare($request);
+		$sql->bindValue(':lib', $casier_lib, PDO::PARAM_STR);
+		try{
+			$sql->execute();
+			return $sql->fetch(PDO::FETCH_ASSOC);
+		}catch(PDOException $e){
+			return $this->errmessage.$e->getMessage();
+		}
+	}
+
     public function db_create($libelle=''){
 
         if(!$libelle){

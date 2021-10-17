@@ -37,12 +37,32 @@ class Produit{
 		}
 	}
 
-	public function db_create($produit_nom='', $produit_commentaire, $fk_casier_id ,$articles=[], $quantite=[]){
+	public function db_get_one(){
+		global $conn;
+
+		$request = "SELECT pro_ID FROM ".DB_TABLE_PRODUIT." WHERE pro_is_visible LIMIT 1";
+		try{
+			$sql = $conn->query($request);
+			return $sql->fetch(PDO::FETCH_ASSOC)["pro_ID"];
+		}catch(PDOException $e){
+			return $this->errmessage.$e->getMessage();
+		}
+	}
+
+	public function db_create($produit_nom='', $produit_commentaire, $fk_casier ,$articles=[], $quantite=[]){
 		if(!$produit_nom || !is_array($articles) || !is_array($quantite)){
-			return false;
+			return "coucou";
 		}
 
 		global $conn;
+		global $oCasier;
+
+		$fk_casier_id = (int) $oCasier->db_get_by_lib($fk_casier)["cas_ID"];
+
+		if(!$fk_casier_id){
+			$fk_casier_id = 1;
+		}
+
 		$request = "INSERT INTO ".DB_TABLE_PRODUIT."(pro_lib, pro_commentaire, fk_cas_ID) VALUES(:nom_produit, :commentaire, :casier_ID)";
         $sql = $conn->prepare($request);
         $sql->bindValue(":nom_produit", $produit_nom, PDO::PARAM_STR);
@@ -64,7 +84,7 @@ class Produit{
                 }
                 try{
                     $sql->execute();
-                    return true;
+                    return $id;
                 }catch(PDOException $e){
                     return $this->errmessage.$e->getMessage();
                 }
@@ -76,22 +96,19 @@ class Produit{
 		}
 	}
 
-	public function db_update($produit_id=0, $produit_nom='', $produit_commentaire='', $fk_categorie_id=0, $fk_casier_id=0){
+	public function db_update($produit_id=0, $produit_nom='', $produit_commentaire=''){
+		//rajouter casier + categorie
 		$produit_id = (int) $produit_id;
-		$fk_categorie_id = (int) $fk_categorie_id;
-		$fk_casier_id = (int) $fk_casier_id;
-		if(!$produit_id || !$fk_categorie_id || !$fk_casier_id){
+		if(!$produit_id){
 			return false;
 		}
 
 		global $conn;
-		$request = "UPDATE ".DB_TABLE_ARTICLE." SET art_nom= :art_nom, art_commentaire = :art_commentaire, fk_cat_ID = :fk_cat_ID, fk_cas_ID = :fk_cas_ID WHERE art_ID = :article_ID";
+		$request = "UPDATE ".DB_TABLE_PRODUIT." SET pro_lib= :pro_lib, pro_commentaire = :pro_commentaire WHERE pro_ID = :produit_ID";
 		$sql = $conn->prepare($request);
-		$sql->bindValue(":art_nom", $produit_nom, PDO::PARAM_STR);
-		$sql->bindValue(":art_commentaire", $produit_commentaire, PDO::PARAM_STR);
-		$sql->bindValue(":fk_cat_ID", $fk_categorie_id, PDO::PARAM_INT);
-		$sql->bindValue(":fk_cas_ID", $fk_casier_id, PDO::PARAM_INT);
-		$sql->bindValue(":article_ID", $produit_id, PDO::PARAM_INT);
+		$sql->bindValue(":pro_lib", $produit_nom, PDO::PARAM_STR);
+		$sql->bindValue(":pro_commentaire", $produit_commentaire, PDO::PARAM_STR);
+		$sql->bindValue(":produit_ID", $produit_id, PDO::PARAM_INT);
 		try{
 			$sql->execute();
 			return true;
