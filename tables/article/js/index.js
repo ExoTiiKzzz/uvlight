@@ -32,7 +32,6 @@ createBtn.addEventListener("click", (e) =>{
     )
     .then(response => response.json())
     .then(result => {
-        console.log(result);
         if(result.error === true){
             console.log(result.errortext);
         }else{

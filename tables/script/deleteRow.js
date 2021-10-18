@@ -94,7 +94,8 @@ deleteBtn.addEventListener("click", () => {
     }).then((result) => {
     if (result.isConfirmed) {
         var checkedboxes = [];
-        checkboxes.forEach(checkbox => {
+        var newcheckboxes = document.querySelectorAll(".checkbox");
+        newcheckboxes.forEach(checkbox => {
             if(checkbox.checked){
                 var checkid = checkbox.dataset.index;
                 checkedboxes.push(checkid);

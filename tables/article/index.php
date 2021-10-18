@@ -28,6 +28,21 @@
         $categories = $oCategorie->db_get_all();
         $casiers = $oCasier->db_get_all();
 
+        $listeCasiers = "<datalist id='liste_casiers'>";
+        foreach ($casiers as $key) {
+            $listeCasiers .= "<option value='".$key["cas_lib"]."'>";
+        }
+        $listeCasiers .="</datalist>";
+
+        $listeCategories = "<datalist id='liste_categories'>";
+        foreach ($categories as $key) {
+            $listeCategories .= "<option value='".$key["cat_nom"]."'>";
+        }
+        $listeCategories .="</datalist>";
+
+        echo $listeCasiers;
+        echo $listeCategories;
+
 ?>
 <div class="main-container sidenav-open">
     
@@ -68,7 +83,7 @@
                                 <center><?php echo $key["cas_lib"] ?></center>
                             </td>
                             <td style='display:flex; justify-content: space-evenly;'>
-                                <button type='button' class='btn btn-primary updateBtn' data-index="<?php echo $id ?>" data-toggle='modal' data-target='#modal<?php echo $id ?>'>
+                                <button type='button' class='btn btn-primary updateBtn' data-index="<?php echo $id ?>" data-toggle='modal' data-target='#updateModal'>
                                     Modifier
                                 </button>
                                 <button type="button" name="delete" data-index="<?php echo $id ?>" class="delete-btn btn btn-danger">
@@ -113,25 +128,11 @@
                         </div>
 
                         <div class="form-group">
-                            <select type="text" class="form-control createCat" placeholder="Code tarif" name="categorie" required autocomplete="off" required>
-                                <?php 
-                                foreach ($categories as $subkey) {?>
-                                    <option value="<?php echo $subkey["cat_ID"] ?>"><?php echo $subkey["cat_nom"] ?></option>   
-                                <?php
-                                }
-                                ?>
-                            </select>
+                            <input list='liste_categories' class="form-control createCat">
                         </div>
 
                         <div class="form-group">
-                            <select type="text" class="form-control createCas" placeholder="Code tarif" name="casier" required autocomplete="off" required>
-                                <?php 
-                                foreach ($casiers as $subkey) {?>
-                                    <option value="<?php echo $subkey["cas_ID"] ?>"><?php echo $subkey["cas_lib"] ?></option>
-                                <?php
-                                }
-                                ?>
-                            </select>
+                            <input list='liste_casiers' class="form-control createCas">
                         </div>
                         
                         
@@ -145,53 +146,33 @@
             </div>
         </div>
     </div>
-    
-
-    <?php 
-    
-        foreach($data as $key){ ?>
 
             <!-- Modal -->
-            <div class="modal fade" id="modal<?php echo $key["art_ID"] ?>" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Modifier le casier</h5>
+                            <h5 class="modal-title">Modifier l'article</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <form action="trait.php" method="post" class="update_form" onsubmit="return checkForm(0)">
-                            <input type="hidden" name="article_id" value="<?php echo $key["art_ID"] ?>">
                             <div class="mx-auto modal-body col-10">
                                 <div class="form-group">
                                     <div data-index="0" class="alert alert-danger" style="display: none">Le nom de l'article doit faire entre 1 et 50 charactères maximum</div>
-                                    <input placeholder="Nom de l'article" class="form-control name_input" data-index="0" 
-                                    style="margin: 0 auto" type="text" name="article_name" required value="<?php echo $key["art_nom"] ?>">
+                                    <input class="form-control name_input updateLib" data-index="0" 
+                                    style="margin: 0 auto" type="text" name="article_name" required>
                                 </div>
                                 <div class="form-group">
-                                    <textarea placeholder="Commentaire sur le produit" class="form-control" rows="3" name="article_commentaire"><?php if($key["art_commentaire"] === "0"){ echo " "; }else { echo $key["art_commentaire"]; } ?></textarea>
+                                    <textarea class="form-control updateComment" rows="3" name="article_commentaire"></textarea>
                                 </div>
 
                                 <div class="form-group">
-                                    <select type="text" class="form-control" placeholder="Code tarif" name="categorie" required autocomplete="off" required>
-                                        <?php 
-                                        foreach ($categories as $subkey) {?>
-                                            <option value="<?php echo $subkey["cat_ID"] ?>" <?php if($key["fk_cat_ID"] === $subkey["cat_ID"]) echo "selected" ?>><?php echo $subkey["cat_nom"] ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
+                                    <select type="text" class="form-control updateCat" name="categorie" required autocomplete="off" required></select>
                                 </div>
                                 <div class="form-group">
-                                    <select type="text" class="form-control" placeholder="Code tarif" name="casier" required autocomplete="off" required>
-                                        <?php 
-                                        foreach ($casiers as $subkey) {?>
-                                            <option value="<?php echo $subkey["cas_ID"] ?>" <?php if($key["fk_cas_ID"] === $subkey["cas_ID"]) echo "selected" ?>><?php echo $subkey["cas_lib"] ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
+                                    <select type="text" class="form-control updateCas" name="casier" required autocomplete="off" required></select>
                                 </div>
                                 
                                 
@@ -199,17 +180,12 @@
                         
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                                <button type="submit" name="update" class="btn btn-primary">Modifier</button>
+                                <button type="button" name="update" class="btn btn-primary updateRowBtn">Modifier</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-        
-        <?php    
-        }
-
-    ?>
 </div>
 
     <!-- jQuery Library -->
