@@ -6,11 +6,12 @@
     
     echo doctype("Article", $path);
     echo navbar($path);
-    echo sidenav("../../");
+    echo sidenav($path);
 ?>
 <style>
     <?php 
         require '../static/css/table.css';
+        require '../../assets/css/main.css';
         require '../../assets/css/navbar.css';
         require '../../assets/css/sidenav.css';
     ?>
@@ -30,6 +31,8 @@
 ?>
 <div class="main-container sidenav-open">
     
+
+    <button type='button' class='my-3 btn btn-success' data-toggle='modal' data-target='#createmodal'> Créer un article </button>
 
     <div class="table-container" style="margin-right: 0px;">
         <table id="table">
@@ -65,13 +68,12 @@
                                 <center><?php echo $key["cas_lib"] ?></center>
                             </td>
                             <td style='display:flex; justify-content: space-evenly;'>
-                                <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modal<?php echo $id ?>'>
+                                <button type='button' class='btn btn-primary updateBtn' data-index="<?php echo $id ?>" data-toggle='modal' data-target='#modal<?php echo $id ?>'>
                                     Modifier
                                 </button>
-                                <form action="trait.php" method="post">
-                                    <input type="hidden" name="article_id" value="<?php echo $id ?>">
-                                    <button type="submit" name="delete" class="delete-btn btn btn-danger">Supprimer</button>
-                                </form>
+                                <button type="button" name="delete" data-index="<?php echo $id ?>" class="delete-btn btn btn-danger">
+                                    Supprimer
+                                </button>
                             </td>
                         </tr>
                         <?php
@@ -89,8 +91,6 @@
         </button>
     </div>
   </div>
-
-  <button type='button' class='mt-4 ml-3 btn btn-success' data-toggle='modal' data-target='#createmodal'> Créer un article </button>
     <!-- modal pour créer une catégorie -->
     <div class="modal fade" id="createmodal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -105,15 +105,15 @@
                     <div class="mx-auto modal-body col-10">
                         <div class="form-group">
                             <div data-index="0" class="alert alert-danger" style="display: none">Le nom de l'article doit faire entre 1 et 50 charactères maximum</div>
-                            <input placeholder="Nom de l'article" class="form-control name_input" data-index="0" 
+                            <input placeholder="Nom de l'article" class="form-control name_input createLib" data-index="0" 
                             style="margin: 0 auto" type="text" name="article_name" required>
                         </div>
                         <div class="form-group">
-                            <textarea placeholder="Commentaire sur le produit" class="form-control" rows="3" name="article_commentaire"></textarea>
+                            <textarea placeholder="Commentaire sur le produit" class="form-control createComment" rows="3" name="article_commentaire"></textarea>
                         </div>
 
                         <div class="form-group">
-                            <select type="text" class="form-control" placeholder="Code tarif" name="categorie" required autocomplete="off" required>
+                            <select type="text" class="form-control createCat" placeholder="Code tarif" name="categorie" required autocomplete="off" required>
                                 <?php 
                                 foreach ($categories as $subkey) {?>
                                     <option value="<?php echo $subkey["cat_ID"] ?>"><?php echo $subkey["cat_nom"] ?></option>   
@@ -124,7 +124,7 @@
                         </div>
 
                         <div class="form-group">
-                            <select type="text" class="form-control" placeholder="Code tarif" name="casier" required autocomplete="off" required>
+                            <select type="text" class="form-control createCas" placeholder="Code tarif" name="casier" required autocomplete="off" required>
                                 <?php 
                                 foreach ($casiers as $subkey) {?>
                                     <option value="<?php echo $subkey["cas_ID"] ?>"><?php echo $subkey["cas_lib"] ?></option>
@@ -138,8 +138,8 @@
                     </div>
                 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                        <button type="submit" name="create" class="btn btn-primary">Créer</button>
+                        <button type="button" class="btn btn-secondary createCloseBtn" data-dismiss="modal">Fermer</button>
+                        <button type="button" name="create" class="btn btn-primary createBtn">Créer</button>
                     </div>
                 </form>
             </div>
@@ -219,12 +219,14 @@
     <script src="../script/jquery.dataTables.min.js"></script>
 
     <script src="../script/checkboxes.js"></script>
-    <script src="../script/index.js"></script>
+    <script src="../script/deleteRow.js"></script>
+    <script src="./js/index.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <script> //initialisation datatable
+        var table = $('#table');
         $(document).ready(function(){
-            $('#table').DataTable();
+            table.dataTable();
         });
 
         function checkForm(formid){

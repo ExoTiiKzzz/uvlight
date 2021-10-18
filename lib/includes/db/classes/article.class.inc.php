@@ -36,6 +36,18 @@ class Article{
 		}
 	}
 
+	public function db_get_one(){
+		global $conn;
+
+		$request = "SELECT art_ID FROM ".DB_TABLE_ARTICLE." WHERE art_is_visible = 1 AND art_ID != 0 LIMIT 1";
+		try{
+			$sql = $conn->query($request);
+			return $sql->fetch(PDO::FETCH_ASSOC)["art_ID"];
+		}catch(PDOException $e){
+			return $this->errmessage.$e->getMessage();
+		}
+	}
+
 	public function db_get_article_by_produit_id($produit_id=0){
 		$produit_id = (int) $produit_id;
 		if(!$produit_id){
@@ -64,7 +76,7 @@ class Article{
 			return false;
 		}
 
-		global $conn;
+		global $conn, $oCasier, $oCategorie;
 		$request = "INSERT INTO ".DB_TABLE_ARTICLE."(art_nom, art_commentaire, fk_cat_ID, fk_cas_ID) VALUES(:article_nom, :article_commentaire, :fk_categorie_id, :fk_casier_id);";
 		$sql = $conn->prepare($request);
 		if(!$article_commentaire) $article_commentaire = "0";
@@ -74,7 +86,11 @@ class Article{
 		$sql->bindValue(':fk_casier_id', $fk_casier_id, PDO::PARAM_INT);
 		try{
 			$sql->execute();
-			return true;
+			$return = [];
+			$return["lastid"] = $conn->lastInsertId();
+			$return["cat"] = $oCategorie->db_get_by_id((int) $fk_categorie_id)["cat_nom"];
+			$return["cas"] = $oCasier->db_get_by_id((int) $fk_casier_id)["cas_lib"];
+			return $return;
 		}catch(PDOException $e){
 			return $this->errmessage.$e->getMessage();
 		}
@@ -137,13 +153,12 @@ class Article{
 
         global $conn;
 
-        $list_id = implode(',', $id_array);
+        $variables = $id_array;
+        $placeholders = str_repeat ('?, ',  count ($variables) - 1) . '?';
 
-        $request = "UPDATE ".DB_TABLE_ARTICLE." SET art_is_visible = 0 WHERE art_ID IN (:list_id)";
-        $sql = $conn->prepare($request);
-        $sql->bindValue(':list_id', $list_id, PDO::PARAM_STR);
+        $sql = $conn -> prepare ("UPDATE ".DB_TABLE_ARTICLE." SET art_is_visible = 0 WHERE art_ID IN($placeholders)");
         try{
-            $sql->execute();
+            $sql->execute($variables);
             return true;
         }catch(PDOException $e){
             return $this->errmessage.$e->getMessage();

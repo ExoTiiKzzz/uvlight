@@ -4,23 +4,18 @@ require '../../lib/includes/defines.inc.php';
 
 
 if(isset($_POST["create"])){
-    if(empty($_POST["article_name"]) || empty($_POST["categorie"]) || empty($_POST["casier"])){
-        ?>
-            <script>
-                window.location.replace("index.php");
-            </script>
-        <?php
-    }
-    $req = $oArticle->db_create($_POST["article_name"], $_POST["article_commentaire"], $_POST["categorie"], $_POST["casier"]);
-    if($req){
-        ?>
-            <script>
-                window.location.replace("index.php");
-            </script>
-        <?php
+    $res = $oArticle->db_create($_POST["lib"], $_POST["comment"], $_POST["cat"], $_POST["cas"]);
+    if($res != false){
+        $response["error"] = false;
+        $response["existingid"] = $oArticle->db_get_one();
+        $response["createdid"] = $res["lastid"];
+        $response["cat"] = $res["cas"];
+        $response["cas"] = $res["cat"];
     }else{
-        var_dump($req);
+        $response["error"] = true;
+        $response["errortext"] = $res;
     }
+    echo json_encode($response);
 }elseif(isset($_POST["update"])){
     $req = $oArticle->db_update($_POST["article_id"], $_POST["article_name"], $_POST["article_commentaire"], $_POST["categorie"], $_POST["casier"]);
     if($req){
@@ -31,14 +26,23 @@ if(isset($_POST["create"])){
         <?php
     }
 }elseif(isset($_POST["delete"])){
-    $req = $oArticle->db_soft_delete_one($_POST["article_id"]);
-    if($req){
-        ?>
-            <script>
-                window.location.replace("index.php");
-            </script>
-        <?php
+    $id = (int) $_POST["id"];
+
+    if(!$id){
+        $response["error"] = true;
+        $response["errortext"] = "Veuillez saisir une valeure correcte";
+        echo json_encode($response);
+        die;
     }
+
+    $res = $oArticle->db_soft_delete_one($id);
+    if($res){
+        $response["error"] = false;
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = "Une erreur s'est produite, veuillez reessayer";
+    }
+    echo json_encode($response);
 }elseif(isset($_POST["multi_delete"])){
     $array = $_POST["array"];
     $finalarray = json_decode($array, true);

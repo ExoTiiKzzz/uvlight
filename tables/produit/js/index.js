@@ -103,7 +103,7 @@
                     var seeArticle = document.createElement("td");
                     seeArticle.appendChild(document.querySelector(".seeArticleBtn[data-index='"+id+"']").cloneNode(true));
                     seeArticle.dataset.index = result.createdid;
-                    seeArticle.addEventListener( "click", seeArticleListener(e));
+                    seeArticle.addEventListener( "click", seeArticleListener);
                     // seeArticle.innerText = "Voir les articles (<span class='countArticles' data-index='"+result.createdid+"'>" + articlesArray.length + "</span>)";
 
                     var update = document.querySelector(".updateBtn[data-index='"+id+"']").cloneNode(true);
@@ -133,6 +133,8 @@
 
                     table.api().row.add(newRow);
                     table.api().order( [ 1, 'asc' ] ).draw();
+
+                    document.querySelector(".createCloseBtn").click();
                 }
             })
             .catch(err => console.log(err));
@@ -260,7 +262,7 @@
             .then(response => response.json())
             .then(produit => {
                 if(produit.error){
-                    console.log(error.texterror);
+                    console.log(produit.texterror);
                 } else{
                     document.querySelector(".seearticletitle").innerHTML = produit.content.pro_lib;
                 }

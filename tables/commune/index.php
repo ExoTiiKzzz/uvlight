@@ -1,45 +1,41 @@
 <?php 
-require '../../lib/includes/defines.inc.php';
+    require '../../lib/includes/defines.inc.php';
+    require '../../lib/includes/navbar.php';
+    require '../../lib/includes/sidenav.php';
+    require '../../lib/includes/doctype.php';
+
+    echo doctype("Article", $path);
+    echo navbar($path);
+    echo sidenav($path);
 ?>
-
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.2/datatables.min.css"/>
-    <script src="autocomplete.js">
-    </script>
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
-    <!-- jQuery Library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
-
-    
-    <title>Departement</title>
-</head>
 <body>
+    <style>
+        <?php 
+            require '../static/css/table.css';
+        ?>
+    </style>
 
 <?php
     if(!isset($_GET["nav"]) || $_GET["nav"] === "read"){
 
   ?>
-  <div class="container pt-5">
+  <div class="main-container sidenav-open">
     <a class="btn btn-success mb-4" href="index.php?nav=create">Créer une nouvelle commune</a>
 
-    <table id="table">
-        <thead>
-            <th>Code INSEE</th>
-            <th>Code ZIP</th>
-            <th>Nom Departement</th>
-            <th>Nom</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-            <th>Actions</th>
-        </thead>
-    </table>
+    <div class="table-container">
+        <table id="table">
+            <thead>
+                <th>Code INSEE</th>
+                <th>Code ZIP</th>
+                <th>Nom Departement</th>
+                <th>Nom</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Actions</th>
+            </thead>
+        </table>
+    </div>
+    
   </div>
     
 
@@ -121,5 +117,6 @@ require '../../lib/includes/defines.inc.php';
 
     <!-- Datatable JS -->
     <script src="../script/jquery.dataTables.min.js"></script>
+        <script src="../../script/js/sidenav.js"></script>
 </body>
 </html>

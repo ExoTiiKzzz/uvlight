@@ -1,12 +1,12 @@
 <?php 
-require '../../lib/includes/defines.inc.php';
-require '../../lib/includes/doctype.php';
-require '../../lib/includes/navbar.php';
-require '../../lib/includes/sidenav.php';
+    require '../../lib/includes/defines.inc.php';
+    require '../../lib/includes/navbar.php';
+    require '../../lib/includes/sidenav.php';
+    require '../../lib/includes/doctype.php';
 
-echo doctype("Produits", "../../../");
-echo sidenav("../../../");
-echo navbar("../../../");
+    echo doctype("Article", $path);
+    echo navbar($path);
+    echo sidenav($path);
 
 ?>
 
@@ -381,6 +381,7 @@ echo navbar("../../../");
 
     <!-- Datatable JS -->
     <script src="../script/jquery.dataTables.min.js"></script>
+    <script src="../../script/js/sidenav.js"></script>
 
     <script src="../script/checkboxes.js"></script>
     <script src="../script/index.js"></script>

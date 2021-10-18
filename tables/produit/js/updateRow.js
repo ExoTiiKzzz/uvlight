@@ -65,9 +65,9 @@ function updateRow(){
 
 
             var row = document.querySelector('tr[data-value="'+id+'"]');
-            table.api().row(row).remove();
 
             table.api().row.add(newRow);
+            table.api().row(row).remove();
             table.api().order( [ 1, 'asc' ] ).draw();
             document.querySelector(".updateCloseBtn").click();
         }

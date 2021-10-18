@@ -40,7 +40,7 @@ class Produit{
 	public function db_get_one(){
 		global $conn;
 
-		$request = "SELECT pro_ID FROM ".DB_TABLE_PRODUIT." WHERE pro_is_visible LIMIT 1";
+		$request = "SELECT pro_ID FROM ".DB_TABLE_PRODUIT." WHERE pro_is_visible = 1 AND pro_ID != 0 LIMIT 1";
 		try{
 			$sql = $conn->query($request);
 			return $sql->fetch(PDO::FETCH_ASSOC)["pro_ID"];

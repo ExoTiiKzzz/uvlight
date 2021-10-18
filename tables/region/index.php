@@ -1,17 +1,19 @@
 <?php 
-require '../../lib/includes/defines.inc.php';
-?>
+    require '../../lib/includes/defines.inc.php';
+    require '../../lib/includes/navbar.php';
+    require '../../lib/includes/sidenav.php';
+    require '../../lib/includes/doctype.php';
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.2/datatables.min.css"/>
-    <title>Regions</title>
-</head>
+    echo doctype("Article", $path);
+    echo navbar($path);
+    echo sidenav($path);
+?>
 <body>
+    <style>
+        <?php 
+            require '../static/css/table.css';
+        ?>
+    </style>
 
 <?php
     if(!isset($_GET["nav"]) || $_GET["nav"] === "read"){
@@ -19,30 +21,34 @@ require '../../lib/includes/defines.inc.php';
         $data = $oRegion->db_get_all();
 
   ?>
-    <a href="index.php?nav=create">Créer une nouvelle région</a>
-
-    <table id="table">
-        <thead>
-            <th>Code</th>
-            <th>Nom</th>
-            <th>Actions</th>
-        </thead>
-        <tbody>
-            <?php 
-                foreach ($data as $key) {
-                    $id = $key["id"];
-                    echo "<tr>
-                    <td><center>".$key["code"]."</center></td>
-                    <td><center>".$key["name"]."</center></td>
-                    <td style='display:flex; justify-content: space-evenly;'>
-                        <a href='index.php?nav=update&id=$id'>Modifier</a>
-                        <a href='index.php?nav=delete&id=$id'>Supprimer</a>
-                    </td>
-                    </tr>";
-                }
-            ?>
-        </tbody>
-    </table>
+  <div class="main-container sidenav-open">
+        <a href="index.php?nav=create">Créer une nouvelle région</a>
+        <div class="table-container">
+            <table id="table">
+                <thead>
+                    <th>Code</th>
+                    <th>Nom</th>
+                    <th>Actions</th>
+                </thead>
+                <tbody>
+                    <?php 
+                        foreach ($data as $key) {
+                            $id = $key["id"];
+                            echo "<tr>
+                            <td><center>".$key["code"]."</center></td>
+                            <td><center>".$key["name"]."</center></td>
+                            <td style='display:flex; justify-content: space-evenly;'>
+                                <a href='index.php?nav=update&id=$id'>Modifier</a>
+                                <a href='index.php?nav=delete&id=$id'>Supprimer</a>
+                            </td>
+                            </tr>";
+                        }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+  </div>
+    
 
     <!-- jQuery Library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -97,5 +103,6 @@ require '../../lib/includes/defines.inc.php';
     ?>
 
     
+<script src="../../script/js/sidenav.js"></script>
 </body>
 </html>
