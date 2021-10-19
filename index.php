@@ -22,7 +22,7 @@
 
     echo doctype("Accueil", $path);
     echo navbar($path);
-    echo sidenav();
+    echo sidenav($path);
 ?>
 
 
