@@ -54,6 +54,18 @@ class Casier{
 		}
 	}
 
+    public function db_get_one(){
+        global $conn;
+
+		$request = "SELECT cas_ID FROM ".DB_TABLE_CASIER." WHERE cas_is_visible = 1 AND cas_ID != 0 LIMIT 1";
+		try{
+			$sql = $conn->query($request);
+			return $sql->fetch(PDO::FETCH_ASSOC);
+		}catch(PDOException $e){
+			return $this->errmessage.$e->getMessage();
+		}
+    }
+
     public function db_create($libelle=''){
 
         if(!$libelle){
@@ -67,13 +79,15 @@ class Casier{
 
         try{
             $sql->execute();
-            return true;
+            $id = $conn->lastInsertId();
+            $res["lastid"] = $id;
+            return $res;
         }catch(PDOException $e){
             return $this->errmessage.$e->getMessage();
         }
     }
 
-    public function db_update_lib($casier_id=0, $newlib=''){
+    public function db_update($casier_id=0, $newlib=''){
         $casier_id = (int) $casier_id;
         if(!$casier_id || !$newlib){
             return false;
@@ -86,8 +100,8 @@ class Casier{
         $sql->bindValue(':libelle', $newlib, PDO::PARAM_STR);
         $sql->bindValue(':id', $casier_id, PDO::PARAM_INT);
         try{
-            $req = $sql->execute();
-            return $req;
+            $sql->execute();
+			return true;
         }catch(PDOException $e){
             return $this->errmessage.$e->getMessage();
         }
@@ -118,7 +132,7 @@ class Casier{
             return false;
         }
 
-        foreach ($id_array as $key) {
+        foreach ($id_array as $key => $value) {
             if(is_nan($id_array[$key]) || !$id_array[$key]){
                 return false;
             }

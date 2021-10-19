@@ -6,8 +6,11 @@ class Article{
 
     public function db_get_all(){
 		global $conn;
-		$request = "SELECT * FROM ".DB_TABLE_ARTICLE." INNER JOIN ".DB_TABLE_CATEGORIE." ON ".DB_TABLE_ARTICLE.".fk_cat_ID = ".DB_TABLE_CATEGORIE.".cat_ID 
-					INNER JOIN ".DB_TABLE_CASIER." ON ".DB_TABLE_ARTICLE.".fk_cas_ID = ".DB_TABLE_CASIER.".cas_ID WHERE art_is_visible = 1 AND art_ID != 0 ;";
+		$request = "SELECT * FROM ".DB_TABLE_ARTICLE." 
+					INNER JOIN ".DB_TABLE_CATEGORIE." ON ".DB_TABLE_ARTICLE.".fk_cat_ID = ".DB_TABLE_CATEGORIE.".cat_ID 
+					INNER JOIN ".DB_TABLE_CASIER." ON ".DB_TABLE_ARTICLE.".fk_cas_ID = ".DB_TABLE_CASIER.".cas_ID 
+					WHERE art_is_visible = 1 AND art_ID != 0
+					ORDER BY art_ID ;";
 
 		try{
 			$sql = $conn->query($request);
@@ -25,7 +28,10 @@ class Article{
 
 		global $conn;
 
-		$request = "SELECT * FROM ".DB_TABLE_ARTICLE." WHERE art_ID = :id";
+		$request = "SELECT * FROM ".DB_TABLE_ARTICLE." 
+					INNER JOIN ".DB_TABLE_CASIER." ON ".DB_TABLE_ARTICLE.".fk_cas_ID = ".DB_TABLE_CASIER.".cas_ID
+					INNER JOIN ".DB_TABLE_CATEGORIE." ON ".DB_TABLE_ARTICLE.".fk_cat_ID = ".DB_TABLE_CATEGORIE.".cat_ID
+					WHERE art_ID = :id";
 		$sql = $conn->prepare($request);
 		$sql->bindValue(':id', $article_id, PDO::PARAM_INT);
 		try{
@@ -69,14 +75,14 @@ class Article{
 		}
 	}
 
-	public function db_create($article_nom='', $article_commentaire='', $fk_categorie_id=0, $fk_casier_id=0){
-		$fk_categorie_id = (int) $fk_categorie_id;
-		$fk_casier_id = (int) $fk_casier_id;
+	public function db_create($article_nom='', $article_commentaire='', $categorie='', $casier=''){
+		global $conn, $oCasier, $oCategorie;
+
+		$fk_categorie_id = (int) $oCategorie->db_get_by_lib($categorie)["cat_ID"];
+		$fk_casier_id = (int) $oCasier->db_get_by_lib($casier)["cas_ID"];
 		if(!$article_nom || !$fk_categorie_id || !$fk_casier_id){
 			return false;
 		}
-
-		global $conn, $oCasier, $oCategorie;
 		$request = "INSERT INTO ".DB_TABLE_ARTICLE."(art_nom, art_commentaire, fk_cat_ID, fk_cas_ID) VALUES(:article_nom, :article_commentaire, :fk_categorie_id, :fk_casier_id);";
 		$sql = $conn->prepare($request);
 		if(!$article_commentaire) $article_commentaire = "0";
@@ -96,15 +102,16 @@ class Article{
 		}
 	}
 
-	public function db_update($article_id=0, $article_nom='', $article_commentaire='', $fk_categorie_id=0, $fk_casier_id=0){
+	public function db_update($article_id=0, $article_nom='', $article_commentaire='', $categorie=0, $casier=0){
 		$article_id = (int) $article_id;
-		$fk_categorie_id = (int) $fk_categorie_id;
-		$fk_casier_id = (int) $fk_casier_id;
+		global $conn, $oCasier, $oCategorie;
+		$fk_categorie_id = (int) $oCategorie->db_get_by_lib($categorie)["cat_ID"];
+		$fk_casier_id = (int) $oCasier->db_get_by_lib($casier)["cas_ID"];
+
 		if(!$article_id || !$fk_categorie_id || !$fk_casier_id){
 			return false;
 		}
 
-		global $conn;
 		$request = "UPDATE ".DB_TABLE_ARTICLE." SET art_nom= :art_nom, art_commentaire = :art_commentaire, fk_cat_ID = :fk_cat_ID, fk_cas_ID = :fk_cas_ID WHERE art_ID = :article_ID";
 		$sql = $conn->prepare($request);
 		$sql->bindValue(":art_nom", $article_nom, PDO::PARAM_STR);

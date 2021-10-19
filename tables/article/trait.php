@@ -17,14 +17,28 @@ if(isset($_POST["create"])){
     }
     echo json_encode($response);
 }elseif(isset($_POST["update"])){
-    $req = $oArticle->db_update($_POST["article_id"], $_POST["article_name"], $_POST["article_commentaire"], $_POST["categorie"], $_POST["casier"]);
-    if($req){
-        ?>
-            <script>
-                window.location.replace("index.php");
-            </script>
-        <?php
+    $res = $oArticle->db_update($_POST["id"], $_POST["lib"], $_POST["comment"], $_POST["cat"], $_POST["cas"]);
+    if($res != false){
+        $response["error"] = false;
+        $response["existingid"] = $oArticle->db_get_one();
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = $res;
     }
+    echo json_encode($response);
+}elseif(isset($_POST["getData"])){
+    $res = $oArticle->db_get_by_id($_POST["id"]);
+    if($res != false){
+        $response["error"] = false;
+        $response["content"]["lib"] = $res["art_nom"];
+        $response["content"]["comment"] = $res["art_commentaire"];
+        $response["content"]["cas"] = $res["cas_lib"];
+        $response["content"]["cat"] = $res["cat_nom"];
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = $res;
+    }
+    echo json_encode($response);
 }elseif(isset($_POST["delete"])){
     $id = (int) $_POST["id"];
 

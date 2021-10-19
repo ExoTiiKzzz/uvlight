@@ -1,21 +1,14 @@
 const updateBtn = document.querySelector('.updateRowBtn');
-console.log(updateBtn)
 
 function updateRow(){
     var id = document.querySelector(".updateId").value;
     var lib = document.querySelector(".updateLib").value;
-    var comment = document.querySelector(".updateComment").value;
-    var cas = document.querySelector(".updateCas").value;
-    var cat = document.querySelector(".updateCat").value;
 
     var formData = new FormData();
 
     formData.append("update","1");
     formData.append("id", id);
     formData.append("lib", lib);
-    formData.append("comment", comment);
-    formData.append("cas", cas);
-    formData.append("cat", cat);
 
     fetch(url, 
         {
@@ -45,15 +38,6 @@ function updateRow(){
             var tdlib = document.createElement("td");
             tdlib.innerHTML = "<center>"+lib+"</center>";
 
-            var tdcomment = document.createElement("td");
-            tdcomment.innerHTML = "<center>"+comment+"</center>";
-
-            var tdcasier = document.createElement("td");
-            tdcasier.innerHTML = "<center>"+cas+"</center>";
-
-            var tdcat = document.createElement("td");
-            tdcat.innerHTML = "<center>"+cat+"</center>";
-
             var update = document.querySelector(".updateBtn[data-index='"+existingid+"']").cloneNode(true);
             update.dataset.index = id;
             
@@ -69,7 +53,7 @@ function updateRow(){
 
             
             var row = document.querySelector("tr[data-rowindex='"+id+"']");
-            table.api().row(row).remove();  
+            table.api().row(row).remove();
 
             var newRow = document.createElement("tr");
             newRow.classList.add("tablerow");
@@ -78,9 +62,6 @@ function updateRow(){
             newRow.appendChild(checkboxEl);
             newRow.appendChild(tdid);
             newRow.appendChild(tdlib);
-            newRow.appendChild(tdcomment);
-            newRow.appendChild(tdcasier);
-            newRow.appendChild(tdcat);
             newRow.appendChild(td);
 
             table.api().row.add(newRow);

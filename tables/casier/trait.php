@@ -4,39 +4,54 @@ require '../../lib/includes/defines.inc.php';
 
 
 if(isset($_POST["create"])){
-    if(empty($_POST["casier_name"])){
-        ?>
-            <script>
-                window.location.replace("index.php");
-            </script>
-        <?php
+    $res = $oCasier->db_create($_POST["lib"]);
+    if($res != false){
+        $response["error"] = false;
+        $response["existingid"] = $oCasier->db_get_one()["cas_ID"];
+        $response["createdid"] = $res["lastid"];
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = $res;
     }
-    $req = $oCasier->db_create($_POST["casier_name"]);
-    if($req){
-        ?>
-            <script>
-                window.location.replace("index.php");
-            </script>
-        <?php
-    }
+    echo json_encode($response);
 }elseif(isset($_POST["update"])){
-    $req = $oCasier->db_update_lib($_POST["casier_id"], $_POST["casier_name"]);
-    if($req){
-        ?>
-            <script>
-                window.location.replace("index.php");
-            </script>
-        <?php
+    $res = $oCasier->db_update($_POST["id"], $_POST["lib"]);
+    if($res === true){
+        $response["error"] = false;
+        $response["existingid"] = $oCasier->db_get_one()["cas_ID"];
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = $res;
     }
+    echo json_encode($response);
 }elseif(isset($_POST["delete"])){
-    $req = $oCasier->db_soft_delete_one($_POST["casier_id"]);
-    if($req){
-        ?>
-            <script>
-                window.location.replace("index.php");
-            </script>
-        <?php
+    $id = (int) $_POST["id"];
+
+    if(!$id){
+        $response["error"] = true;
+        $response["errortext"] = "Veuillez saisir une valeure correcte";
+        echo json_encode($response);
+        die;
     }
+
+    $res = $oCasier->db_soft_delete_one($id);
+    if($res){
+        $response["error"] = false;
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = "Une erreur s'est produite, veuillez reessayer";
+    }
+    echo json_encode($response);
+}elseif(isset($_POST["getData"])){
+    $res = $oCasier->db_get_by_id($_POST["id"]);
+    if($res != false){
+        $response["error"] = false;
+        $response["content"]["lib"] = $res["cas_lib"];
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = $res;
+    }
+    echo json_encode($response);
 }elseif(isset($_POST["multi_delete"])){
     $array = $_POST["array"];
     $finalarray = json_decode($array, true);
