@@ -14,12 +14,12 @@
             require '../static/css/table.css';
         ?>
     </style>
+    <div class="main-container sidenav-open">
 
 <?php
     if(!isset($_GET["nav"]) || $_GET["nav"] === "read"){
 
   ?>
-  <div class="main-container sidenav-open">
     <a class="btn btn-success mb-4" href="index.php?nav=create">Créer une nouvelle commune</a>
 
     <div class="table-container">
@@ -117,6 +117,6 @@
 
     <!-- Datatable JS -->
     <script src="../script/jquery.dataTables.min.js"></script>
-        <script src="../../script/js/sidenav.js"></script>
+    <script src="../../script/js/sidenav.js"></script>
 </body>
 </html>

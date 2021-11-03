@@ -45,6 +45,7 @@ include_once DB_CLASS_DIR.'login.class.inc.php';
 include_once DB_CLASS_DIR.'tiers.class.inc.php';
 include_once DB_CLASS_DIR.'type_tiers.class.inc.php';
 include_once DB_CLASS_DIR.'produit.class.inc.php';
+include_once DB_CLASS_DIR.'generator.class.inc.php';
 include_once DB_CLASS_DIR.'../../../../server/bootstrap.php';
 
 // get main objects
@@ -64,8 +65,9 @@ $oUser = new User();
 $oLogin = new Login();
 $oTiers = new Tiers();
 $oProduit = new Produit();
+$oDatatableGenerator = new Datatable_generator();
 
-$isProd = false;
+$isProd = true;
 
 if(!$isProd){
     $server = "localhost";
@@ -86,6 +88,8 @@ try {
 
     // connect to DB
     $conn = new PDO("mysql:host=$server;dbname=$dbname","$username","$password");
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 }
 catch (PDOException $e) {
     throw $e;

@@ -6,7 +6,7 @@ class Categorie{
 
     public function db_get_all(){
         global $conn;
-        $request = "SELECT * FROM ".DB_TABLE_CATEGORIE." WHERE cat_is_visible = 1;";
+        $request = "SELECT cat_ID, cat_nom, cat_description FROM ".DB_TABLE_CATEGORIE." WHERE cat_is_visible = 1;";
 
         try{
             $sql = $conn->query($request);
@@ -54,6 +54,18 @@ class Categorie{
 		}
 	}
 
+    public function db_get_one(){
+		global $conn;
+
+		$request = "SELECT cat_ID FROM ".DB_TABLE_CATEGORIE." WHERE cat_is_visible = 1 AND cat_ID != 0 LIMIT 1";
+		try{
+			$sql = $conn->query($request);
+			return $sql->fetch(PDO::FETCH_ASSOC);
+		}catch(PDOException $e){
+			return $this->errmessage.$e->getMessage();
+		}
+	}
+
     public function db_create($nom='', $description=''){
 
         if(!$nom || !$description){
@@ -68,7 +80,8 @@ class Categorie{
 
         try{
             $sql->execute();
-            return true;
+            $res["lastid"] = $conn->lastInsertId();
+            return $res;
         }catch(PDOException $e){
             return $this->errmessage.$e->getMessage();
         }

@@ -23,7 +23,7 @@ function updateRow(){
             console.log(result.errortext);
         }else{
 
-            var existingid = result.existingid;
+            var existingid = document.querySelector("tr.odd").dataset.value;
 
             var checkboxEl = document.createElement("td");
             var checkbox = document.querySelector(".checkbox[data-index='"+existingid+"']").cloneNode(true);
@@ -52,12 +52,11 @@ function updateRow(){
             td.appendChild(deleteEl);
 
             
-            var row = document.querySelector("tr[data-rowindex='"+id+"']");
+            var row = document.querySelector("tr[data-value='"+id+"']");
             table.api().row(row).remove();
 
             var newRow = document.createElement("tr");
             newRow.classList.add("tablerow");
-            newRow.dataset.rowindex = id;
             newRow.dataset.value = id;
             newRow.appendChild(checkboxEl);
             newRow.appendChild(tdid);

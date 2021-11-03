@@ -1,3 +1,12 @@
+function deleteRow(index){
+    if(isNaN(index)){
+        return
+    }
+
+    var row = document.querySelector('tr[data-value="'+index+'"]');
+    table.api().row(row).remove().draw();
+}
+
 const deleteBtn = document.querySelector(".delete-all");
 const deleteBtns = document.querySelectorAll(".delete-btn");
 

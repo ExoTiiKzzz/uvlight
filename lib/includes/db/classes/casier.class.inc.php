@@ -6,7 +6,7 @@ class Casier{
 
     public function db_get_all(){
         global $conn;
-        $request = "SELECT * FROM ".DB_TABLE_CASIER." WHERE cas_is_visible=1;";
+        $request = "SELECT cas_ID, cas_lib FROM ".DB_TABLE_CASIER." WHERE cas_is_visible=1;";
 
         try{
             $sql = $conn->query($request);
@@ -79,8 +79,7 @@ class Casier{
 
         try{
             $sql->execute();
-            $id = $conn->lastInsertId();
-            $res["lastid"] = $id;
+            $res["lastid"] = $conn->lastInsertId();
             return $res;
         }catch(PDOException $e){
             return $this->errmessage.$e->getMessage();

@@ -6,7 +6,7 @@ class Communes{
 	public function db_get_all(){
 		global $conn;
 
-		$request = "SELECT * FROM ".DB_TABLE_COMMUNES." 
+		$request = "SELECT c_id, c_name, insee_code, zip_code, d_name FROM ".DB_TABLE_COMMUNES." 
 		INNER JOIN ".DB_TABLE_DEPARTEMENT." 
 		ON ".DB_TABLE_COMMUNES.".department_code = ".DB_TABLE_DEPARTEMENT.".d_code WHERE c_is_visible = 1;";
 		try{

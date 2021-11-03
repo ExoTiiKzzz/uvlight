@@ -14,7 +14,7 @@ if(isset($_POST["create"])){
         ?>
             <script>
                 alert("Cela a fonctionné")
-                window.location.replace("http://localhost/uvlight/atelier1/commune/index.php?nav=read");
+                window.location.replace("./");
             </script>
         <?php
     }
@@ -24,18 +24,26 @@ if(isset($_POST["create"])){
         ?>
             <script>
                 alert("Cela a fonctionné")
-                window.location.replace("http://localhost/uvlight/atelier1/commune/index.php?nav=read");
+                window.location.replace("./");
             </script>
         <?php
     }
 }elseif(isset($_POST["delete"])){
-    $req = $oCommunes->db_soft_delete_one();
+    $req = $oCommunes->db_soft_delete_one($_POST["city_id"]);
     if($req){
         ?>
             <script>
                 alert("Cela a fonctionné")
-                window.location.replace("http://localhost/uvlight/atelier1/commune/index.php?nav=read");
+                window.location.replace("./");
             </script>
+        <?php
+    }else{
+        var_dump($req);
+        ?>
+            <!-- <script>
+                alert("Une erreur s'est produite")
+                window.location.replace("./");
+            </script> -->
         <?php
     }
 }
