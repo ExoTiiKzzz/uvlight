@@ -17,6 +17,7 @@ define('DB_TABLE_TARIF', 'tarif');
 define('DB_TABLE_TIERS', 'tiers');
 define('DB_TABLE_TYPE_REGLEMENT', 'type_reglement');
 define('DB_TABLE_TYPE_SOCIETE', 'type_societe');
+define('DB_TABLE_TYPE_DOCUMENT', 'type_document');
 define('DB_TABLE_TYPE_TIERS', 'type_tiers');
 define('DB_TABLE_REGION', 'regions');
 define('DB_TABLE_DEPARTEMENT', 'departments');
@@ -33,6 +34,7 @@ include_once DB_CLASS_DIR.'categorie.class.inc.php';
 include_once DB_CLASS_DIR.'etat_document.class.inc.php';
 include_once DB_CLASS_DIR.'tarif.class.inc.php';
 include_once DB_CLASS_DIR.'type_reglement.class.inc.php';
+include_once DB_CLASS_DIR.'type_document.class.inc.php';
 include_once DB_CLASS_DIR.'type_societe.class.inc.php';
 include_once DB_CLASS_DIR.'article.class.inc.php';
 include_once DB_CLASS_DIR.'articlequantite.class.inc.php';
@@ -64,6 +66,7 @@ $oUser = new User();
 $oLogin = new Login();
 $oTiers = new Tiers();
 $oProduit = new Produit();
+$oTypeDocument = new Type_Document();
 
 $isProd = false;
 

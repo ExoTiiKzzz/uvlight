@@ -6,7 +6,7 @@ class Type_Societe{
 
     public function db_get_all(){
         global $conn;
-        $request = "SELECT * FROM ".DB_TABLE_TYPE_SOCIETE.";";
+        $request = "SELECT * FROM ".DB_TABLE_TYPE_SOCIETE." ORDER BY typso_lib;";
 
         try{
             $sql = $conn->query($request);

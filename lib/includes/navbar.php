@@ -12,6 +12,7 @@ function navbar($path){
                     </div>
                     <div class="list-item">
                         <li class="ul-el"><a href="<?php echo $path ?>uvlight/" disable>Dashboard</a></li>
+                        <li class="ul-el"><a href="<?php echo $path ?>uvlight/docs" disable>Documents</a></li>
                         <li class="ul-el"><span href="#"><i class="far fa-power-off logout"></i></span></li>
                     </div>
                     
