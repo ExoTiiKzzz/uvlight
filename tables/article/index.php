@@ -161,6 +161,7 @@
                             <div class="mx-auto modal-body col-10">
                                 <div class="form-group">
                                     <div data-index="0" class="alert alert-danger" style="display: none">Le nom de l'article doit faire entre 1 et 50 charactères maximum</div>
+                                    <input type="hidden" class="updateId">
                                     <input class="form-control name_input updateLib" data-index="0" 
                                     style="margin: 0 auto" type="text" name="article_name" required>
                                 </div>
@@ -169,17 +170,18 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <select type="text" class="form-control updateCat" name="categorie" required autocomplete="off" required></select>
+                                    <input list='liste_categories' class="form-control updateCat">
                                 </div>
+
                                 <div class="form-group">
-                                    <select type="text" class="form-control updateCas" name="casier" required autocomplete="off" required></select>
+                                    <input list='liste_casiers' class="form-control updateCas">
                                 </div>
                                 
                                 
                             </div>
                         
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                <button type="button" class="btn btn-secondary updateCloseBtn" data-dismiss="modal">Fermer</button>
                                 <button type="button" name="update" class="btn btn-primary updateRowBtn">Modifier</button>
                             </div>
                         </form>
@@ -197,6 +199,7 @@
     <script src="../script/checkboxes.js"></script>
     <script src="../script/deleteRow.js"></script>
     <script src="./js/index.js"></script>
+    <script src="./js/updateRow.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="../../script/js/sidenav.js"></script>
 

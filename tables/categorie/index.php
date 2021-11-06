@@ -4,7 +4,7 @@
     require '../../lib/includes/sidenav.php';
     require '../../lib/includes/doctype.php';
 
-    echo doctype("Article", $path);
+    echo doctype("Catégorie", $path);
     echo navbar($path);
     echo sidenav($path);
 ?>
@@ -24,79 +24,50 @@
   ?>
 
   <div class="main-container sidenav-open">
-    <button type='button' class='mt-4 ml-3 btn btn-success' data-toggle='modal' data-target='#createmodal'> Créer une catégorie </button>
+    <button type='button' class='my-3 btn btn-success' data-toggle='modal' data-target='#createmodal'> Créer une catégorie </button>
+
     <!-- modal pour créer une catégorie -->
     <div class="modal fade" id="createmodal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modifier le categorie</h5>
+                    <h5 class="modal-title">Créer la catégorie</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="trait.php" method="post" onsubmit="return checkForm(0)">
-                    <div class="mx-auto modal-body col-10">
-                        <div class="form-group">
-                            <div data-index="0" class="alert alert-danger" style="display: none">Le nom de la catégorie doit faire entre 1 et 50 charactères maximum</div>
-                            <input placeholder="Nom de la catégorie" class="form-control name_input" data-index="0" 
-                            style="margin: 0 auto" type="text" name="categorie_name">
-                        </div>
-                        <div class="form-group">
-                            <textarea placeholder="Description de la catégorie" class="form-control" rows="3" name="categorie_description"></textarea>
-                        </div>                    
+                <div class="mx-auto modal-body col-10">
+                    <div class="form-group">
+                        <div data-index="0" class="alert alert-danger" style="display: none">Le nom de la catégorie doit faire entre 1 et 50 charactères maximum</div>
+                        <input placeholder="Nom de la catégorie" class="form-control name_input createLib" data-index="0" 
+                        style="margin: 0 auto" type="text" name="categorie_name">
                     </div>
-                
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                        <button type="submit" name="create" class="btn btn-primary">Créer</button>
-                    </div>
-                </form>
+                    <div class="form-group">
+                        <textarea placeholder="Description de la catégorie" class="form-control createComment" rows="3" name="categorie_description"></textarea>
+                    </div>                    
+                </div>
+            
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary createCloseBtn" data-dismiss="modal">Fermer</button>
+                    <button type="button" name="create" class="btn btn-primary createBtn">Créer</button>
+                </div>
             </div>
         </div>
     </div>
 
         <div class="table-container">
-            <table id="table">
-                <thead>
-                    <th>Selectionner</th>
-                    <th style='text-align :center'>ID</th>
-                    <th style='text-align :center'>Lib</th>
-                    <th style='text-align :center'>Description</th>
-                    <th style='text-align :center'>Actions</th>
-                </thead>
-                <tbody>
-                    <?php 
-                        foreach ($data as $key) {
-                            $id = $key["cat_ID"]; ?>
-                            <tr data-value="<?php echo $id ?>">
-                                <td style='width: 5%'>
-                                    <input type='checkbox' class='checkbox' data-index="<?php echo $id ?>" checked='false'>
-                                </td>
-                                <td>
-                                    <center><?php echo $id ?></center>
-                                </td>
-                                <td>
-                                    <center><?php echo $key["cat_nom"] ?></center>
-                                </td>
-                                <td>
-                                    <center><?php echo $key["cat_description"] ?></center>
-                                </td>
-                                <td style='display:flex; justify-content: space-evenly;'>
-                                    <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modal<?php echo $id ?>'>
-                                        Modifier
-                                    </button>
-                                    <form action="trait.php" method="post">
-                                        <input type="hidden" name="categorie_id" value="<?php echo $id ?>">
-                                        <button type="submit" name="delete" class="delete-btn btn btn-danger">Supprimer</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            <?php
-                        }
-                    ?>
-                </tbody>
-            </table>
+        <?php 
+            
+            $resulttable = $oDatatableGenerator->generate_datatable($data, ["cat_ID", "cat_nom", "cat_description"], "cat_ID", true, "checkbox", true, "btn btn-primary updateBtn", true, "delete-btn btn btn-danger");
+
+            if(!$resulttable["error"]){
+                echo $resulttable["content"];
+            }else{
+                $resulttable["errortext"];
+            }
+        
+        ?>
+            
             <input type="checkbox" class="select-all" id="select-all">
             <label for="select-all" class="form-check-label">Tout sélectionner</label>
 
@@ -107,43 +78,41 @@
             </button>
         </div>
     </div>
-        
 
-        <?php 
-        
-            foreach($data as $key){ ?>
 
-                <!-- Modal -->
-                <div class="modal fade" id="modal<?php echo $key["cat_ID"] ?>" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Modifier le categorie</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <form action="trait.php" method="post" class="update_form" data-index="<?php echo $key["cat_ID"] ?>" onsubmit="return checkForm(<?php echo $key['cat_ID'] ?>)">
-                                <div class="mx-auto modal-body form-group col-8">
-                                    <div data-index="<?php echo $key["cat_ID"] ?>" class="alert alert-danger" style="display: none">Le nom de la catégorie doit faire entre 1 et 50 charactères maximum</div>
-                                    <input class="form-control name_input" data-index="<?php echo $key["cat_ID"] ?>" style="margin: 0 auto" type="text" name="categorie_name" value="<?php echo $key["cat_nom"]; ?>">
-                                    <textarea placeholder="Description de la catégorie" class="form-control" rows="3" name="categorie_description"><?php echo $key["cat_description"] ?></textarea>
-                                    <input type="hidden" name="categorie_id" value="<?php echo $key["cat_ID"] ?>">
-                                </div>
-                            
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                                    <button type="submit" name="update" class="btn btn-primary">Modifier</button>
-                                </div>
-                            </form>
+    <!-- Modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modifier la catégorie</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="trait.php" method="post" class="update_form">
+                    <div class="mx-auto modal-body col-10">
+                        <div class="form-group">
+                            <div class="alert alert-danger" style="display: none">Le nom de la catégorie doit faire entre 1 et 50 charactères maximum</div>
+                            <input class="form-control updateLib" style="margin: 0 auto" type="text" name="categorie_name">
+                            <input type="hidden" class="updateId">
+                        </div>
+                        
+                        <div class="form-group">
+                            <textarea placeholder="Description de la catégorie" class="form-control updateComment" rows="3" name="categorie_description"></textarea>
                         </div>
                     </div>
-                </div>
-            
-            <?php    
-            }
 
-        ?>
+                    
+                
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary updateCloseBtn" data-dismiss="modal">Fermer</button>
+                        <button type="button" name="update" class="btn btn-primary updateRowBtn">Modifier</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
   </div>
 
 
@@ -153,15 +122,18 @@
 
     <!-- Datatable JS -->
     <script src="../script/jquery.dataTables.min.js"></script>
-        <script src="../../script/js/sidenav.js"></script>
+    <script src="../../script/js/sidenav.js"></script>
 
     <script src="../script/checkboxes.js"></script>
-    <script src="../script/index.js"></script>
+    <script src="./js/index.js"></script>
+    <script src="./js/updateRow.js"></script>
+    <script src="../script/deleteRow.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <script> //initialisation datatable
+        var table = $('#table');
         $(document).ready(function(){
-            $('#table').DataTable();
+            table.dataTable();
         });
 
         function checkForm(formid){

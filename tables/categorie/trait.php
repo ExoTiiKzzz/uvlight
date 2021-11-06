@@ -4,41 +4,55 @@ require '../../lib/includes/defines.inc.php';
 
 
 if(isset($_POST["create"])){
-    if(empty($_POST["categorie_name"]) || empty($_POST["categorie_description"])){
-        ?>
-            <script>
-                window.location.replace("index.php");
-            </script>
-        <?php
+    $res = $oCategorie->db_create($_POST["lib"],$_POST["comment"]);
+    if($res != false){
+        $response["error"] = false;
+        $response["existingid"] = $oCategorie->db_get_one()["cat_ID"];
+        $response["createdid"] = $res["lastid"];
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = $res;
     }
-    $req = $oCategorie->db_create($_POST["categorie_name"], $_POST["categorie_description"]);
-    echo $_POST["categorie_name"], $_POST["categorie_description"];
-    if($req){
-        var_dump($req);
-        ?>
-            <script>
-                window.location.replace("index.php");
-            </script>
-        <?php
+    echo json_encode($response);
+}elseif(isset($_POST["getData"])){
+    $res = $oCategorie->db_get_by_id($_POST["id"]);
+    if($res != false){
+        $response["error"] = false;
+        $response["content"]["lib"] = $res["cat_nom"];
+        $response["content"]["comment"] = $res["cat_description"];
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = $res;
     }
+    echo json_encode($response);
 }elseif(isset($_POST["update"])){
-    $req = $oCategorie->db_update($_POST["categorie_id"], $_POST["categorie_name"], $_POST["categorie_description"]);
-    if($req){
-        ?>
-            <script>
-                window.location.replace("index.php");
-            </script>
-        <?php
+    $res = $oCategorie->db_update($_POST["id"], $_POST["lib"], $_POST["comment"]);
+    if($res != false){
+        $response["error"] = false;
+        $response["existingid"] = $oCategorie->db_get_one()["cat_ID"];
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = $res;
     }
+    echo json_encode($response);
 }elseif(isset($_POST["delete"])){
-    $req = $oCategorie->db_soft_delete_one($_POST["categorie_id"]);
-    if($req){
-        ?>
-            <script>
-                window.location.replace("index.php");
-            </script>
-        <?php
+    $id = (int) $_POST["id"];
+
+    if(!$id){
+        $response["error"] = true;
+        $response["errortext"] = "Veuillez saisir une valeure correcte";
+        echo json_encode($response);
+        die;
     }
+
+    $res = $oCasier->db_soft_delete_one($id);
+    if($res){
+        $response["error"] = false;
+    }else{
+        $response["error"] = true;
+        $response["errortext"] = "Une erreur s'est produite, veuillez reessayer";
+    }
+    echo json_encode($response);
 }elseif(isset($_POST["multi_delete"])){
     $array = $_POST["array"];
     $finalarray = json_decode($array, true);
