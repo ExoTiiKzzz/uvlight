@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 30, 2021 at 06:36 AM
+-- Generation Time: Nov 06, 2021 at 03:19 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.4.21
 
@@ -41,13 +41,17 @@ CREATE TABLE `article` (
 --
 
 INSERT INTO `article` (`art_ID`, `art_nom`, `art_commentaire`, `fk_cat_ID`, `fk_cas_ID`, `art_is_visible`) VALUES
-(3, 'test', 'commentaireaaaa', 3, 26, 1),
-(4, 'sad', '0', 2, 26, 1),
+(0, 'Choisir un article', '', 2, 1, 1),
+(3, 'Leproduiteee', 'Un commentaire', 3, 26, 1),
+(4, 'pizpizpizpiz', 'pipi', 2, 26, 1),
 (5, 'dasdsa', '0', 2, 26, 1),
 (6, 'esaaes', '0', 2, 26, 1),
-(7, 'dasdas', '0', 2, 26, 1),
-(8, 'sdadas', '0', 2, 26, 1),
-(9, 'edfjjg', '0', 2, 26, 1);
+(7, 'dasdaseeeeeee', '0', 2, 26, 1),
+(8, 'sdadas', ' eaeae', 2, 26, 1),
+(9, 'edfjjg', '0', 2, 26, 1),
+(11, 'lelelele', 'sadadsa', 2, 3, 1),
+(12, 'aeaea', 'ssss', 2, 1, 1),
+(13, 'papapapa', 'ssss', 2, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -66,31 +70,31 @@ CREATE TABLE `casier` (
 --
 
 INSERT INTO `casier` (`cas_ID`, `cas_lib`, `cas_is_visible`) VALUES
-(1, 'testeeee', 0),
-(2, 'cacaeeeee', 0),
-(3, 'Test', 0),
-(4, 'dadad', 0),
-(5, 'geraud', 0),
-(6, 'test', 0),
-(7, 'dadf', 0),
-(8, 'dada', 0),
-(9, 'clement', 0),
-(10, 'efrr', 0),
-(11, 'dazdazz*e', 0),
-(12, 'coucoucava', 0),
-(13, 'dada', 0),
-(14, 'fdfaz', 0),
-(15, 'dfaf', 0),
-(16, 'djudbajd', 0),
-(17, 'B4750zaaaa', 0),
-(18, 'jadajdv', 0),
-(19, 'casier', 0),
-(20, 'testeeeee', 0),
-(21, 'Casier', 0),
-(22, 'allezssss', 0),
-(23, 'dadad', 0),
-(24, 'zefzfsq', 0),
-(25, 'dsasae', 0),
+(1, 'testeeee', 1),
+(2, 'cacaeeeee', 1),
+(3, 'Test', 1),
+(4, 'dadad', 1),
+(5, 'geraud', 1),
+(6, 'test', 1),
+(7, 'dadf', 1),
+(8, 'dada', 1),
+(9, 'clement', 1),
+(10, 'efrr', 1),
+(11, 'dazdazz*e', 1),
+(12, 'coucoucava', 1),
+(13, 'dada', 1),
+(14, 'fdfaz', 1),
+(15, 'dfaf', 1),
+(16, 'djudbajd', 1),
+(17, 'B4750zaaaa', 1),
+(18, 'jadajdv', 1),
+(19, 'casier', 1),
+(20, 'testeeeee', 1),
+(21, 'Casier', 1),
+(22, 'allezssss', 1),
+(23, 'dadad', 1),
+(24, 'zefzfsq', 1),
+(25, 'dsasae', 1),
 (26, 's', 1),
 (27, 'e', 1),
 (28, 'as', 1),
@@ -116,12 +120,12 @@ CREATE TABLE `categorie` (
 --
 
 INSERT INTO `categorie` (`cat_ID`, `cat_nom`, `cat_description`, `cat_is_visible`) VALUES
-(1, 'testaaa', 'comoneee', 0),
+(1, 'testaaa', 'comoneee', 1),
 (2, 'a', 'ad', 1),
 (3, 'b', 'ad', 1),
-(4, 'c', 'adad', 0),
-(5, 'd', 'dada', 0),
-(6, 'e', 'assa', 0),
+(4, 'c', 'adad', 1),
+(5, 'd', 'dada', 1),
+(6, 'e', 'assa', 1),
 (7, 'c', 'dada', 1),
 (8, 'd', 'adada', 1),
 (9, 'e', 'dadsa', 1);
@@ -36101,6 +36105,24 @@ CREATE TABLE `compose` (
   `compo_quantite` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `compose`
+--
+
+INSERT INTO `compose` (`pro_ID`, `art_ID`, `compo_quantite`) VALUES
+(3, 0, 0),
+(3, 6, 4),
+(3, 8, 1),
+(4, 4, 4),
+(6, 0, 4),
+(7, 0, 7),
+(9, 0, 18),
+(10, 0, 18),
+(11, 0, 18),
+(12, 0, 75),
+(13, 0, 75),
+(14, 0, 14);
+
 -- --------------------------------------------------------
 
 --
@@ -36318,6 +36340,26 @@ CREATE TABLE `produit` (
   `pro_is_visible` int(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `produit`
+--
+
+INSERT INTO `produit` (`pro_ID`, `pro_lib`, `pro_commentaire`, `fk_cas_ID`, `pro_is_visible`) VALUES
+(1, 'Test', 'Commentaire', 28, 1),
+(2, 'a', 'b', 26, 0),
+(3, 'Leproduit', 'Un commentaire', 26, 0),
+(4, 'Cacapopo', 'pipi', 26, 0),
+(5, 'dada', 'dddd', 5, 0),
+(6, 'abc', 'def', 2, 0),
+(7, 'tess', 'hess', 8, 0),
+(8, 'quatre', 'quatro', 3, 0),
+(9, 'carrement', 'a la base', 7, 0),
+(10, 'a la base', 'PLK', 5, 1),
+(11, 'aaaaaa', 'PLK', 5, 1),
+(12, 'ghah', 'Polak', 12, 1),
+(13, 'eee', 'aaa', 3, 1),
+(14, 'fff', 'hhh', 3, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -36431,6 +36473,36 @@ INSERT INTO `tiers` (`tie_ID`, `tie_adresse`, `tie_tel`, `tie_email`, `tie_raiso
 (14, '14 rue du calvados', '01 23 45 67 89', 'mail@mail.fr', 'C\'est partisqdvas', '451ad51as54eae', '1asa', 'adse', 'sad', 'as', 'ss', 'Quelque part', 26478, 3, 15, 8, 2, 1),
 (15, '14 rue du calvadosss', '01 23 45 67 89', 'mail@mail.fr', 'C\'est parti', '451ad51as54eae', '1asa', 'adse', 'sad', 'as', 'ss', 'Quelque part', 29900, 3, 14, 10, 2, 0),
 (16, 'Adresse de fou', '0417895623', 'mail@mail.ru', 'Test', 'a54adad', '5784', '7524', '552', '2424', '45', 'Credit agricole Paris', 4673, 3, 14, 11, 3, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `type_document`
+--
+
+CREATE TABLE `type_document` (
+  `typdo_ID` int(11) NOT NULL,
+  `typdo_lib` varchar(255) NOT NULL,
+  `typdo_is_visible` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `type_document`
+--
+
+INSERT INTO `type_document` (`typdo_ID`, `typdo_lib`, `typdo_is_visible`) VALUES
+(1, 'Devis', 0),
+(2, 'Test', 0),
+(3, 'Truc de ouf', 0),
+(4, 'please', 0),
+(5, 'Dernier essai', 0),
+(6, 'Dernier essaieeeee', 0),
+(7, 'Test', 0),
+(8, 'Test', 0),
+(9, 'Test', 0),
+(10, 'Test', 0),
+(11, 'Eliot le gros con', 0),
+(12, 'cool', 0);
 
 -- --------------------------------------------------------
 
@@ -36643,6 +36715,12 @@ ALTER TABLE `tiers`
   ADD KEY `type_tiers` (`fk_typti_ID`);
 
 --
+-- Indexes for table `type_document`
+--
+ALTER TABLE `type_document`
+  ADD PRIMARY KEY (`typdo_ID`);
+
+--
 -- Indexes for table `type_reglement`
 --
 ALTER TABLE `type_reglement`
@@ -36674,7 +36752,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `article`
 --
 ALTER TABLE `article`
-  MODIFY `art_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `art_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `casier`
@@ -36722,7 +36800,7 @@ ALTER TABLE `etat_doc`
 -- AUTO_INCREMENT for table `produit`
 --
 ALTER TABLE `produit`
-  MODIFY `pro_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pro_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `regions`
@@ -36741,6 +36819,12 @@ ALTER TABLE `tarif`
 --
 ALTER TABLE `tiers`
   MODIFY `tie_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `type_document`
+--
+ALTER TABLE `type_document`
+  MODIFY `typdo_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `type_reglement`
