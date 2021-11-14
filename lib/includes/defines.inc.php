@@ -23,6 +23,8 @@ define('DB_TABLE_REGION', 'regions');
 define('DB_TABLE_DEPARTEMENT', 'departments');
 define('DB_TABLE_USERS', 'users');
 define('DB_TABLE_PRODUIT', 'produit');
+define('DB_TABLE_COMMANDE', 'commande');
+define('DB_TABLE_LIGNES_COMMANDE', 'lignes_commande');
 
 //define paths
 define('DB_CLASS_DIR', 'db/classes/');
@@ -69,7 +71,7 @@ $oTiers = new Tiers();
 $oProduit = new Produit();
 $oTypeDocument = new Type_Document();
 
-$isProd = true;
+$isProd = false;
 
 if(!$isProd){
     $server = "localhost";

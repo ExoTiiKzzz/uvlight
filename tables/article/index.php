@@ -3,6 +3,7 @@
     require '../../lib/includes/navbar.php';
     require '../../lib/includes/sidenav.php';
     require '../../lib/includes/doctype.php';
+    require '../../lib/includes/tablefooter.php';
     
     echo doctype("Article", $path);
     echo navbar($path);
@@ -60,41 +61,6 @@
                 <th style='text-align :center'>Casier</th>
                 <th style='text-align :center'>Actions</th>
             </thead>
-            <tbody>
-                <?php 
-                    foreach ($data as $key) {
-                        $id = $key["art_ID"]; ?>
-                        <tr data-value="<?php echo $id ?>">
-                            <td style='width: 5%'>
-                            <input type='checkbox' class='checkbox' data-index="<?php echo $id ?>" checked='false'></td>
-                            <td>
-                                <center><?php echo $id ?></center>
-                            </td>
-                            <td>
-                                <center><?php echo $key["art_nom"] ?></center>
-                            </td>
-                            <td>
-                                <center><?php echo $key["art_commentaire"] ?></center>
-                            </td>
-                            <td>
-                                <center><?php echo $key["cat_nom"] ?></center>
-                            </td>
-                            <td>
-                                <center><?php echo $key["cas_lib"] ?></center>
-                            </td>
-                            <td style='display:flex; justify-content: space-evenly;'>
-                                <button type='button' class='btn btn-primary updateBtn' data-index="<?php echo $id ?>" data-toggle='modal' data-target='#updateModal'>
-                                    Modifier
-                                </button>
-                                <button type="button" name="delete" data-index="<?php echo $id ?>" class="delete-btn btn btn-danger">
-                                    Supprimer
-                                </button>
-                            </td>
-                        </tr>
-                        <?php
-                    }
-                ?>
-            </tbody>
         </table>
         <input type="checkbox" class="select-all" id="select-all">
         <label for="select-all" class="form-check-label">Tout sélectionner</label>
@@ -108,7 +74,7 @@
   </div>
     <!-- modal pour créer une catégorie -->
     <div class="modal fade" id="createmodal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Créer un article</h5>
@@ -119,20 +85,24 @@
                 <form action="trait.php" method="post" class="update_form" onsubmit="return checkForm(0)">
                     <div class="mx-auto modal-body col-10">
                         <div class="form-group">
+                            <label for="nomarticle">Nom de l'article : </label>
                             <div data-index="0" class="alert alert-danger" style="display: none">Le nom de l'article doit faire entre 1 et 50 charactères maximum</div>
-                            <input placeholder="Nom de l'article" class="form-control name_input createLib" data-index="0" 
+                            <input id="nomarticle" placeholder="Nom de l'article" class="form-control name_input createLib" data-index="0" 
                             style="margin: 0 auto" type="text" name="article_name" required>
                         </div>
                         <div class="form-group">
-                            <textarea placeholder="Commentaire sur le produit" class="form-control createComment" rows="3" name="article_commentaire"></textarea>
+                            <label for="commentaire">Commentaire : </label>
+                            <textarea id="commentaire" placeholder="Commentaire sur le produit" class="form-control createComment" rows="3" name="article_commentaire"></textarea>
                         </div>
 
                         <div class="form-group">
-                            <input list='liste_categories' class="form-control createCat">
+                            <label for="categorie">Catégorie : </label>
+                            <input id="categorie" list='liste_categories' class="form-control createCat" placeholder="Commencer à écrire puis sélectionner ce qui vous convient">
                         </div>
 
                         <div class="form-group">
-                            <input list='liste_casiers' class="form-control createCas">
+                            <label for="casier">Casier : </label>
+                            <input id="casier" list='liste_casiers' class="form-control createCas" placeholder="Commencer à écrire puis sélectionner ce qui vous convient">
                         </div>
                         
                         
@@ -193,20 +163,31 @@
     <!-- jQuery Library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-    <!-- Datatable JS -->
-    <script src="../script/jquery.dataTables.min.js"></script>
-
-    <script src="../script/checkboxes.js"></script>
-    <script src="../script/deleteRow.js"></script>
-    <script src="./js/index.js"></script>
-    <script src="./js/updateRow.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script src="../../script/js/sidenav.js"></script>
+    <?= $footer ?>
 
     <script> //initialisation datatable
         var table = $('#table');
         $(document).ready(function(){
-            table.dataTable();
+            table.dataTable({
+                'processing': true,
+                'serverSide': true,
+                'serverMethod': 'post',
+                'ajax': {
+                    'url':'ajaxfile.php'
+                },
+                'columns': [
+                    { data: 'checkbox' },
+                    { data: 'art_id' },
+                    { data: 'art_nom' },
+                    { data: 'art_commentaire' },
+                    { data: 'categorie' },
+                    { data: 'casier' },
+                    { data: 'actions' }
+                ],
+                deferRender:    true,
+                scrollCollapse: true,
+                scroller:       true
+            });
         });
 
         function checkForm(formid){

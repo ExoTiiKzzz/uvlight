@@ -37,26 +37,6 @@
                 <th style='text-align :center'>Lib</th>
                 <th style='text-align :center'>Actions</th>
             </thead>
-            <tbody>
-                <?php 
-                    foreach ($data as $key) {
-                        $id = $key["typdo_ID"]; ?>
-                        <tr data-value="<?php echo $id ?>">
-                            <td style='width: 5%'>
-                            <input type='checkbox' class='checkbox' data-index="<?php echo $id ?>" checked='false'></td>
-                            <td><center><?php echo $id ?></center></td>
-                            <td><center><?php echo $key["typdo_lib"] ?></center></td>
-                            <td style='display:flex; justify-content: space-evenly;'>
-                                <button type='button' class='btn btn-primary updateBtn' data-toggle='modal' data-target='#updatemodal' data-index="<?= $id; ?>">
-                                    Modifier
-                                </button>
-                                <button type="submit" name="delete" class="delete-btn btn btn-danger" data-index="<?= $id; ?>">Supprimer</button>
-                            </td>
-                        </tr>
-                        <?php
-                    }
-                ?>
-            </tbody>
         </table>
         <div class="operations-div" style="display: flex; justify-content: space-evenly">
             <button class="btn btn-danger delete-all" style="display: none">
@@ -109,7 +89,23 @@
     <script> //initialisation datatable
         var table = $('#table');
         $(document).ready(function(){
-            table.dataTable();
+            table.dataTable({
+                'processing': true,
+                'serverSide': true,
+                'serverMethod': 'post',
+                'ajax': {
+                    'url':'ajaxfile.php'
+                },
+                'columns': [
+                    { data: 'checkbox' },
+                    { data: 'typdo_id' },
+                    { data: 'typdo_lib' },
+                    { data: 'actions' }
+                ],
+                deferRender:    true,
+                scrollCollapse: true,
+                scroller:       true
+            });
         });
 
         function checkForm(formid){

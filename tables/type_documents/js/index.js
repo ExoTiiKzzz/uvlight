@@ -72,12 +72,12 @@ createBtn.addEventListener("click", () => {
 
 const updateBtns = document.querySelectorAll(".updateBtn");
 
-updateBtns.forEach(element => {
-    element.addEventListener("click", updateModal);
-});
+// updateBtns.forEach(element => {
+//     element.addEventListener("click", updateModal);
+// });
 
-function updateModal(e){
-    let id = e.target.dataset.index;
+function updateModal(event){
+    let id = event.target.dataset.index;
 
     var formData = new FormData();
     formData.append("id", id);

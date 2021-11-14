@@ -6,11 +6,11 @@ class Casier{
 
     public function db_get_all(){
         global $conn;
-        $request = "SELECT cas_ID, cas_lib FROM ".DB_TABLE_CASIER." WHERE cas_is_visible=1;";
+        $request = "SELECT cas_ID AS arrkey, cas_ID, cas_lib FROM ".DB_TABLE_CASIER." WHERE cas_is_visible=1;";
 
         try{
             $sql = $conn->query($request);
-            return $sql->fetchAll(PDO::FETCH_ASSOC);
+            return $sql->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE|\PDO::FETCH_ASSOC);
         }catch(PDOException $e){
             return $this->errmessage.$e->getMessage();
         }

@@ -1,10 +1,5 @@
-function deleteRow(index){
-    if(isNaN(index)){
-        return
-    }
-
-    var row = document.querySelector('tr[data-value="'+index+'"]');
-    table.api().row(row).remove().draw();
+function deleteRow(){
+    drawTable();
 }
 
 const deleteBtn = document.querySelector(".delete-all");
@@ -43,7 +38,7 @@ function deleteEventListener(e){
             )
             .then(response => response.json() ).then(result => {
                 if(result.error === false){
-                    deleteRow(e.target.dataset.index);
+                    deleteRow();
                     swalWithBootstrapButtons.fire(
                         {
                             title: 'Supprimé',
@@ -124,8 +119,7 @@ deleteBtn.addEventListener("click", () => {
         ).then(response => response.json() ).then(result => {
             if(result == "ok"){
                 checkedboxes.forEach(el => {
-                    var id = el;
-                    deleteRow(id);
+                    deleteRow();
                     deleteBtn.style.display = "none";
                 });
             }

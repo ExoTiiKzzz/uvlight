@@ -29,61 +29,7 @@ function updateRow(){
         if(result.error === true){
             console.log(result.errortext);
         }else{
-
-            var existingid = document.querySelector("tr.odd").dataset.value;
-
-            var checkboxEl = document.createElement("td");
-            var checkbox = document.querySelector(".checkbox[data-index='"+existingid+"']").cloneNode(true);
-            checkbox.dataset.index = id;
-            checkbox.addEventListener("change", checkBoxListener);
-
-            checkboxEl.appendChild(checkbox);
-
-            var tdid = document.createElement("td");
-            tdid.innerHTML = "<center>"+id+"</center>";
-
-            var tdlib = document.createElement("td");
-            tdlib.innerHTML = "<center>"+lib+"</center>";
-
-            var tdcomment = document.createElement("td");
-            tdcomment.innerHTML = "<center>"+comment+"</center>";
-
-            var tdcasier = document.createElement("td");
-            tdcasier.innerHTML = "<center>"+cas+"</center>";
-
-            var tdcat = document.createElement("td");
-            tdcat.innerHTML = "<center>"+cat+"</center>";
-
-            var update = document.querySelector(".updateBtn[data-index='"+existingid+"']").cloneNode(true);
-            update.dataset.index = id;
-            
-            var deleteEl = document.querySelector(".delete-btn[data-index='"+existingid+"']").cloneNode(true);
-            deleteEl.dataset.index = id;
-            deleteEl.addEventListener("click", deleteEventListener);
-
-            var td = document.createElement("td");
-            td.style.display = "flex";
-            td.style.justifyContent = "space-evenly";
-            td.appendChild(update);
-            td.appendChild(deleteEl);
-
-            
-            var row = document.querySelector("tr[data-value='"+id+"']");
-            table.api().row(row).remove();  
-
-            var newRow = document.createElement("tr");
-            newRow.classList.add("tablerow");
-            newRow.dataset.value = id;
-            newRow.appendChild(checkboxEl);
-            newRow.appendChild(tdid);
-            newRow.appendChild(tdlib);
-            newRow.appendChild(tdcomment);
-            newRow.appendChild(tdcasier);
-            newRow.appendChild(tdcat);
-            newRow.appendChild(td);
-
-            table.api().row.add(newRow);
-            table.api().order( [ 1, 'asc' ] ).draw();
+            drawTable();
             document.querySelector(".updateCloseBtn").click();
         }
     }).catch(err => console.log(err));

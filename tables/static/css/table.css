@@ -83,7 +83,7 @@ table th{
 }
 
 .dataTable tr td{
-    margin: 10px 0px 10px 0px;
+    padding: 8px 0px ;
 }
 
 .dataTables_filter{
@@ -95,7 +95,7 @@ table th{
 }
 
 table{
-    width: 100%;
+    width: 100% !important;
     margin: 0;
     border-radius: 10px;
 }
@@ -115,4 +115,8 @@ table{
 .dataTables_length label select{
     background: #3b3b3b;
     color: #fff;
+}
+
+.table-container{
+    width: 100%;
 }
