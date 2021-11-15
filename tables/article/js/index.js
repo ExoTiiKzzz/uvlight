@@ -130,3 +130,33 @@ function openUpdateModalListener(e){
         }
     }).catch(err => console.log(err));
 }
+
+const commandBtn = document.querySelector(".commandBtn");
+
+commandBtn.addEventListener("click", (e) => {
+
+    let article, quantity;
+
+    article = document.querySelector(".commandArticle").value;
+
+    quantity = document.querySelector(".commandQuantite").value;
+
+    let formData = new FormData;
+    formData.append("command", "1");
+    formData.append("article", article);
+    formData.append("quantity", quantity);
+
+    fetch(url, {
+        method: "POST",
+        body: formData
+    })
+        .then(result => result.json())
+        .then(data => {
+            if(data.error === false){
+                drawTable();
+            }else{
+                console.log(data.errortext);
+            }
+        })
+
+})

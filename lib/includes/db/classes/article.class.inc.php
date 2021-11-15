@@ -38,6 +38,18 @@ class Article{
 		}
 	}
 
+    public function db_get_liste_articles($data){
+
+        $list = "<datalist id='articles'>";
+        foreach ($data as $key) {
+            $list .= "<option value='".$key["art_nom"]."'>";
+        }
+        $list .="</datalist>";
+
+        return $list;
+
+    }
+
 	public function db_get_one(){
 		global $conn;
 
@@ -70,6 +82,49 @@ class Article{
 			return $this->errmessage.$e->getMessage();
 		}
 	}
+
+    public function db_create_command($article, $quantity){
+
+        if(!$article || !$quantity){
+            $response["error"] = true;
+            $response["errortext"] = "Données invalide";
+            return $response;
+        }
+
+        global $conn;
+
+
+        $request = "SELECT art_ID FROM ".DB_TABLE_ARTICLE." WHERE art_nom = :article";
+        $res = $conn->prepare($request);
+        $res->bindValue(":article", $article, PDO::PARAM_STR);
+        $res->execute();
+
+        if(!$res){
+            $response["error"] = true;
+            $response["errortext"] = "Article invalide";
+            return $response;
+        }else{
+            $article = $res->fetch(PDO::FETCH_ASSOC)["art_ID"];
+        }
+
+        $conn->query("INSERT INTO ".DB_TABLE_COMMANDE."(fk_doc_ID) VALUES(2)");
+
+        $commandeID = $conn->lastInsertId();
+
+
+        $request = "INSERT INTO ".DB_TABLE_LIGNES_COMMANDE."(Lign_quantite, Lign_is_vente, fk_art_ID, fk_com_ID) VALUES(:quantite, 0, :article, $commandeID)";
+        try {
+            $conn->prepare($request)->execute([":quantite"=>$quantity, ":article"=>$article]);
+            $response["error"] = false;
+            return $response;
+        }catch (PDOException $e){
+            $response["error"] = true;
+            $response["errortext"] = $this->errmessage.$e->getMessage();
+            return $response;
+        }
+
+
+    }
 
 	public function db_create($article_nom='', $article_commentaire='', $categorie='', $casier=''){
 		global $conn, $oCasier, $oCategorie;

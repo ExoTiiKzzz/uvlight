@@ -73,7 +73,10 @@ if(isset($_POST["create"])){
         $response = "pb";
     }
     echo json_encode($response);
-}else{
+}elseif(isset($_POST["command"])){
+    echo json_encode($oArticle->db_create_command($_POST["article"], $_POST["quantity"]));
+}
+else{
     header("location: index.php");
 }
 

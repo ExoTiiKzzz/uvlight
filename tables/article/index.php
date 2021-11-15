@@ -29,6 +29,8 @@
         $categories = $oCategorie->db_get_all();
         $casiers = $oCasier->db_get_all();
 
+        echo $oArticle->db_get_liste_articles($data);
+
         $listeCasiers = "<datalist id='liste_casiers'>";
         foreach ($casiers as $key) {
             $listeCasiers .= "<option value='".$key["cas_lib"]."'>";
@@ -46,9 +48,10 @@
 
 ?>
 <div class="main-container sidenav-open">
-    
+
 
     <button type='button' class='my-3 btn btn-success' data-toggle='modal' data-target='#createmodal'> Créer un article </button>
+    <button type='button' class='mx-3 btn btn-success' data-toggle='modal' data-target='#command'> Commander un article </button>
 
     <div class="table-container" style="margin-right: 0px;">
         <table id="table">
@@ -57,6 +60,7 @@
                 <th style='text-align :center'>ID</th>
                 <th style='text-align :center'>Nom</th>
                 <th style='text-align :center'>Commentaire</th>
+                <th style='text-align :center'>Stock</th>
                 <th style='text-align :center'>Catégorie</th>
                 <th style='text-align :center'>Casier</th>
                 <th style='text-align :center'>Actions</th>
@@ -72,6 +76,7 @@
         </button>
     </div>
   </div>
+
     <!-- modal pour créer une catégorie -->
     <div class="modal fade" id="createmodal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -117,6 +122,40 @@
         </div>
     </div>
 
+    <!-- Modal pour commander un article -->
+
+    <div class="modal fade" id="command" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Commander un article</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="mx-auto modal-body col-10">
+                    <div class="form-group">
+                        <label for="article">Nom de l'article : </label>
+                        <input placeholder="Nom de l'article" class="form-control name_input commandArticle"
+                               style="margin: 0 auto" type="text" list="articles" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="article">Quantité souhaitée : </label>
+                        <input placeholder="Quantité" class="form-control name_input commandQuantite"
+                               style="margin: 0 auto" type="number" required>
+                    </div>
+
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary commandCloseBtn" data-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-primary commandBtn">Commander</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
             <!-- Modal -->
             <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -132,7 +171,7 @@
                                 <div class="form-group">
                                     <div data-index="0" class="alert alert-danger" style="display: none">Le nom de l'article doit faire entre 1 et 50 charactères maximum</div>
                                     <input type="hidden" class="updateId">
-                                    <input class="form-control name_input updateLib" data-index="0" 
+                                    <input class="form-control name_input updateLib" data-index="0" >
                                     style="margin: 0 auto" type="text" name="article_name" required>
                                 </div>
                                 <div class="form-group">
@@ -180,6 +219,7 @@
                     { data: 'art_id' },
                     { data: 'art_nom' },
                     { data: 'art_commentaire' },
+                    { data: 'stock' },
                     { data: 'categorie' },
                     { data: 'casier' },
                     { data: 'actions' }

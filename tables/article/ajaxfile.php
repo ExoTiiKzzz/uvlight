@@ -106,6 +106,7 @@ foreach($empRecords as $row){
       "art_id" => $id,
       "art_nom"=>$row['art_nom'],
       "art_commentaire"=>$row["art_commentaire"],
+      "stock"=>$row["stock"],
       "categorie"=>$categories[$row["fk_cat_ID"]]["cat_nom"],
       "casier"=>$casiers[$row["fk_cas_ID"]]["cas_lib"],
       "actions"=>$actionrow
