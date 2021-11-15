@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 06, 2021 at 03:19 PM
+-- Generation Time: Nov 15, 2021 at 10:42 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.4.21
 
@@ -44,11 +44,11 @@ INSERT INTO `article` (`art_ID`, `art_nom`, `art_commentaire`, `fk_cat_ID`, `fk_
 (0, 'Choisir un article', '', 2, 1, 1),
 (3, 'Leproduiteee', 'Un commentaire', 3, 26, 1),
 (4, 'pizpizpizpiz', 'pipi', 2, 26, 1),
-(5, 'dasdsa', '0', 2, 26, 1),
+(5, 'oklm', 'Test', 1, 2, 1),
 (6, 'esaaes', '0', 2, 26, 1),
 (7, 'dasdaseeeeeee', '0', 2, 26, 1),
 (8, 'sdadas', ' eaeae', 2, 26, 1),
-(9, 'edfjjg', '0', 2, 26, 1),
+(9, 'edfjjg', 'def', 4, 26, 1),
 (11, 'lelelele', 'sadadsa', 2, 3, 1),
 (12, 'aeaea', 'ssss', 2, 1, 1),
 (13, 'papapapa', 'ssss', 2, 1, 1);
@@ -76,7 +76,7 @@ INSERT INTO `casier` (`cas_ID`, `cas_lib`, `cas_is_visible`) VALUES
 (4, 'dadad', 1),
 (5, 'geraud', 1),
 (6, 'test', 1),
-(7, 'dadf', 1),
+(7, 'dadf', 0),
 (8, 'dada', 1),
 (9, 'clement', 1),
 (10, 'efrr', 1),
@@ -36084,6 +36084,34 @@ INSERT INTO `cities` (`c_id`, `department_code`, `insee_code`, `zip_code`, `c_na
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `commande`
+--
+
+CREATE TABLE `commande` (
+  `Com_ID` int(11) NOT NULL,
+  `Com_create_datetime` timestamp NOT NULL DEFAULT current_timestamp(),
+  `fk_doc_ID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `commande`
+--
+
+INSERT INTO `commande` (`Com_ID`, `Com_create_datetime`, `fk_doc_ID`) VALUES
+(1, '2021-11-10 21:04:10', 2),
+(2, '2021-11-10 21:07:22', 2),
+(3, '2021-11-10 21:16:59', 1),
+(4, '2021-11-10 21:16:59', 2),
+(5, '2021-11-15 21:25:47', 2),
+(6, '2021-11-15 21:26:13', 2),
+(7, '2021-11-15 21:26:51', 2),
+(8, '2021-11-15 21:39:40', 2),
+(9, '2021-11-15 21:39:44', 2),
+(10, '2021-11-15 21:40:06', 2);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `communes`
 --
 
@@ -36278,8 +36306,16 @@ CREATE TABLE `document` (
   `doc_create_datetime` int(11) NOT NULL,
   `doc_commentaire` varchar(255) NOT NULL,
   `fk_tiers_ID` int(11) NOT NULL,
-  `fk_eta_ID` int(11) NOT NULL
+  `fk_typdo_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `document`
+--
+
+INSERT INTO `document` (`doc_ID`, `doc_create_datetime`, `doc_commentaire`, `fk_tiers_ID`, `fk_typdo_ID`) VALUES
+(1, 2147483647, 'Test', 14, 1),
+(2, 12, 'Testaaaa', 14, 1);
 
 -- --------------------------------------------------------
 
@@ -36313,6 +36349,30 @@ CREATE TABLE `etat_doc` (
   `eta_ID` int(11) NOT NULL,
   `eta_lib` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lignes_commande`
+--
+
+CREATE TABLE `lignes_commande` (
+  `Lign_ID` int(11) NOT NULL,
+  `Lign_quantite` int(11) NOT NULL,
+  `Lign_is_vente` tinyint(1) NOT NULL DEFAULT 1,
+  `fk_art_ID` int(11) NOT NULL,
+  `fk_com_ID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `lignes_commande`
+--
+
+INSERT INTO `lignes_commande` (`Lign_ID`, `Lign_quantite`, `Lign_is_vente`, `fk_art_ID`, `fk_com_ID`) VALUES
+(3, 25, 0, 0, 7),
+(4, 12, 1, 4, 8),
+(5, 25, 0, 4, 9),
+(6, 14, 0, 5, 10);
 
 -- --------------------------------------------------------
 
@@ -36446,10 +36506,10 @@ INSERT INTO `tarif` (`tar_ID`, `tar_lib`) VALUES
 
 CREATE TABLE `tiers` (
   `tie_ID` int(11) NOT NULL,
+  `tie_raison_sociale` varchar(50) NOT NULL,
   `tie_adresse` varchar(150) NOT NULL,
   `tie_tel` varchar(15) NOT NULL,
   `tie_email` varchar(50) NOT NULL,
-  `tie_raison_sociale` varchar(50) NOT NULL,
   `tie_IBAN` varchar(34) NOT NULL,
   `tie_BIC` varchar(11) NOT NULL,
   `tie_code_banque` varchar(5) NOT NULL,
@@ -36469,10 +36529,10 @@ CREATE TABLE `tiers` (
 -- Dumping data for table `tiers`
 --
 
-INSERT INTO `tiers` (`tie_ID`, `tie_adresse`, `tie_tel`, `tie_email`, `tie_raison_sociale`, `tie_IBAN`, `tie_BIC`, `tie_code_banque`, `tie_code_guichet`, `tie_num_compte`, `tie_cle_rib`, `tie_domiciliation`, `fk_com_ID`, `fk_typre_ID`, `fk_tar_id`, `fk_typso_ID`, `fk_typti_ID`, `tie_is_visible`) VALUES
-(14, '14 rue du calvados', '01 23 45 67 89', 'mail@mail.fr', 'C\'est partisqdvas', '451ad51as54eae', '1asa', 'adse', 'sad', 'as', 'ss', 'Quelque part', 26478, 3, 15, 8, 2, 1),
-(15, '14 rue du calvadosss', '01 23 45 67 89', 'mail@mail.fr', 'C\'est parti', '451ad51as54eae', '1asa', 'adse', 'sad', 'as', 'ss', 'Quelque part', 29900, 3, 14, 10, 2, 0),
-(16, 'Adresse de fou', '0417895623', 'mail@mail.ru', 'Test', 'a54adad', '5784', '7524', '552', '2424', '45', 'Credit agricole Paris', 4673, 3, 14, 11, 3, 0);
+INSERT INTO `tiers` (`tie_ID`, `tie_raison_sociale`, `tie_adresse`, `tie_tel`, `tie_email`, `tie_IBAN`, `tie_BIC`, `tie_code_banque`, `tie_code_guichet`, `tie_num_compte`, `tie_cle_rib`, `tie_domiciliation`, `fk_com_ID`, `fk_typre_ID`, `fk_tar_id`, `fk_typso_ID`, `fk_typti_ID`, `tie_is_visible`) VALUES
+(14, 'C\'est partisqdvas', '14 rue du calvados', '01 23 45 67 89', 'mail@mail.fr', '451ad51as54eae', '1asa', 'adse', 'sad', 'as', 'ss', 'Quelque part', 26478, 3, 15, 8, 2, 1),
+(15, 'C\'est parti', '14 rue du calvadosss', '01 23 45 67 89', 'mail@mail.fr', '451ad51as54eae', '1asa', 'adse', 'sad', 'as', 'ss', 'Quelque part', 29900, 3, 14, 10, 2, 0),
+(16, 'Test', 'Adresse de fou', '0417895623', 'mail@mail.ru', 'a54adad', '5784', '7524', '552', '2424', '45', 'Credit agricole Paris', 4673, 3, 14, 11, 3, 0);
 
 -- --------------------------------------------------------
 
@@ -36493,16 +36553,17 @@ CREATE TABLE `type_document` (
 INSERT INTO `type_document` (`typdo_ID`, `typdo_lib`, `typdo_is_visible`) VALUES
 (1, 'Devis', 0),
 (2, 'Test', 0),
-(3, 'Truc de ouf', 0),
+(3, 'Truc de ouf', 1),
 (4, 'please', 0),
 (5, 'Dernier essai', 0),
-(6, 'Dernier essaieeeee', 0),
+(6, 'Dernier essaieeeee', 1),
 (7, 'Test', 0),
-(8, 'Test', 0),
-(9, 'Test', 0),
-(10, 'Test', 0),
-(11, 'Eliot le gros con', 0),
-(12, 'cool', 0);
+(8, 'Test', 1),
+(9, 'Test', 1),
+(10, 'Test', 1),
+(11, 'Eliot le gros conz', 0),
+(12, 'cool', 1),
+(13, 'testaaa', 1);
 
 -- --------------------------------------------------------
 
@@ -36634,6 +36695,13 @@ ALTER TABLE `cities`
   ADD KEY `cities_department_code_foreign` (`department_code`);
 
 --
+-- Indexes for table `commande`
+--
+ALTER TABLE `commande`
+  ADD PRIMARY KEY (`Com_ID`),
+  ADD KEY `document` (`fk_doc_ID`);
+
+--
 -- Indexes for table `communes`
 --
 ALTER TABLE `communes`
@@ -36663,7 +36731,9 @@ ALTER TABLE `depend`
 -- Indexes for table `document`
 --
 ALTER TABLE `document`
-  ADD PRIMARY KEY (`doc_ID`);
+  ADD PRIMARY KEY (`doc_ID`),
+  ADD KEY `type_document` (`fk_typdo_ID`),
+  ADD KEY `tiers_concerne` (`fk_tiers_ID`);
 
 --
 -- Indexes for table `doc_produit`
@@ -36682,6 +36752,14 @@ ALTER TABLE `emplacement`
 --
 ALTER TABLE `etat_doc`
   ADD PRIMARY KEY (`eta_ID`);
+
+--
+-- Indexes for table `lignes_commande`
+--
+ALTER TABLE `lignes_commande`
+  ADD PRIMARY KEY (`Lign_ID`,`fk_art_ID`,`fk_com_ID`),
+  ADD KEY `article_ID` (`fk_art_ID`),
+  ADD KEY `commande_ID` (`fk_com_ID`);
 
 --
 -- Indexes for table `produit`
@@ -36773,6 +36851,12 @@ ALTER TABLE `cities`
   MODIFY `c_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35855;
 
 --
+-- AUTO_INCREMENT for table `commande`
+--
+ALTER TABLE `commande`
+  MODIFY `Com_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- AUTO_INCREMENT for table `communes`
 --
 ALTER TABLE `communes`
@@ -36788,13 +36872,19 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `document`
 --
 ALTER TABLE `document`
-  MODIFY `doc_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `doc_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `etat_doc`
 --
 ALTER TABLE `etat_doc`
   MODIFY `eta_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `lignes_commande`
+--
+ALTER TABLE `lignes_commande`
+  MODIFY `Lign_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `produit`
@@ -36824,7 +36914,7 @@ ALTER TABLE `tiers`
 -- AUTO_INCREMENT for table `type_document`
 --
 ALTER TABLE `type_document`
-  MODIFY `typdo_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `typdo_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `type_reglement`
@@ -36868,10 +36958,30 @@ ALTER TABLE `cities`
   ADD CONSTRAINT `cities_department_code_foreign` FOREIGN KEY (`department_code`) REFERENCES `departments` (`d_code`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `commande`
+--
+ALTER TABLE `commande`
+  ADD CONSTRAINT `document` FOREIGN KEY (`fk_doc_ID`) REFERENCES `document` (`doc_ID`);
+
+--
 -- Constraints for table `departments`
 --
 ALTER TABLE `departments`
   ADD CONSTRAINT `departments_region_code_foreign` FOREIGN KEY (`d_region_code`) REFERENCES `regions` (`code`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `document`
+--
+ALTER TABLE `document`
+  ADD CONSTRAINT `tiers_concerne` FOREIGN KEY (`fk_tiers_ID`) REFERENCES `tiers` (`tie_ID`),
+  ADD CONSTRAINT `type_document` FOREIGN KEY (`fk_typdo_ID`) REFERENCES `type_document` (`typdo_ID`);
+
+--
+-- Constraints for table `lignes_commande`
+--
+ALTER TABLE `lignes_commande`
+  ADD CONSTRAINT `article_ID` FOREIGN KEY (`fk_art_ID`) REFERENCES `article` (`art_ID`),
+  ADD CONSTRAINT `commande_ID` FOREIGN KEY (`fk_com_ID`) REFERENCES `commande` (`Com_ID`);
 
 --
 -- Constraints for table `produit`
