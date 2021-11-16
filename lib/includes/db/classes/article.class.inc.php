@@ -4,6 +4,7 @@ class Article{
 
     const errmessage = "Une erreur s'est produite, signalez la à l'administrateur \n";
 
+
     public function db_get_all(){
 		global $conn;
 		$request = "SELECT art_ID, art_nom, art_commentaire, fk_cat_ID, fk_cas_ID FROM ".DB_TABLE_ARTICLE." WHERE art_is_visible = 1";
@@ -85,26 +86,31 @@ class Article{
 
     public function db_create_command($article, $quantity){
 
-        if(!$article || !$quantity){
+        if(empty($article) || empty($quantity)){
             $response["error"] = true;
-            $response["errortext"] = "Données invalide";
+            $response["errortext"] = is_array($article);
             return $response;
         }
 
+
         global $conn;
 
+        $listearticle = str_repeat ('?, ',  count ($article) - 1) . '?';
 
-        $request = "SELECT art_ID FROM ".DB_TABLE_ARTICLE." WHERE art_nom = :article";
-        $res = $conn->prepare($request);
-        $res->bindValue(":article", $article, PDO::PARAM_STR);
-        $res->execute();
 
-        if(!$res){
+        $request = "SELECT art_ID FROM ".DB_TABLE_ARTICLE." WHERE art_nom  IN ($listearticle)";
+        $result = $conn->prepare($request);
+        $result->execute($article);
+
+        if(!$result){
             $response["error"] = true;
             $response["errortext"] = "Article invalide";
             return $response;
-        }else{
-            $article = $res->fetch(PDO::FETCH_ASSOC)["art_ID"];
+        }
+        $resarticles = $result->fetchAll(PDO::FETCH_ASSOC);
+
+        for($cpt = 0 ; $cpt >= count($article); $cpt++){
+            $article[$cpt] = $resarticles[$cpt]["art_ID"];
         }
 
         $conn->query("INSERT INTO ".DB_TABLE_COMMANDE."(fk_doc_ID) VALUES(2)");
@@ -112,10 +118,32 @@ class Article{
         $commandeID = $conn->lastInsertId();
 
 
-        $request = "INSERT INTO ".DB_TABLE_LIGNES_COMMANDE."(Lign_quantite, Lign_is_vente, fk_art_ID, fk_com_ID) VALUES(:quantite, 0, :article, $commandeID)";
+        $request = "INSERT INTO ".DB_TABLE_LIGNES_COMMANDE."(Lign_quantite, Lign_is_vente, fk_art_ID, fk_com_ID) VALUES";
+
+        $i = 0;
+        foreach($article as $el){
+            $request .= "(:quantite$i, 0, :article$i, $commandeID), ";
+            $i++;
+        }
+        $request .= "(0,0,0,0)";
         try {
-            $conn->prepare($request)->execute([":quantite"=>$quantity, ":article"=>$article]);
-            $response["error"] = false;
+            $sql = $conn->prepare($request);
+            $cpt = 0;
+            foreach($article as $ar){
+                $sql->bindValue(":quantite$cpt", $quantity[$cpt]);
+                $sql->bindValue(":article$cpt", $article[$cpt]);
+                $cpt++;
+            }
+            $sql->execute();
+//            $request = "SELECT COUNT(*) as total FROM ".DB_TABLE_LIGNES_COMMANDE." WHERE fk_art_ID = :article AND Lign_is_vente = 1";
+//            $sql = $conn->prepare($request);
+//            $sql->execute([":article" => $article]);
+//            if($sql->fetch(PDO::FETCH_ASSOC)["total"] === 0){
+//                $request = "INSERT INTO ".DB_TABLE_LIGNES_COMMANDE."(Lign_quantite, Lign_is_vente, fk_art_ID, fk_com_ID) VALUES(0, 1, :article, $commandeID)";
+//                $conn->prepare($request)->execute([":article"=>$article]);
+//            }
+            $response["errortext"] = $result->fetch(PDO::FETCH_ASSOC)["art_ID"];
+            $response["error"] = true;
             return $response;
         }catch (PDOException $e){
             $response["error"] = true;

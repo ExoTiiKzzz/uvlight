@@ -74,7 +74,7 @@ if(isset($_POST["create"])){
     }
     echo json_encode($response);
 }elseif(isset($_POST["command"])){
-    echo json_encode($oArticle->db_create_command($_POST["article"], $_POST["quantity"]));
+    echo json_encode($oArticle->db_create_command(json_decode($_POST["article"]), json_decode($_POST["quantity"])));
 }
 else{
     header("location: index.php");

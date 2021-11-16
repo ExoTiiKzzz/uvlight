@@ -134,18 +134,22 @@
                     </button>
                 </div>
                 <div class="mx-auto modal-body col-10">
-                    <div class="form-group">
-                        <label for="article">Nom de l'article : </label>
-                        <input placeholder="Nom de l'article" class="form-control name_input commandArticle"
-                               style="margin: 0 auto" type="text" list="articles" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="article">Quantité souhaitée : </label>
-                        <input placeholder="Quantité" class="form-control name_input commandQuantite"
-                               style="margin: 0 auto" type="number" required>
+                    <div class="commandListArticles">
+                        <div class="row">
+                            <div class="form-group col-5">
+                                <label for="article">Nom de l'article : </label>
+                                <input placeholder="Nom de l'article" class="form-control name_input commandArticle"
+                                       style="margin: 0 auto" type="text" list="articles" data-index="0" required>
+                            </div>
+                            <div class="form-group col-5">
+                                <label for="article">Quantité souhaitée : </label>
+                                <input placeholder="Quantité" class="form-control name_input commandQuantite"
+                                       style="margin: 0 auto" type="number" data-index="0" required>
+                            </div>
+                        </div>
                     </div>
 
-
+                    <button type="button" class="btn btn-success commandAddArticleBtn">Ajouter un article à la commande</button>
                 </div>
 
                 <div class="modal-footer">
@@ -228,6 +232,7 @@
                 scrollCollapse: true,
                 scroller:       true
             });
+            document.querySelector(".searchInput").focus();
         });
 
         function checkForm(formid){

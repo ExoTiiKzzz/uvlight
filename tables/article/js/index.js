@@ -1,6 +1,4 @@
 const createBtn = document.querySelector(".createBtn");
-
-
 createBtn.addEventListener("click", (e) =>{
     e.preventDefault();
 
@@ -135,16 +133,22 @@ const commandBtn = document.querySelector(".commandBtn");
 
 commandBtn.addEventListener("click", (e) => {
 
-    let article, quantity;
+    let articles = [], quantitys = [];
 
-    article = document.querySelector(".commandArticle").value;
+    articleEls = document.querySelectorAll(".commandArticle");
 
-    quantity = document.querySelector(".commandQuantite").value;
+    articleEls.forEach(article => {
+        let index = article.dataset.index;
+        articles[index] = article.value;
+        quantitys[index] = document.querySelector(".commandQuantite[data-index='"+index+"']").value;
+    })
+
+    console.log(articles, quantitys);
 
     let formData = new FormData;
     formData.append("command", "1");
-    formData.append("article", article);
-    formData.append("quantity", quantity);
+    formData.append("article", JSON.stringify(articles));
+    formData.append("quantity", JSON.stringify(quantitys));
 
     fetch(url, {
         method: "POST",
@@ -154,9 +158,44 @@ commandBtn.addEventListener("click", (e) => {
         .then(data => {
             if(data.error === false){
                 drawTable();
+                document.querySelector(".commandCloseBtn").click();
             }else{
                 console.log(data.errortext);
             }
         })
 
 })
+
+const commandAddArticleBtn = document.querySelector(".commandAddArticleBtn");
+
+commandAddArticleBtn.addEventListener("click", (e) => {
+    let id = getMaxCommandArticleIndex();
+    commandAddArticle(id);
+})
+
+function getMaxCommandArticleIndex(){
+    let articles = document.querySelectorAll(".commandArticle");
+    let maxindex = parseInt(articles[articles.length - 1].dataset.index) + 1;
+
+
+    return maxindex;
+}
+
+function commandAddArticle(index){
+    let textToAdd = '<div class="form-group col-5">' +
+                        '<label for="article">Nom de l\'article : </label>' +
+                        '<input placeholder="Nom de l\'article" class="form-control name_input commandArticle"' +
+                                'style="margin: 0 auto" type="text" list="articles" data-index="'+index+'" required>' +
+                    '</div>' +
+                    '<div class="form-group col-5">' +
+                        '<label for="article">Quantité souhaitée : </label>' +
+                        '<input placeholder="Quantité" class="form-control name_input commandQuantite"' +
+                                'style="margin: 0 auto" type="number" data-index="'+index+'" required>' +
+                    '</div>';
+
+    let row = document.createElement("div");
+    row.classList.add("row");
+    row.innerHTML = textToAdd;
+
+    document.querySelector(".commandListArticles").appendChild(row);
+}
