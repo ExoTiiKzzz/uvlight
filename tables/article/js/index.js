@@ -25,63 +25,7 @@ createBtn.addEventListener("click", (e) =>{
         if(result.error === true){
             console.log(result.errortext);
         }else{
-            table.api().order( [ 1, 'asc' ] ).draw();
-
-            var id = result.existingid;
-
-            var checkboxEl = document.createElement("td");
-            var checkbox = document.querySelector(".checkbox[data-index='"+id+"']").cloneNode(true);
-            checkbox.dataset.index = result.createdid;
-            checkbox.addEventListener("change", checkBoxListener);
-
-            checkboxEl.appendChild(checkbox);
-
-            var tdid = document.createElement("td");
-            tdid.innerHTML = "<center>"+result.createdid+"</center>";
-
-            var tdlib = document.createElement("td");
-            tdlib.innerHTML = "<center>"+lib+"</center>";
-
-            var tdcomment = document.createElement("td");
-            tdcomment.innerHTML = "<center>"+comment+"</center>";
-
-            var tdcasier = document.createElement("td");
-            tdcasier.innerHTML = "<center>"+result.cas+"</center>";
-
-            var tdcat = document.createElement("td");
-            tdcat.innerHTML = "<center>"+result.cat+"</center>";
-
-            var update = document.querySelector(".updateBtn[data-index='"+id+"']").cloneNode(true);
-            update.dataset.index = result.createdid;
-            update.addEventListener("click", openUpdateModalListener);
-            
-            var deleteEl = document.querySelector(".delete-btn[data-index='"+id+"']").cloneNode(true);
-            deleteEl.dataset.index = result.createdid;
-            deleteEl.addEventListener("click", deleteEventListener);
-
-            var td = document.createElement("td");
-            td.style.display = "flex";
-            td.style.justifyContent = "space-evenly";
-            td.appendChild(update);
-            td.appendChild(deleteEl);
-
-            
-
-            var newRow = document.createElement("tr");
-            newRow.classList.add("tablerow");
-            newRow.dataset.rowindex = result.createdid;
-            newRow.dataset.value = result.createdid;
-            newRow.appendChild(checkboxEl);
-            newRow.appendChild(tdid);
-            newRow.appendChild(tdlib);
-            newRow.appendChild(tdcomment);
-            newRow.appendChild(tdcasier);
-            newRow.appendChild(tdcat);
-            newRow.appendChild(td);
-
-            table.api().row.add(newRow);
-            table.api().order( [ 1, 'asc' ] ).draw();
-
+            drawTable();
             document.querySelector(".createCloseBtn").click();
         }
     })
@@ -143,7 +87,7 @@ commandBtn.addEventListener("click", (e) => {
         quantitys[index] = document.querySelector(".commandQuantite[data-index='"+index+"']").value;
     })
 
-    console.log(articles, quantitys);
+    // console.log(articles, quantitys);
 
     let formData = new FormData;
     formData.append("command", "1");
@@ -175,7 +119,8 @@ commandAddArticleBtn.addEventListener("click", (e) => {
 
 function getMaxCommandArticleIndex(){
     let articles = document.querySelectorAll(".commandArticle");
-    let maxindex = parseInt(articles[articles.length - 1].dataset.index) + 1;
+    let maxindex;
+    articles[articles.length - 1] === undefined ? maxindex = 0 : maxindex = parseInt(articles[articles.length - 1].dataset.index) + 1;
 
 
     return maxindex;
@@ -187,15 +132,24 @@ function commandAddArticle(index){
                         '<input placeholder="Nom de l\'article" class="form-control name_input commandArticle"' +
                                 'style="margin: 0 auto" type="text" list="articles" data-index="'+index+'" required>' +
                     '</div>' +
-                    '<div class="form-group col-5">' +
+                    '<div class="form-group col-4">' +
                         '<label for="article">Quantité souhaitée : </label>' +
                         '<input placeholder="Quantité" class="form-control name_input commandQuantite"' +
                                 'style="margin: 0 auto" type="number" data-index="'+index+'" required>' +
+                    '</div>'+
+                    '<div class="form-group col-3" >'+
+                            '<label> Retirer </label>'+
+                            '<button class="form-control btn btn-danger commandDeleteArticle" onClick="commandDeleteArticle('+index+')">X</button>'+
                     '</div>';
 
     let row = document.createElement("div");
     row.classList.add("row");
+    row.dataset.index = index;
     row.innerHTML = textToAdd;
 
     document.querySelector(".commandListArticles").appendChild(row);
+}
+
+function commandDeleteArticle(index){
+    document.querySelector(".commandListArticles").removeChild(document.querySelector(".row[data-index='"+index+"']"));
 }

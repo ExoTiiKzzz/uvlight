@@ -1,5 +1,4 @@
 const updateBtn = document.querySelector('.updateRowBtn');
-console.log(updateBtn)
 
 function updateRow(){
     var id = document.querySelector(".updateId").value;

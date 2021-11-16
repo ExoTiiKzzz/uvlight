@@ -98,7 +98,7 @@ class Article{
         $listearticle = str_repeat ('?, ',  count ($article) - 1) . '?';
 
 
-        $request = "SELECT art_ID FROM ".DB_TABLE_ARTICLE." WHERE art_nom  IN ($listearticle)";
+        $request = "SELECT art_ID, art_nom FROM ".DB_TABLE_ARTICLE." WHERE art_nom  IN ($listearticle)";
         $result = $conn->prepare($request);
         $result->execute($article);
 
@@ -109,8 +109,14 @@ class Article{
         }
         $resarticles = $result->fetchAll(PDO::FETCH_ASSOC);
 
-        for($cpt = 0 ; $cpt >= count($article); $cpt++){
-            $article[$cpt] = $resarticles[$cpt]["art_ID"];
+        foreach($resarticles as $element){
+            $cpt = 0;
+            foreach($article as $subel){
+                if($subel === $element["art_nom"]) {
+                    $article[$cpt] = $element["art_ID"];
+                }
+                $cpt++;
+            }
         }
 
         $conn->query("INSERT INTO ".DB_TABLE_COMMANDE."(fk_doc_ID) VALUES(2)");
@@ -135,15 +141,7 @@ class Article{
                 $cpt++;
             }
             $sql->execute();
-//            $request = "SELECT COUNT(*) as total FROM ".DB_TABLE_LIGNES_COMMANDE." WHERE fk_art_ID = :article AND Lign_is_vente = 1";
-//            $sql = $conn->prepare($request);
-//            $sql->execute([":article" => $article]);
-//            if($sql->fetch(PDO::FETCH_ASSOC)["total"] === 0){
-//                $request = "INSERT INTO ".DB_TABLE_LIGNES_COMMANDE."(Lign_quantite, Lign_is_vente, fk_art_ID, fk_com_ID) VALUES(0, 1, :article, $commandeID)";
-//                $conn->prepare($request)->execute([":article"=>$article]);
-//            }
-            $response["errortext"] = $result->fetch(PDO::FETCH_ASSOC)["art_ID"];
-            $response["error"] = true;
+            $response["error"] = false;
             return $response;
         }catch (PDOException $e){
             $response["error"] = true;
@@ -171,8 +169,10 @@ class Article{
 		$sql->bindValue(':fk_casier_id', $fk_casier_id, PDO::PARAM_INT);
 		try{
 			$sql->execute();
+            $id = $conn->lastInsertId();
+            $conn->prepare("INSERT INTO ".DB_TABLE_LIGNES_COMMANDE."(Lign_quantite, Lign_is_vente, fk_art_ID, fk_com_ID) VALUES(0, 1, $id, 0)")->execute();
 			$return = [];
-			$return["lastid"] = $conn->lastInsertId();
+			$return["lastid"] = $id;
 			$return["cat"] = $oCategorie->db_get_by_id((int) $fk_categorie_id)["cat_nom"];
 			$return["cas"] = $oCasier->db_get_by_id((int) $fk_casier_id)["cas_lib"];
 			return $return;

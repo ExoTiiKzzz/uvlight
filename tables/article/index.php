@@ -51,7 +51,7 @@
 
 
     <button type='button' class='my-3 btn btn-success' data-toggle='modal' data-target='#createmodal'> Créer un article </button>
-    <button type='button' class='mx-3 btn btn-success' data-toggle='modal' data-target='#command'> Commander un article </button>
+    <button type='button' class='mx-3 btn btn-success' data-toggle='modal' data-target='#command'> Créer une commande </button>
 
     <div class="table-container" style="margin-right: 0px;">
         <table id="table">
@@ -128,23 +128,27 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Commander un article</h5>
+                    <h5 class="modal-title">Créer une commande</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="mx-auto modal-body col-10">
                     <div class="commandListArticles">
-                        <div class="row">
+                        <div class="row" data-index="0">
                             <div class="form-group col-5">
                                 <label for="article">Nom de l'article : </label>
                                 <input placeholder="Nom de l'article" class="form-control name_input commandArticle"
                                        style="margin: 0 auto" type="text" list="articles" data-index="0" required>
                             </div>
-                            <div class="form-group col-5">
+                            <div class="form-group col-4">
                                 <label for="article">Quantité souhaitée : </label>
                                 <input placeholder="Quantité" class="form-control name_input commandQuantite"
                                        style="margin: 0 auto" type="number" data-index="0" required>
+                            </div>
+                            <div class="form-group col-3">
+                                <label>Retirer</label>
+                                <button class="form-control btn btn-danger commandDeleteArticle" onclick="commandDeleteArticle(0)">X</button>
                             </div>
                         </div>
                     </div>
