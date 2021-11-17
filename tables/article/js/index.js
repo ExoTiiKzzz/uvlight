@@ -1,3 +1,38 @@
+var table = $('#table');
+$(document).ready(function(){
+    table.dataTable({
+        processing: true,
+        serverSide: true,
+        serverMethod: 'post',
+        ajax: {
+            'url':'ajaxfile.php'
+        },
+        columns: [
+            { data: 'checkbox' },
+            { data: 'art_id' },
+            { data: 'art_nom' },
+            { data: 'art_commentaire' },
+            { data: 'stock' },
+            { data: 'categorie' },
+            { data: 'casier' },
+            { data: 'actions' }
+        ],
+        deferRender:    true,
+        scrollCollapse: true,
+        scroller:       true
+    });
+    document.querySelector(".searchInput").focus();
+});
+
+function checkForm(formid){
+    if(0 > document.querySelector(".name_input[data-index='"+formid+"']").value.length > 50){
+        document.querySelector(".alert-danger[data-index='"+formid+"']").style.display = "block";
+        return false;
+    }else{
+        return true;
+    }
+}
+
 const createBtn = document.querySelector(".createBtn");
 createBtn.addEventListener("click", (e) =>{
     e.preventDefault();

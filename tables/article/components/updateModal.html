@@ -1,0 +1,40 @@
+ <!-- Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifier l'article</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="trait.php" method="post" class="update_form" onsubmit="return checkForm(0)">
+                <div class="mx-auto modal-body col-10">
+                    <div class="form-group">
+                        <div data-index="0" class="alert alert-danger" style="display: none">Le nom de l'article doit faire entre 1 et 50 charactères maximum</div>
+                        <input type="hidden" class="updateId">
+                        <input class="form-control name_input updateLib" data-index="0" style="margin: 0 auto" type="text" name="article_name" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control updateComment" rows="3" name="article_commentaire"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <input list='liste_categories' class="form-control updateCat">
+                    </div>
+
+                    <div class="form-group">
+                        <input list='liste_casiers' class="form-control updateCas">
+                    </div>
+                    
+                    
+                </div>
+            
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary updateCloseBtn" data-dismiss="modal">Fermer</button>
+                    <button type="button" name="update" class="btn btn-primary updateRowBtn">Modifier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

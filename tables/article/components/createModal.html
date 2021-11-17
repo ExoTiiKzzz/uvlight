@@ -1,0 +1,44 @@
+<!-- modal pour créer une catégorie -->
+<div class="modal fade" id="createmodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Créer un article</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="trait.php" method="post" class="update_form" onsubmit="return checkForm(0)">
+                <div class="mx-auto modal-body col-10">
+                    <div class="form-group">
+                        <label for="nomarticle">Nom de l'article : </label>
+                        <div data-index="0" class="alert alert-danger" style="display: none">Le nom de l'article doit faire entre 1 et 50 charactères maximum</div>
+                        <input id="nomarticle" placeholder="Nom de l'article" class="form-control name_input createLib" data-index="0" 
+                        style="margin: 0 auto" type="text" name="article_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="commentaire">Commentaire : </label>
+                        <textarea id="commentaire" placeholder="Commentaire sur le produit" class="form-control createComment" rows="3" name="article_commentaire"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="categorie">Catégorie : </label>
+                        <input id="categorie" list='liste_categories' class="form-control createCat" placeholder="Commencer à écrire puis sélectionner ce qui vous convient">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="casier">Casier : </label>
+                        <input id="casier" list='liste_casiers' class="form-control createCas" placeholder="Commencer à écrire puis sélectionner ce qui vous convient">
+                    </div>
+                    
+                    
+                </div>
+            
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary createCloseBtn" data-dismiss="modal">Fermer</button>
+                    <button type="button" name="create" class="btn btn-primary createBtn">Créer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

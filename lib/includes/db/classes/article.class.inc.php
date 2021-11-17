@@ -39,18 +39,6 @@ class Article{
 		}
 	}
 
-    public function db_get_liste_articles($data){
-
-        $list = "<datalist id='articles'>";
-        foreach ($data as $key) {
-            $list .= "<option value='".$key["art_nom"]."'>";
-        }
-        $list .="</datalist>";
-
-        return $list;
-
-    }
-
 	public function db_get_one(){
 		global $conn;
 
@@ -169,7 +157,7 @@ class Article{
 		try{
 			$sql->execute([":article_nom" => $article_nom, ":article_commentaire" => $article_commentaire, ":fk_categorie_id" => $fk_categorie_id, ":fk_casier_id" => $fk_casier_id]);
             $id = $conn->lastInsertId();
-            $conn->prepare("INSERT INTO ".DB_TABLE_LIGNES_COMMANDE."(Lign_quantite, Lign_is_vente, fk_art_ID, fk_com_ID) VALUES(0, 1, $id, 0)")->execute();
+            $conn->prepare("INSERT INTO ".DB_TABLE_LIGNES_COMMANDE."(Lign_quantite, Lign_is_vente, fk_art_ID, fk_com_ID) VALUES(0, 1, $id, 0), (0, 0, $id, 0)")->execute();
 			$return = [];
 			$return["lastid"] = $id;
 			$return["cat"] = $oCategorie->db_get_by_id((int) $fk_categorie_id)["cat_nom"];
@@ -192,13 +180,13 @@ class Article{
 
 		$request = "UPDATE ".DB_TABLE_ARTICLE." SET art_nom= :art_nom, art_commentaire = :art_commentaire, fk_cat_ID = :fk_cat_ID, fk_cas_ID = :fk_cas_ID WHERE art_ID = :article_ID";
 		$sql = $conn->prepare($request);
-		$sql->bindValue(":art_nom", $article_nom, PDO::PARAM_STR);
-		$sql->bindValue(":art_commentaire", $article_commentaire, PDO::PARAM_STR);
-		$sql->bindValue(":fk_cat_ID", $fk_categorie_id, PDO::PARAM_INT);
-		$sql->bindValue(":fk_cas_ID", $fk_casier_id, PDO::PARAM_INT);
-		$sql->bindValue(":article_ID", $article_id, PDO::PARAM_INT);
 		try{
-			$sql->execute();
+			$sql->execute([
+                ":art_nom" => $article_nom,
+                ":art_commentaire" => $article_commentaire,
+                ":fk_cat_ID" => $fk_categorie_id,
+                ":fk_cas_ID" => $fk_casier_id,
+                ":article_ID" => $article_id]);
 			return true;
 		}catch(PDOException $e){
 			return $this->errmessage.$e->getMessage();

@@ -120,3 +120,7 @@ table{
 .table-container{
     width: 100%;
 }
+
+.dataTables_processing{
+    color: #fff;
+}

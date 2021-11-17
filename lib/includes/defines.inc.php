@@ -50,6 +50,7 @@ include_once DB_CLASS_DIR.'tiers.class.inc.php';
 include_once DB_CLASS_DIR.'type_tiers.class.inc.php';
 include_once DB_CLASS_DIR.'produit.class.inc.php';
 include_once DB_CLASS_DIR.'generator.class.inc.php';
+include_once DB_CLASS_DIR.'liste.class.inc.php';
 include_once DB_CLASS_DIR.'../../../../server/bootstrap.php';
 
 // get main objects
@@ -70,6 +71,7 @@ $oLogin = new Login();
 $oTiers = new Tiers();
 $oProduit = new Produit();
 $oTypeDocument = new Type_Document();
+$oListe = new Liste();
 
 $isProd = false;
 
