@@ -158,17 +158,16 @@ class Article{
 		$fk_categorie_id = (int) $oCategorie->db_get_by_lib($categorie)["cat_ID"];
 		$fk_casier_id = (int) $oCasier->db_get_by_lib($casier)["cas_ID"];
 		if(!$article_nom || !$fk_categorie_id || !$fk_casier_id){
-			return false;
+            $response["error"] = true;
+            $response["errortext"] = "Données invalide";
+			return $response;
 		}
+
 		$request = "INSERT INTO ".DB_TABLE_ARTICLE."(art_nom, art_commentaire, fk_cat_ID, fk_cas_ID) VALUES(:article_nom, :article_commentaire, :fk_categorie_id, :fk_casier_id);";
 		$sql = $conn->prepare($request);
 		if(!$article_commentaire) $article_commentaire = "0";
-		$sql->bindValue(':article_nom', $article_nom, PDO::PARAM_STR);
-		$sql->bindValue(':article_commentaire', $article_commentaire, PDO::PARAM_STR);
-		$sql->bindValue(':fk_categorie_id', $fk_categorie_id, PDO::PARAM_INT);
-		$sql->bindValue(':fk_casier_id', $fk_casier_id, PDO::PARAM_INT);
 		try{
-			$sql->execute();
+			$sql->execute([":article_nom" => $article_nom, ":article_commentaire" => $article_commentaire, ":fk_categorie_id" => $fk_categorie_id, ":fk_casier_id" => $fk_casier_id]);
             $id = $conn->lastInsertId();
             $conn->prepare("INSERT INTO ".DB_TABLE_LIGNES_COMMANDE."(Lign_quantite, Lign_is_vente, fk_art_ID, fk_com_ID) VALUES(0, 1, $id, 0)")->execute();
 			$return = [];
