@@ -25,6 +25,10 @@ define('DB_TABLE_USERS', 'users');
 define('DB_TABLE_PRODUIT', 'produit');
 define('DB_TABLE_COMMANDE', 'commande');
 define('DB_TABLE_LIGNES_COMMANDE', 'lignes_commande');
+define('DB_TABLE_SOUS_CATEGORIE', 'sous_categorie');
+
+// err message
+define('BASIC_ERROR', 'Une erreur s\'est produite, signalez la à l\'administrateur \n');
 
 //define paths
 define('DB_CLASS_DIR', 'db/classes/');
@@ -51,6 +55,7 @@ include_once DB_CLASS_DIR.'type_tiers.class.inc.php';
 include_once DB_CLASS_DIR.'produit.class.inc.php';
 include_once DB_CLASS_DIR.'generator.class.inc.php';
 include_once DB_CLASS_DIR.'liste.class.inc.php';
+include_once DB_CLASS_DIR.'sous_categorie.class.inc.php';
 include_once DB_CLASS_DIR.'../../../../server/bootstrap.php';
 
 // get main objects
@@ -72,6 +77,7 @@ $oTiers = new Tiers();
 $oProduit = new Produit();
 $oTypeDocument = new Type_Document();
 $oListe = new Liste();
+$oSousCategorie = new Sous_categorie();
 
 $isProd = false;
 

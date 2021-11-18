@@ -68,7 +68,7 @@
                 <tbody>
                     <?php 
                         foreach ($data as $key) {
-                            $id = $key["cat_ID"]; ?>
+                            $id = $key["scat_ID"]; ?>
                             <tr data-value="<?php echo $id ?>" data-rowindex="<?php echo $id ?>">
                                 <td style='width: 5%'>
                                     <input type='checkbox' class='checkbox' data-index="<?php echo $id ?>" checked='false'>
@@ -77,10 +77,10 @@
                                     <center><?php echo $id ?></center>
                                 </td>
                                 <td>
-                                    <center><?php echo $key["cat_nom"] ?></center>
+                                    <center><?php echo $key["scat_lib"] ?></center>
                                 </td>
                                 <td>
-                                    <center><?php echo $key["cat_description"] ?></center>
+                                    <center><?php echo $key["fk_cat_ID"] ?></center>
                                 </td>
                                 <td style='display:flex; justify-content: space-evenly;'>
                                     <button type='button' data-index="<?php echo $id ?>" class='btn btn-primary updateBtn' data-toggle='modal' data-target='#updateModal'>
