@@ -138,6 +138,10 @@ commandBtn.addEventListener("click", (e) => {
             if(data.error === false){
                 drawTable();
                 document.querySelector(".commandCloseBtn").click();
+                document.querySelectorAll(".row").forEach(el => {
+                    document.querySelector(".commandListArticles").removeChild(el);
+                })
+                commandAddArticle();
             }else{
                 console.log(data.errortext);
             }
@@ -165,7 +169,7 @@ function commandAddArticle(index){
     let textToAdd = '<div class="form-group col-5">' +
                         '<label for="article">Nom de l\'article : </label>' +
                         '<input placeholder="Nom de l\'article" class="form-control name_input commandArticle"' +
-                                'style="margin: 0 auto" type="text" list="articles" data-index="'+index+'" required>' +
+                                'style="margin: 0 auto" type="text" list="liste_articles" data-index="'+index+'" required>' +
                     '</div>' +
                     '<div class="form-group col-4">' +
                         '<label for="article">Quantité souhaitée : </label>' +
