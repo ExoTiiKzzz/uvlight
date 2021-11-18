@@ -4,7 +4,7 @@
 
         public function db_get_all(){
             global $conn;
-            $request = "SELECT * FROM ".DB_TABLE_SOUS_CATEGORIE." WHERE scat_is_visible = 1";
+            $request = "SELECT scat_ID, scat_lib, cat_nom FROM ".DB_TABLE_SOUS_CATEGORIE." INNER JOIN ".DB_TABLE_CATEGORIE." ON ".DB_TABLE_SOUS_CATEGORIE.".fk_cat_ID = ".DB_TABLE_CATEGORIE.".cat_ID WHERE scat_is_visible = 1";
 
             try{
                 $sql = $conn->query($request);
@@ -35,8 +35,9 @@
         }
 
         /**
-         * @param libelle
-         * @param categorie
+         * @param string $libelle
+         * @param string $categorie 
+         * @return boolean
          */
 
         public function db_create($libelle='', $categorie=''){
@@ -61,6 +62,18 @@
                 return true;
             }catch(PDOException $e){
                 return BASIC_ERROR.$e->getMessage();
+            }
+        }
+
+        public function db_get_one(){
+            global $conn;
+    
+            $request = "SELECT scat_ID FROM ".DB_TABLE_CATEGORIE." WHERE cat_is_visible = 1 AND scat_ID != 0 LIMIT 1";
+            try{
+                $sql = $conn->query($request);
+                return $sql->fetch(PDO::FETCH_ASSOC);
+            }catch(PDOException $e){
+                return $this->errmessage.$e->getMessage();
             }
         }
     }

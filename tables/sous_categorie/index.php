@@ -19,31 +19,32 @@
     </style>
 <?php
 
-        $data = $oCategorie->db_get_all();
+        $data = $oSousCategorie->db_get_all();
+        echo $oListe->build_liste('list_categorie', $oCategorie->db_get_all(), 'cat_nom');
 
   ?>
 
   <div class="main-container sidenav-open">
-    <button type='button' class='my-3 btn btn-success' data-toggle='modal' data-target='#createmodal'> Créer une catégorie </button>
+    <button type='button' class='my-3 btn btn-success' data-toggle='modal' data-target='#createmodal'> Créer une sous catégorie </button>
 
-    <!-- modal pour créer une catégorie -->
+    <!-- modal pour créer une sous catégorie -->
     <div class="modal fade" id="createmodal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Créer la catégorie</h5>
+                    <h5 class="modal-title">Créer la sous catégorie</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="mx-auto modal-body col-10">
                     <div class="form-group">
-                        <div data-index="0" class="alert alert-danger" style="display: none">Le nom de la catégorie doit faire entre 1 et 50 charactères maximum</div>
-                        <input placeholder="Nom de la catégorie" class="form-control name_input createLib" data-index="0" 
-                        style="margin: 0 auto" type="text" name="categorie_name">
+                        <div data-index="0" class="alert alert-danger" style="display: none">Le nom de la sous catégorie doit faire entre 1 et 50 charactères maximum</div>
+                        <input placeholder="Nom de la sous catégorie" class="form-control name_input createLib" data-index="0" 
+                        style="margin: 0 auto" type="text" name="sous_categorie_name">
                     </div>
                     <div class="form-group">
-                        <textarea placeholder="Description de la catégorie" class="form-control createComment" rows="3" name="categorie_description"></textarea>
+                        <input placeholder="Description de la sous catégorie" class="form-control categorie" rows="3" name="sous_categorie_description" list="list_categorie">
                     </div>                    
                 </div>
             
@@ -62,7 +63,7 @@
                     <th>Selectionner</th>
                     <th style='text-align :center'>ID</th>
                     <th style='text-align :center'>Lib</th>
-                    <th style='text-align :center'>Description</th>
+                    <th style='text-align :center'>Catégorie Référente</th>
                     <th style='text-align :center'>Actions</th>
                 </thead>
                 <tbody>
@@ -80,7 +81,7 @@
                                     <center><?php echo $key["scat_lib"] ?></center>
                                 </td>
                                 <td>
-                                    <center><?php echo $key["fk_cat_ID"] ?></center>
+                                    <center><?php echo $key["cat_nom"] ?></center>
                                 </td>
                                 <td style='display:flex; justify-content: space-evenly;'>
                                     <button type='button' data-index="<?php echo $id ?>" class='btn btn-primary updateBtn' data-toggle='modal' data-target='#updateModal'>

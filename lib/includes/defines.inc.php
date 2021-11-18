@@ -56,7 +56,7 @@ include_once DB_CLASS_DIR.'produit.class.inc.php';
 include_once DB_CLASS_DIR.'generator.class.inc.php';
 include_once DB_CLASS_DIR.'liste.class.inc.php';
 include_once DB_CLASS_DIR.'sous_categorie.class.inc.php';
-include_once DB_CLASS_DIR.'../../../../server/bootstrap.php';
+//include_once DB_CLASS_DIR.'../../../../server/bootstrap.php';
 
 // get main objects
 $oCasier = new Casier();
