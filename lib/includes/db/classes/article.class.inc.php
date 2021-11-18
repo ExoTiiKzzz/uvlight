@@ -2,12 +2,11 @@
 
 class Article{
 
-    const errmessage = "Une erreur s'est produite, signalez la à l'administrateur \n";
-
+    private $errmessage = "Une erreur s'est produite, signalez la à l'administrateur \n";
 
     public function db_get_all(){
 		global $conn;
-		$request = "SELECT art_ID, art_nom, art_commentaire, fk_cat_ID, fk_cas_ID FROM ".DB_TABLE_ARTICLE." WHERE art_is_visible = 1";
+		$request = "SELECT art_ID, art_nom, art_commentaire, fk_cat_ID, fk_cas_ID FROM ".DB_TABLE_ARTICLE." WHERE art_is_visible = 1 AND art_ID != 0";
 
 		try{
 			$sql = $conn->query($request);
@@ -72,6 +71,8 @@ class Article{
 		}
 	}
 
+
+
     public function db_create_command($article, $quantity){
 
         if(empty($article) || empty($quantity)){
@@ -124,7 +125,7 @@ class Article{
             $sql = $conn->prepare($request);
             $cpt = 0;
             foreach($article as $ar){
-                $sql->bindValue(":quantite$cpt", $quantity[$cpt]);
+                $sql->bindValue(":quantite$cpt", $quantity[$cpt], PDO::PARAM_INT);
                 $sql->bindValue(":article$cpt", $article[$cpt]);
                 $cpt++;
             }
