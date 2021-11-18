@@ -34,6 +34,11 @@
             }
         }
 
+        /**
+         * @param libelle
+         * @param categorie
+         */
+
         public function db_create($libelle='', $categorie=''){
             global $conn;
             $request = "SELECT cat_ID FROM".DB_TABLE_CATEGORIE." WHERE cat_nom = :cat_nom";
