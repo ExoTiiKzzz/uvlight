@@ -16,7 +16,13 @@ class Article{
 		}
     }
 
-	public function db_get_by_id($article_id=0){
+
+    /**
+     * @param int $article_id Une description
+     * @return array
+     */
+	public function db_get_by_id(int $article_id=0): array
+    {
 		$article_id = (int) $article_id;
 		if(!$article_id){
 			return false;
