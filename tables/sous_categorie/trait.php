@@ -7,7 +7,7 @@ if(isset($_POST["create"])){
     $res = $oSousCategorie->db_create($_POST["lib"],$_POST["comment"]);
     if($res != false){
         $response["error"] = false;
-        $response["existingid"] = $oCategorie->db_get_one()["scat_ID"];
+        $response["existingid"] = $oSousCategorie->db_get_one()["scat_ID"];
         $response["createdid"] = $res["lastid"];
     }else{
         $response["error"] = true;
@@ -15,7 +15,7 @@ if(isset($_POST["create"])){
     }
     echo json_encode($response);
 }elseif(isset($_POST["getData"])){
-    $res = $oCategorie->db_get_by_id($_POST["id"]);
+    $res = $oSousCategorie->db_get_by_id($_POST["id"]);
     if($res != false){
         $response["error"] = false;
         $response["content"]["lib"] = $res["scat_lib"];
@@ -25,8 +25,8 @@ if(isset($_POST["create"])){
         $response["errortext"] = $res;
     }
     echo json_encode($response);
-}elseif(isset($_POST["update"])){
-    $res = $oCategorie->db_update($_POST["id"], $_POST["lib"], $_POST["comment"]);
+/*}elseif(isset($_POST["update"])){
+    $res = $oSousCategorie->db_update($_POST["id"], $_POST["lib"], $_POST["comment"]);
     if($res != false){
         $response["error"] = false;
         $response["existingid"] = $oSousCategorie->db_get_one()["cat_ID"];
@@ -35,7 +35,7 @@ if(isset($_POST["create"])){
         $response["errortext"] = $res;
     }
     echo json_encode($response);
-}elseif(isset($_POST["delete"])){
+*/}elseif(isset($_POST["delete"])){
     $id = (int) $_POST["id"];
 
     if(!$id){
@@ -53,7 +53,7 @@ if(isset($_POST["create"])){
         $response["errortext"] = "Une erreur s'est produite, veuillez reessayer";
     }
     echo json_encode($response);
-}elseif(isset($_POST["multi_delete"])){
+/*}elseif(isset($_POST["multi_delete"])){
     $array = $_POST["array"];
     $finalarray = json_decode($array, true);
     $ids = [];
@@ -62,13 +62,13 @@ if(isset($_POST["create"])){
         array_push($ids, $id);
     }
 
-    $res = $oCategorie->db_soft_delete_multi($ids);
+    $res = $oSousCategorie->db_soft_delete_multi($ids);
     if($res){
         $response = "ok";
     }else{
         $response = "pb";
     }
-    echo json_encode($response);
+    echo json_encode($response);*/
 }else{
     // header("location: index.php");
     echo "coucou";

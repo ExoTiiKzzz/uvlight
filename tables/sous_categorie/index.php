@@ -4,7 +4,7 @@
     require '../../lib/includes/sidenav.php';
     require '../../lib/includes/doctype.php';
 
-    echo doctype("Catégorie", $path);
+    echo doctype("Sous Catégorie", $path);
     echo navbar($path);
     echo sidenav($path);
 ?>
@@ -86,7 +86,7 @@
                                 <td style='display:flex; justify-content: space-evenly;'>
                                     <button type='button' data-index="<?php echo $id ?>" class='btn btn-primary updateBtn' data-toggle='modal' data-target='#updateModal'>
                                         Modifier
-                                    </button>
+                                    </button>   
                                     <button type="button" data-index="<?php echo $id ?>" name="delete" class="delete-btn btn btn-danger">
                                         Supprimer
                                     </button>
@@ -129,7 +129,7 @@
                         </div>
                         
                         <div class="form-group">
-                            <textarea placeholder="Description de la catégorie" class="form-control updateComment" rows="3" name="categorie_description"></textarea>
+                            <input placeholder="Catégorie référente" class="form-control updateCat" name="categorie_ref" >
                         </div>
                     </div>
 
