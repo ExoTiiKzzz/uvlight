@@ -21,7 +21,6 @@ $(document).ready(function(){
         scrollCollapse: true,
         scroller:       true
     });
-    document.querySelector(".searchInput").focus();
 });
 
 function checkForm(formid){
