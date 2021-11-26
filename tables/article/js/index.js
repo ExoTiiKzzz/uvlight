@@ -22,7 +22,15 @@ $(document).ready(function(){
         scroller:       true
     });
     document.querySelector(".searchInput").focus();
+    emptyInputs();
 });
+
+function emptyInputs(){
+    document.querySelectorAll("input").forEach(input => {
+        input.value = "";
+    })
+
+}
 
 function checkForm(formid){
     if(0 > document.querySelector(".name_input[data-index='"+formid+"']").value.length > 50){
@@ -62,6 +70,11 @@ createBtn.addEventListener("click", (e) =>{
         }else{
             drawTable();
             document.querySelector(".createCloseBtn").click();
+            document.querySelector(".createLib").value = "";
+            document.querySelector(".createComment").value = "";
+            document.querySelector(".createCas").value = "";
+            document.querySelector(".createCat").value = "";
+            updateListeArticle(lib);
         }
     })
     .catch(err => console.log(err));

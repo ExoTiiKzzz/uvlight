@@ -22,6 +22,11 @@
     
 <script> 
     const url = "trait.php";
+    function updateListeArticle(newlib){
+        let option = document.createElement("option");
+        option.value = newlib;
+        document.getElementById("liste_articles").appendChild(option);
+    }
 </script>
 <?php
         echo $oListe->build_liste("liste_articles", $oArticle->db_get_all(), "art_nom");
