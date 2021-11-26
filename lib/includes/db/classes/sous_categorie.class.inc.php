@@ -68,7 +68,7 @@
         public function db_get_one(){
             global $conn;
     
-            $request = "SELECT scat_ID FROM ".DB_TABLE_CATEGORIE." WHERE cat_is_visible = 1 AND scat_ID != 0 LIMIT 1";
+            $request = "SELECT scat_ID FROM ".DB_TABLE_SOUS_CATEGORIE." WHERE scat_is_visible = 1 AND scat_ID != 0 LIMIT 1";
             try{
                 $sql = $conn->query($request);
                 return $sql->fetch(PDO::FETCH_ASSOC);
@@ -76,4 +76,25 @@
                 return $this->errmessage.$e->getMessage();
             }
         }
+
+        /*public function db_update($categorie_id=0, $newnom='', $newdescription=''){
+            $categorie_id = (int) $categorie_id;
+            if(!$categorie_id || !$newnom || !$newdescription){
+                return false;
+            }
+    
+            global $conn;
+    
+            $request = "UPDATE ".DB_TABLE_SOUS_CATEGORIE." SET cat_nom = :nom, cat_description = :description WHERE cat_ID = :id";
+            $sql = $conn->prepare($request);
+            $sql->bindValue(':nom', $newnom, PDO::PARAM_STR);
+            $sql->bindValue(':description', $newdescription, PDO::PARAM_STR);
+            $sql->bindValue(':id', $categorie_id, PDO::PARAM_INT);
+            try{
+                $sql->execute();
+                return true;
+            }catch(PDOException $e){
+                return $this->errmessage.$e->getMessage();
+            }
+        }*/
     }

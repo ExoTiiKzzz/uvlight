@@ -11,7 +11,7 @@ define('DB_TABLE_DEPEND', 'depend');
 define('DB_TABLE_DOCUMENT', 'document');
 define('DB_TABLE_DOC_PRODUIT', 'doc_produit');
 define('DB_TABLE_EMPLACEMENT', 'emplacement');
-define('DB_TABLE_ETAT_DOCUMENT', 'etat_doc');
+define('DB_TABLE_ETAT_DOCUMENT', 'etats_document');
 define('DB_TABLE_PAYE', 'paye');
 define('DB_TABLE_TARIF', 'tarif');
 define('DB_TABLE_TIERS', 'tiers');

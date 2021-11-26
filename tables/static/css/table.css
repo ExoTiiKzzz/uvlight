@@ -77,7 +77,7 @@ table th{
     padding: 15px 5px 15px 5px;
 }
 
-.dataTable tbody{
+.dataTable tbody tr{
     background: rgb(170, 170, 170);
     color: #fff;
 }
@@ -123,4 +123,8 @@ table{
 
 .dataTables_processing{
     color: #fff;
+}
+
+.dataTable tbody tr:nth-child(even) {
+    background-color: rgb(138, 138, 138);
 }
