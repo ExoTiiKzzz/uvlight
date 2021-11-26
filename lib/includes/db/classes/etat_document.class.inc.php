@@ -6,11 +6,11 @@ class Etat_Document{
 
     public function db_get_all(){
         global $conn;
-        $request = "SELECT * FROM ".DB_TABLE_ETAT_DOCUMENT.";";
+        $request = "SELECT et_ID AS arrkey, et_ID, et_lib FROM ".DB_TABLE_ETAT_DOCUMENT.";";
 
         try{
             $sql = $conn->query($request);
-            return $sql->fetchAll(PDO::FETCH_ASSOC);
+            return $sql->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE|\PDO::FETCH_ASSOC);
         }catch(PDOException $e){
             return $this->errmessage.$e->getMessage();
         }

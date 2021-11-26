@@ -28,6 +28,7 @@
         $liste_articles .="</datalist>";
         echo $liste_articles;
 
+        echo $oListe->build_liste("liste_etat_document", $oEtatDocument->db_get_all(), 'et_lib');
   ?>
 
     <div class="main-container sidenav-open">
@@ -40,7 +41,7 @@
                 <thead>
                     <th>Selectionner</th>
                     <th style='text-align :center'>ID</th>
-                    <th style='text-align :center'>Lib</th>
+                    <th style='text-align :center'>Etat</th>
                     <th style='text-align :center'>Actions</th>
                 </thead>
             </table>
@@ -94,13 +95,14 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Modifier le type de document</h5>
+                        <h5 class="modal-title">Détails de la commande</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="mx-auto modal-body form-group col-8">
-                        <input class="form-control updateLib" style="margin: 0 auto" type="text" name="casier_name">
+                    <div class="mx-auto modal-body form-group col-10">
+                        <label for="etat_document">Etat de la commande</label>
+                        <select id="etat_document" list="liste_etat_document" class="form-control"/>
                     </div>
                 
                     <div class="modal-footer">
@@ -138,8 +140,8 @@
                 },
                 'columns': [
                     { data: 'checkbox' },
-                    { data: 'typdo_id' },
-                    { data: 'typdo_lib' },
+                    { data: 'ID' },
+                    { data: 'etat' },
                     { data: 'actions' }
                 ],
                 deferRender:    true,
