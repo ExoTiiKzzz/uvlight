@@ -28,6 +28,7 @@ function deleteRow(index){
 }
 
 createBtn.addEventListener("click", () => {
+    let comment = document.querySelector(".createComment");
     var articles = [], quantites = [];
     var elements = document.querySelectorAll(".articleRow");
     elements.forEach(element => {
@@ -39,6 +40,7 @@ createBtn.addEventListener("click", () => {
     });
     var formData = new FormData();
     formData.append("achat", "1");
+    formData.append("comment", comment);
     formData.append("articles", articles);
     formData.append("quantites", quantites);
     console.log(articles, quantites);
@@ -59,10 +61,6 @@ createBtn.addEventListener("click", () => {
 
 const updateBtns = document.querySelectorAll(".updateBtn");
 
-// updateBtns.forEach(element => {
-//     element.addEventListener("click", updateModal);
-// });
-
 function updateModal(event){
     let id = event.target.dataset.index;
 
@@ -77,11 +75,35 @@ function updateModal(event){
     .then(res => res.json())
     .then(data => {
         if(data.error === false){
-            document.querySelector(".updateLib").value = data.content.typdo_lib;
+            document.querySelector(".select_etat").innerHTML = data.content;
+            document.querySelector(".seeDocuments").dataset.index = id;
             updateBtn.dataset.index = id;
         }else{
             console.log(data.errortext);
         }
     })
 
+}
+
+const seeDocumentsBtn = document.querySelector(".seeDocuments");
+seeDocumentsBtn.addEventListener("click", seeDocuments);
+
+function seeDocuments(event){
+    let id = event.target.dataset.index;
+    let formData = new FormData();
+    formData.append("action", "getDocuments");
+    formData.append("id", id);
+
+    fetch(url, {
+        method: "POST",
+        body: formData
+    })
+        .then(res => res.json)
+        .then(data => {
+            if(data.error === false){
+                console.log(data.errortext);
+            }else{
+                document.querySelector(".documents").innerHTML = data.content;
+            }
+        })
 }

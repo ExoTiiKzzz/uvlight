@@ -10,7 +10,7 @@ $columnName = $_POST['columns'][$columnIndex]['data']; // Column name
 $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
 $searchValue = $_POST['search']['value']; // Search value
 
-if($columnName === "checkbox" || $columnName === "actions") $columnName = "Com_ID";
+if($columnName === "checkbox" || $columnName === "actions" || $columnName === "createdate") $columnName = "Com_ID";
 
 $searchArray = array();
 
@@ -56,8 +56,9 @@ foreach($empRecords as $row){
     $actionrow = "<div style='display: flex; justify-content: space-evenly'><button type='button' class='btn btn-primary updateBtn' data-toggle='modal' onclick='updateModal(event)' data-target='#updatemodal' data-index='$id'>Détails</button><button type='submit' name='delete' onclick='deleteEventListener(event)' class='delete-btn btn btn-danger' data-index='$id'>Supprimer</button></div>";
     $data[] = array(
       "checkbox" => $checkbox, 
-      "ID" => $id,
+      "Com_ID" => $id,
       "etat"=>$etats[$row["fk_etat_ID"]]["et_lib"],
+      "createdate"=>$row["Com_create_datetime"],
       "actions"=>$actionrow
    );
 }

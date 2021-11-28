@@ -42,6 +42,7 @@
                     <th>Selectionner</th>
                     <th style='text-align :center'>ID</th>
                     <th style='text-align :center'>Etat</th>
+                    <th style='text-align :center'>Date de création</th>
                     <th style='text-align :center'>Actions</th>
                 </thead>
             </table>
@@ -67,6 +68,10 @@
                         </button>
                     </div>
                     <div class="mx-auto modal-body form-group">
+                        <div class="form-group">
+                            <label for="comment">Commentaire :</label>
+                            <textarea type="text" class="form-control createComment" placeholder="Commentaire" id="comment"></textarea>
+                        </div>
                         <div class="articles-container">
                             <div class="row articleRow" data-index="1">
                                 <div class="form-group col-6">
@@ -100,9 +105,19 @@
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="mx-auto modal-body form-group col-10">
-                        <label for="etat_document">Etat de la commande</label>
-                        <select id="etat_document" list="liste_etat_document" class="form-control"/>
+                    <div class="mx-auto modal-body col-10">
+                        <div class="form-group">
+                            <label for="etat_document">Etat de la commande</label>
+                            <select id="etat_document" class="select_etat custom-select"></select>
+                        </div>
+                        <div class="form-group">
+                            <button class="seeDocuments btn btn-primary">Voir les documents associés</button>
+                        </div>
+                        <div class="form-group">
+                            <div class="documents">
+
+                            </div>
+                        </div>
                     </div>
                 
                     <div class="modal-footer">
@@ -124,6 +139,7 @@
 
     <script src="../script/checkboxes.js"></script>
     <script src="../script/deleteRow.js"></script>
+    <script src="../script/table.js"></script>
     <script src="./js/index.js"></script>
     <script src="./js/updateRow.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
@@ -140,8 +156,9 @@
                 },
                 'columns': [
                     { data: 'checkbox' },
-                    { data: 'ID' },
+                    { data: 'Com_ID' },
                     { data: 'etat' },
+                    { data: 'createdate' },
                     { data: 'actions' }
                 ],
                 deferRender:    true,

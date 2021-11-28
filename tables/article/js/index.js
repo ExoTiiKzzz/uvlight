@@ -124,7 +124,8 @@ function openUpdateModalListener(e){
 const commandBtn = document.querySelector(".commandBtn");
 
 commandBtn.addEventListener("click", (e) => {
-
+    let comment = document.querySelector(".createCommandComment").value;
+    console.log(comment);
     let articles = [], quantitys = [];
 
     articleEls = document.querySelectorAll(".commandArticle");
@@ -139,6 +140,7 @@ commandBtn.addEventListener("click", (e) => {
 
     let formData = new FormData;
     formData.append("command", "1");
+    formData.append("comment", comment);
     formData.append("article", JSON.stringify(articles));
     formData.append("quantity", JSON.stringify(quantitys));
 
@@ -154,7 +156,7 @@ commandBtn.addEventListener("click", (e) => {
                 document.querySelectorAll(".row").forEach(el => {
                     document.querySelector(".commandListArticles").removeChild(el);
                 })
-                commandAddArticle();
+                commandAddArticle(getMaxCommandArticleIndex());
             }else{
                 console.log(data.errortext);
             }

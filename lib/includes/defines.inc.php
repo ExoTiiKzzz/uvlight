@@ -56,6 +56,7 @@ include_once DB_CLASS_DIR.'produit.class.inc.php';
 include_once DB_CLASS_DIR.'generator.class.inc.php';
 include_once DB_CLASS_DIR.'liste.class.inc.php';
 include_once DB_CLASS_DIR.'sous_categorie.class.inc.php';
+include_once DB_CLASS_DIR.'commande.class.inc.php';
 //include_once DB_CLASS_DIR.'../../../../server/bootstrap.php';
 
 // get main objects
@@ -78,6 +79,7 @@ $oProduit = new Produit();
 $oTypeDocument = new Type_Document();
 $oListe = new Liste();
 $oSousCategorie = new Sous_categorie();
+$oCommande = new Commande();
 
 $isProd = false;
 

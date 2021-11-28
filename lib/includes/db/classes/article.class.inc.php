@@ -79,73 +79,7 @@ class Article{
 
 
 
-    public function db_create_command($article, $quantity){
 
-        if(empty($article) || empty($quantity)){
-            $response["error"] = true;
-            $response["errortext"] = is_array($article);
-            return $response;
-        }
-
-
-        global $conn;
-
-        $listearticle = str_repeat ('?, ',  count ($article) - 1) . '?';
-
-
-        $request = "SELECT art_ID, art_nom FROM ".DB_TABLE_ARTICLE." WHERE art_nom  IN ($listearticle)";
-        $result = $conn->prepare($request);
-        $result->execute($article);
-
-        if(!$result){
-            $response["error"] = true;
-            $response["errortext"] = "Article invalide";
-            return $response;
-        }
-        $resarticles = $result->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach($resarticles as $element){
-            $cpt = 0;
-            foreach($article as $subel){
-                if($subel === $element["art_nom"]) {
-                    $article[$cpt] = $element["art_ID"];
-                }
-                $cpt++;
-            }
-        }
-
-        $conn->query("INSERT INTO ".DB_TABLE_COMMANDE."(fk_doc_ID) VALUES(2)");
-
-        $commandeID = $conn->lastInsertId();
-
-
-        $request = "INSERT INTO ".DB_TABLE_LIGNES_COMMANDE."(Lign_quantite, Lign_is_vente, fk_art_ID, fk_com_ID) VALUES";
-
-        $i = 0;
-        foreach($article as $el){
-            $request .= "(:quantite$i, 0, :article$i, $commandeID), ";
-            $i++;
-        }
-        $request .= "(0,0,0,0)";
-        try {
-            $sql = $conn->prepare($request);
-            $cpt = 0;
-            foreach($article as $ar){
-                $sql->bindValue(":quantite$cpt", $quantity[$cpt], PDO::PARAM_INT);
-                $sql->bindValue(":article$cpt", $article[$cpt]);
-                $cpt++;
-            }
-            $sql->execute();
-            $response["error"] = false;
-            return $response;
-        }catch (PDOException $e){
-            $response["error"] = true;
-            $response["errortext"] = $this->errmessage.$e->getMessage();
-            return $response;
-        }
-
-
-    }
 
 	public function db_create($article_nom='', $article_commentaire='', $categorie='', $casier=''){
 		global $conn, $oCasier, $oCategorie;
