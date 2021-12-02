@@ -7,8 +7,6 @@ if(isset($_POST["create"])){
     $res = $oSousCategorie->db_create($_POST["lib"],$_POST["categorie"]);
     if($res != false){
         $response["error"] = false;
-        $response["existingid"] = $oSousCategorie->db_get_one()["scat_ID"];
-        $response["createdid"] = $res["lastid"];
     }else{
         $response["error"] = true;
         $response["errortext"] = $res;

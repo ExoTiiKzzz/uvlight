@@ -41,21 +41,14 @@
          */
 
         public function db_create($libelle='', $categorie=''){
-            global $conn;
-            $request = "SELECT cat_ID FROM".DB_TABLE_CATEGORIE." INNER JOIN ".DB_TABLE_SOUS_CATEGORIE." WHERE cat_nom = :cat_nom";
-            $sql = $conn->prepare($request);
-            $sql->bindValue(':cat_nom', $categorie, PDO::PARAM_STR);
-            try{
-                $sql->execute();
-                $scat_ID=$sql->fetch(PDO::FETCH_ASSOC)['scat_ID'];
-            }catch(PDOException $e){
-                return BASIC_ERROR.$e->getMessage();
-            }
+            global $conn, $oCategorie;
+            
+            $cat_ID = $oCategorie->db_get_by_lib($categorie)['cat_ID'];
 
-            $request = "INSERT INTO ".DB_TABLE_SOUS_CATEGORIE." (scat_lib, fk_scat_ID) VALUES (:scat_lib, :fk_scat_ID)";
+            $request = "INSERT INTO ".DB_TABLE_SOUS_CATEGORIE." (scat_lib, fk_cat_ID) VALUES (:scat_lib, :fk_cat_ID)";
             $sql = $conn->prepare($request);
             $sql->bindValue(':scat_lib', $libelle, PDO::PARAM_STR);
-            $sql->bindValue(':fk_scat_ID', $scat_ID, PDO::PARAM_STR);
+            $sql->bindValue(':fk_cat_ID', $cat_ID, PDO::PARAM_STR);
     
             try{
                 $sql->execute();
