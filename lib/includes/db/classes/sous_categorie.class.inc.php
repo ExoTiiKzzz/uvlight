@@ -42,20 +42,20 @@
 
         public function db_create($libelle='', $categorie=''){
             global $conn;
-            $request = "SELECT cat_ID FROM".DB_TABLE_CATEGORIE." WHERE cat_nom = :cat_nom";
+            $request = "SELECT cat_ID FROM".DB_TABLE_CATEGORIE." INNER JOIN ".DB_TABLE_SOUS_CATEGORIE." WHERE cat_nom = :cat_nom";
             $sql = $conn->prepare($request);
             $sql->bindValue(':cat_nom', $categorie, PDO::PARAM_STR);
             try{
                 $sql->execute();
-                $cat_ID=$sql->fetch(PDO::FETCH_ASSOC)['cat_ID'];
+                $scat_ID=$sql->fetch(PDO::FETCH_ASSOC)['scat_ID'];
             }catch(PDOException $e){
                 return BASIC_ERROR.$e->getMessage();
             }
 
-            $request = "INSERT INTO ".DB_TABLE_SOUS_CATEGORIE." (scat_lib, fk_cat_ID) VALUES (:libelle, :fk_cat_ID)";
+            $request = "INSERT INTO ".DB_TABLE_SOUS_CATEGORIE." (scat_lib, fk_scat_ID) VALUES (:scat_lib, :fk_scat_ID)";
             $sql = $conn->prepare($request);
-            $sql->bindValue(':libelle', $libelle, PDO::PARAM_STR);
-            $sql->bindValue(':fk_cat_ID', $cat_ID, PDO::PARAM_STR);
+            $sql->bindValue(':scat_lib', $libelle, PDO::PARAM_STR);
+            $sql->bindValue(':fk_scat_ID', $scat_ID, PDO::PARAM_STR);
     
             try{
                 $sql->execute();
@@ -77,18 +77,18 @@
             }
         }
 
-        /*public function db_update($categorie_id=0, $newnom='', $newdescription=''){
-            $categorie_id = (int) $categorie_id;
-            if(!$categorie_id || !$newnom || !$newdescription){
+        /*public function db_update($categorie_id=0, $newlib='', $newcat=''){
+            $sous_categorie_id = (int) $sous_categorie_id;
+            if(!$sous_categorie_id || !$newlib || !$newcat){
                 return false;
             }
     
             global $conn;
     
-            $request = "UPDATE ".DB_TABLE_SOUS_CATEGORIE." SET cat_nom = :nom, cat_description = :description WHERE cat_ID = :id";
+            $request = "UPDATE ".DB_TABLE_SOUS_CATEGORIE." SET sous_cat_lib = :scat_lib, cat = :cat WHERE scat_ID = :id";
             $sql = $conn->prepare($request);
-            $sql->bindValue(':nom', $newnom, PDO::PARAM_STR);
-            $sql->bindValue(':description', $newdescription, PDO::PARAM_STR);
+            $sql->bindValue(':nom', $newlib, PDO::PARAM_STR);
+            $sql->bindValue(':cat', $newcat, PDO::PARAM_STR);
             $sql->bindValue(':id', $categorie_id, PDO::PARAM_INT);
             try{
                 $sql->execute();
@@ -98,3 +98,4 @@
             }
         }*/
     }
+?>
