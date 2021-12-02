@@ -43,7 +43,7 @@ if(isset($_POST["create"])){
         die;
     }
 
-    $res = $oCasier->db_soft_delete_one($id);
+    $res = $oSousCategorie->db_soft_delete_one($id);
     if($res){
         $response["error"] = false;
     }else{

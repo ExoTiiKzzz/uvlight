@@ -70,6 +70,21 @@
             }
         }
 
+        public function db_soft_delete_one($id=0){
+    
+            global $conn;
+    
+            $request = "UPDATE ".DB_TABLE_SOUS_CATEGORIE." SET scat_is_visible = 0 WHERE scat_ID = :id;";
+            $sql = $conn->prepare($request);
+            $sql->bindValue(':id', $id, PDO::PARAM_INT);
+            try{
+                $sql->execute();
+                return true;
+            }catch(PDOException $e){
+                return $this->errmessage.$e->getMessage();
+            }
+        }
+
         /*public function db_update($categorie_id=0, $newlib='', $newcat=''){
             $sous_categorie_id = (int) $sous_categorie_id;
             if(!$sous_categorie_id || !$newlib || !$newcat){
