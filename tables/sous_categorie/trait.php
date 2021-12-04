@@ -4,11 +4,9 @@ require '../../lib/includes/defines.inc.php';
 
 
 if(isset($_POST["create"])){
-    $res = $oSousCategorie->db_create($_POST["lib"],$_POST["comment"]);
+    $res = $oSousCategorie->db_create($_POST["lib"],$_POST["categorie"]);
     if($res != false){
         $response["error"] = false;
-        $response["existingid"] = $oSousCategorie->db_get_one()["scat_ID"];
-        $response["createdid"] = $res["lastid"];
     }else{
         $response["error"] = true;
         $response["errortext"] = $res;
@@ -19,7 +17,7 @@ if(isset($_POST["create"])){
     if($res != false){
         $response["error"] = false;
         $response["content"]["lib"] = $res["scat_lib"];
-        $response["content"]["comment"] = $res["cat_ID"];
+        $response["content"]["categorie"] = $res["cat_ID"];
     }else{
         $response["error"] = true;
         $response["errortext"] = $res;

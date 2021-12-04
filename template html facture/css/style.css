@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(53, 53, 53);
+}
+
+body{
+    background: #ffffff;
+}
+
+.nav{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 100px 25px 50px 25px;
+}
+
+.title{
+    color: rgb(53, 53, 53);
+    font-size: 7em;
+    padding-left: 200px;
+}
+
+.logo{
+    margin-right: 200px;
+    height: 350px;
+    width: 350px;
+    border-radius: 50%;
+}
+
+.separate{
+    display: flex;
+    justify-content: center;
+    padding: 100px 0px 100px 0px;
+}
+
+.separator{
+    width: 90%;
+    height: 3px;
+}
+
+.container{
+    display: grid;
+    grid-template-rows: 500px 500px 500px;
+    padding-left: 200px;
+}
+
+.text{
+    font-size: 2.5em;
+}
+
+.glbi{
+    grid-row-start: 1;
+}
+
+.glbi h2{
+    font-size: 3em;
+    padding-bottom: 50px;
+}
+
+.date{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 100px 100px 100px 100px 100px;
+    align-items: center;
+}
+
+.date label{
+    grid-column-start: 1;
+    
+}
+
+.tp{
+    grid-column-start: 2;
+    font-size: 2.5em;
+}
+
+.additionnal{
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+}
+
+.additionnal h2{
+    font-size: 3em;
+}
+
+.additionnal label{
+    font-size: 1.5em;
+}
+
+.footer{
+    display: flex;
+    justify-content: center;
+}
+
+table{
+    display: table;
+    font-size: 2em;
+    padding-bottom: 100px;
+}
+
+table th{
+    border-bottom: 1px solid rgb(53, 53, 53);
+}
+
+table thead, table tbody{
+    text-align: center;
+}
+
+table td, table th{
+    padding: 10px 50px 10px 50px;
+}
+
+footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer label{
+    padding: 50px 0px 50px 0px;
+    font-size: 1.5em;
+    font-weight: thin;
+    letter-spacing: .5em;
+}

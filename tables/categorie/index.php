@@ -106,6 +106,9 @@
                 Supprimer les éléments selectionnés.
             </button>
         </div>
+        <form action="../sous_categorie/index.php">
+            <button type="submit" name="scat" class="mt-3 btn btn-primary">Acceder aux sous-catégories</button>
+        </form>
     </div>
 
 
