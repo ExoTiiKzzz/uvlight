@@ -6,7 +6,7 @@ class Liste{
 
         $list = "<datalist id='$id'>";
         foreach ($data as $key) {
-            $list .= "<option value='".$key["$value_name"]."'>";
+            $list .= '<option value="'.$key["$value_name"].'">';
         }
         $list .="</datalist>";
 

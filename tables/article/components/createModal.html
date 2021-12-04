@@ -11,6 +11,10 @@
             <form action="trait.php" method="post" class="update_form" onsubmit="return checkForm(0)">
                 <div class="mx-auto modal-body col-10">
                     <div class="form-group">
+                        <label for="fournisseur">Fournisseur</label>
+                        <input type="text" id="fournisseur" list="liste_fournisseurs" class="form-control createFourni" placeholder="Commencer à écrire puis sélectionner ce qui vous convient">
+                    </div>
+                    <div class="form-group">
                         <label for="nomarticle">Nom de l'article : </label>
                         <div data-index="0" class="alert alert-danger" style="display: none">Le nom de l'article doit faire entre 1 et 50 charactères maximum</div>
                         <input id="nomarticle" placeholder="Nom de l'article" class="form-control name_input createLib" data-index="0" 

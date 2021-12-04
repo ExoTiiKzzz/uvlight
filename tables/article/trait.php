@@ -4,18 +4,7 @@ require '../../lib/includes/defines.inc.php';
 
 
 if(isset($_POST["create"])){
-    $res = $oArticle->db_create($_POST["lib"], $_POST["comment"], $_POST["cat"], $_POST["cas"]);
-    if($res != false){
-        $response["error"] = false;
-        $response["existingid"] = $oArticle->db_get_one();
-        $response["createdid"] = $res["lastid"];
-        $response["cat"] = $res["cas"];
-        $response["cas"] = $res["cat"];
-    }else{
-        $response["error"] = true;
-        $response["errortext"] = $res;
-    }
-    echo json_encode($response);
+    echo json_encode($oArticle->db_create($_POST["lib"], $_POST["comment"], $_POST["fournisseur"], $_POST["cat"], $_POST["cas"]));
 }elseif(isset($_POST["update"])){
     $res = $oArticle->db_update($_POST["id"], $_POST["lib"], $_POST["comment"], $_POST["cat"], $_POST["cas"]);
     if($res != false){

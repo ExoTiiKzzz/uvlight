@@ -12,6 +12,7 @@
             <th style='text-align :center'>Nom</th>
             <th style='text-align :center'>Commentaire</th>
             <th style='text-align :center'>Stock</th>
+            <th style='text-align :center'>Fournisseur</th>
             <th style='text-align :center'>Catégorie</th>
             <th style='text-align :center'>Casier</th>
             <th style='text-align :center'>Actions</th>

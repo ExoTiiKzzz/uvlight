@@ -21,6 +21,12 @@ class Tiers{
         }
     }
 
+    public function db_get_all_fournisseurs(): array{
+        global $conn;
+        $request = "SELECT tie_ID, tie_ID as arrkey, tie_raison_sociale FROM ".DB_TABLE_TIERS." WHERE fk_typti_ID IN (2,3)";
+        return $conn->query($request)->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE|\PDO::FETCH_ASSOC);
+    }
+
     public function db_get_by_id($tiers_id=0){
         $tiers_id = (int) $tiers_id;
         if(!$tiers_id){
@@ -38,6 +44,20 @@ class Tiers{
             return $sql->fetch(PDO::FETCH_ASSOC);
         }catch(PDOException $e){
             return $this->errmessage.$e->getMessage();
+        }
+    }
+
+    public function db_get_by_lib($lib = '') : array{
+        global $conn;
+        $request = "SELECT * FROM ".DB_TABLE_TIERS." WHERE tie_raison_sociale = :lib";
+
+        $sql = $conn->prepare($request);
+        $sql->bindValue(":lib", $lib);
+        try {
+            $sql->execute();
+            return $sql->fetch(PDO::FETCH_ASSOC);
+        } catch(PDOException $e){
+            return false;
         }
     }
 
