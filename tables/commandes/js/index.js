@@ -75,6 +75,9 @@ function updateModal(event){
     .then(res => res.json())
     .then(data => {
         if(data.error === false){
+            document.querySelector(".seeDocumentsSpan").style.display = "none";
+            document.querySelector(".seeDocuments").style.display = "block";
+            document.querySelector(".documents").innerHTML = "";
             document.querySelector(".select_etat").innerHTML = data.content;
             document.querySelector(".seeDocuments").dataset.index = id;
             updateBtn.dataset.index = id;
@@ -91,19 +94,25 @@ seeDocumentsBtn.addEventListener("click", seeDocuments);
 function seeDocuments(event){
     let id = event.target.dataset.index;
     let formData = new FormData();
-    formData.append("action", "getDocuments");
+    formData.append("getDocuments", "1");
     formData.append("id", id);
 
     fetch(url, {
         method: "POST",
         body: formData
     })
-        .then(res => res.json)
+        .then(res => res.json())
         .then(data => {
-            if(data.error === false){
+            if(data.error === true){
                 console.log(data.errortext);
             }else{
-                document.querySelector(".documents").innerHTML = data.content;
+                document.querySelector(".seeDocumentsSpan").style.display = "block";
+                document.querySelector(".seeDocuments").style.display = "none";
+                content = '';
+                data.data.forEach(el => {
+                    content += "<div class='document'><a href='./commande.php?id="+id+"' class='btn btn-secondary'>"+data.types[el.fk_typdo_ID]+"</a></div>";
+                })
+                document.querySelector(".documents").innerHTML = content;
             }
         })
 }

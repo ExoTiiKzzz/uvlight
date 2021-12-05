@@ -6,11 +6,11 @@ class Article{
 
     public function db_get_all(){
 		global $conn;
-		$request = "SELECT art_ID, art_nom, art_commentaire, fk_cat_ID, fk_cas_ID FROM ".DB_TABLE_ARTICLE." WHERE art_is_visible = 1 AND art_ID != 0";
+		$request = "SELECT art_ID as arrkey, art_ID, art_nom, art_commentaire, fk_cat_ID, fk_cas_ID FROM ".DB_TABLE_ARTICLE." WHERE art_is_visible = 1 AND art_ID != 0";
 
 		try{
 			$sql = $conn->query($request);
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
+			return $sql->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE|\PDO::FETCH_ASSOC);
 		}catch(PDOException $e){
 			return $this->errmessage.$e->getMessage();
 		}

@@ -60,7 +60,7 @@ class Commande
         $listearticle = str_repeat ('?, ',  count ($article) - 1) . '?';
 
 
-        $request = "SELECT art_ID, art_nom FROM ".DB_TABLE_ARTICLE." WHERE art_nom  IN ($listearticle)";
+        $request = "SELECT art_ID, art_nom, fk_tiers_ID FROM ".DB_TABLE_ARTICLE." WHERE art_nom  IN ($listearticle)";
         $result = $conn->prepare($request);
         $result->execute($article);
 
@@ -76,6 +76,7 @@ class Commande
             foreach($article as $subel){
                 if($subel === $element["art_nom"]) {
                     $article[$cpt] = $element["art_ID"];
+                    $tiers_ID = $element["fk_tiers_ID"];
                 }
                 $cpt++;
             }
@@ -91,7 +92,7 @@ class Commande
             return $response;
             die;
         }
-        $createDoc = $this->db_create_document($comment, 3, $commandeID);
+        $createDoc = $this->db_create_document($comment, 3, $commandeID, $tiers_ID);
         if($createDoc["error"] === true){
             $response["error"] = true;
             $response["errortext"] = $createDoc["errortext"];
@@ -106,13 +107,14 @@ class Commande
 
     }
 
-    private function db_create_document(string $comment, int $typeID , int $commandeID ): array{
+    private function db_create_document(string $comment, int $typeID , int $commandeID , int $tiers_ID): array{
         global $conn;
-        $request = "INSERT INTO ".DB_TABLE_DOCUMENT."(doc_commentaire, fk_typdo_ID, fk_com_ID) VALUES(:comment, :typeID, :commandeID)";
+        $request = "INSERT INTO ".DB_TABLE_DOCUMENT."(doc_commentaire, fk_typdo_ID, fk_com_ID, fk_tiers_ID) VALUES(:comment, :type_ID, :commande_ID, :tiers_ID)";
         $sql = $conn->prepare($request);
         $sql->bindValue(":comment", $comment);
-        $sql->bindValue(":typeID", $typeID, PDO::PARAM_INT);
-        $sql->bindValue(":commandeID", $commandeID, PDO::PARAM_INT);
+        $sql->bindValue(":type_ID", $typeID, PDO::PARAM_INT);
+        $sql->bindValue(":commande_ID", $commandeID, PDO::PARAM_INT);
+        $sql->bindValue(":tiers_ID", $tiers_ID, PDO::PARAM_INT);
         try {
             $sql->execute();
             if($sql){
@@ -155,8 +157,100 @@ class Commande
         }
     }
 
-//    public function get_documents(int $id){
-//        global $conn;
-//        $request = "SELECT "
-//    }
+    public function db_get_documents(int $id) : array{
+        global $conn;
+        $request = "SELECT * FROM ".DB_TABLE_DOCUMENT." WHERE fk_com_ID = :id";
+        try {
+            $sql = $conn->prepare($request);
+            $sql->bindValue(":id", $id, PDO::PARAM_INT);
+            $sql->execute();
+            if(!$sql){
+                $response["error"] = true;
+                $response["errortext"] = "Aucune donnée n'existe";
+                return $response;
+            }
+            $res = $sql->fetchAll(PDO::FETCH_ASSOC);
+            $response["error"] = false;
+            $response["data"] = $res;
+            $response["types"] = SELF::TYPE_DOCUMENT;
+            return $response;
+        }catch (PDOException $e){
+            $response["error"] = true;
+            $response["errortext"] = $e->getMessage();
+            return $response;
+        }
+
+    }
+
+    public function db_get_detailed_documents(int $id): array{
+        global $conn;
+        foreach(SELF::TYPE_DOCUMENT as $type => $value){
+            $response["content"][$value] = $this->db_get_document_by_type($type, $id);
+            if($response["content"][$value]["error"] === true){
+                return $response["content"][$value];
+            }
+        }
+        $response["error"] = false;
+        return $response;
+    }
+
+    private function db_get_document_by_type(int $type, int $com_ID) : array{
+        global $conn;
+        $request = "SELECT * FROM ".DB_TABLE_DOCUMENT." WHERE fk_typdo_ID = :type AND fk_com_ID = :com_ID";
+        try {
+            $sql = $conn->prepare($request);
+            $sql->bindValue(":type", $type, PDO::PARAM_INT);
+            $sql->bindValue(":com_ID", $com_ID, PDO::PARAM_INT);
+            $sql->execute();
+            if(!$sql){
+                $response["error"] = true;
+                $response["errortext"] = "Une erreur s'est produite";
+                return $response;
+            }
+            $result = $sql->fetchAll();
+            $response["error"] = false;
+            $response["data"] = $result;
+            return $response;
+        }catch (PDOException $e){
+            $response["error"] = true;
+            $response["errortext"] = $e->getMessage();
+            return $response;
+        }
+
+    }
+
+    public function db_get_lignes_commande(int $com_ID) : array {
+        global $conn;
+        $request = "SELECT *, SUM(Lign_quantite - Lign_received_quantity) as difference FROM ".DB_TABLE_LIGNES_COMMANDE." WHERE fk_com_ID = :com_ID GROUP BY fk_art_ID";
+        try {
+            $sql = $conn->prepare($request);
+            $sql->bindValue(":com_ID", $com_ID, PDO::PARAM_INT);
+            $sql->execute();
+            if(!$sql){
+                $response["error"] = true;
+                $response["errortext"] = "Une erreur s'est produite";
+                return $response;
+            }
+            $result = $sql->fetchAll();
+            $response["error"] = false;
+            $response["data"] = $result;
+            return $response;
+        }catch (PDOException $e){
+            $response["error"] = true;
+            $response["errortext"] = $e->getMessage();
+            return $response;
+        }
+    }
+
+    public function db_is_command_received(int $com_ID) : bool {
+        $lignes = $this->db_get_lignes_commande($com_ID);
+        $bool = true;
+        foreach($lignes["data"] as $ligne){
+            if($ligne["Lign_is_received"] !== 1){
+                $bool = false;
+            }
+        }
+
+        return $bool;
+    }
 }
