@@ -84,7 +84,7 @@
                                     <center><?php echo $key["cat_nom"] ?></center>
                                 </td>
                                 <td style='display:flex; justify-content: space-evenly;'>
-                                    <button type='button' data-index="<?php echo $id ?>" class='btn btn-primary updateBtn' data-toggle='modal' data-target='#updateModal'>
+                                    <button type='button' data-index="<?php echo $id ?>" class='btn btn-primary' data-toggle='modal' data-target='#updateModal'>
                                         Modifier
                                     </button>   
                                     <button type="button" data-index="<?php echo $id ?>" name="delete" class="delete-btn btn btn-danger">
@@ -115,7 +115,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modifier la catégorie</h5>
+                    <h5 class="modal-title">Modifier la sous catégorie</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -129,7 +129,7 @@
                         </div>
                         
                         <div class="form-group">
-                            <input placeholder="Catégorie référente" class="form-control updateCat" name="categorie_ref" >
+                            <input placeholder="Catégorie référente" class="form-control updateCat" name="categorie_ref" list="list_categorie">
                         </div>
                     </div>
 
@@ -137,7 +137,7 @@
                 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary updateCloseBtn" data-dismiss="modal">Fermer</button>
-                        <button type="button" name="update" class="btn btn-primary updateRowBtn">Modifier</button>
+                        <button type="button" name="update" class="btn btn-primary updateBtn updateRowBtn">Modifier</button>
                     </div>
                 </form>
             </div>

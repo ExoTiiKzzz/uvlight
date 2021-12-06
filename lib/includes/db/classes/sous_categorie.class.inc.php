@@ -85,7 +85,7 @@
             }
         }
 
-        /*public function db_update($categorie_id=0, $newlib='', $newcat=''){
+        public function db_update($sous_categorie_id=0, $newlib='', $newcat=''){
             $sous_categorie_id = (int) $sous_categorie_id;
             if(!$sous_categorie_id || !$newlib || !$newcat){
                 return false;
@@ -93,17 +93,17 @@
     
             global $conn;
     
-            $request = "UPDATE ".DB_TABLE_SOUS_CATEGORIE." SET sous_cat_lib = :scat_lib, cat = :cat WHERE scat_ID = :id";
+            $request = "UPDATE ".DB_TABLE_SOUS_CATEGORIE." INNER JOIN ".DB_TABLE_CATEGORIE." SET scat_lib = :scat_lib, cat = :cat WHERE scat_ID = :id";
             $sql = $conn->prepare($request);
-            $sql->bindValue(':nom', $newlib, PDO::PARAM_STR);
+            $sql->bindValue(':scat_lib', $newlib, PDO::PARAM_STR);
             $sql->bindValue(':cat', $newcat, PDO::PARAM_STR);
-            $sql->bindValue(':id', $categorie_id, PDO::PARAM_INT);
+            $sql->bindValue(':id', $sous_categorie_id, PDO::PARAM_INT);
             try{
                 $sql->execute();
                 return true;
             }catch(PDOException $e){
                 return $this->errmessage.$e->getMessage();
             }
-        }*/
+        }
     }
 ?>

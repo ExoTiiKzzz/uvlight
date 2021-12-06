@@ -23,17 +23,17 @@ if(isset($_POST["create"])){
         $response["errortext"] = $res;
     }
     echo json_encode($response);
-/*}elseif(isset($_POST["update"])){
-    $res = $oSousCategorie->db_update($_POST["id"], $_POST["lib"], $_POST["comment"]);
+}elseif(isset($_POST["update"])){
+    $res = $oSousCategorie->db_update($_POST["id"], $_POST["lib"], $_POST["categorie"]);
     if($res != false){
         $response["error"] = false;
-        $response["existingid"] = $oSousCategorie->db_get_one()["cat_ID"];
+        $response["existingid"] = $oSousCategorie->db_get_one()["scat_ID"];
     }else{
         $response["error"] = true;
         $response["errortext"] = $res;
     }
     echo json_encode($response);
-*/}elseif(isset($_POST["delete"])){
+}elseif(isset($_POST["delete"])){
     $id = (int) $_POST["id"];
 
     if(!$id){

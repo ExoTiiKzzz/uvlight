@@ -4,11 +4,13 @@ const createBtn = document.querySelector(".createBtn");
 
 createBtn.addEventListener("click", (e) =>{
 
-    var lib = document.querySelector(".createLib").value;
-    var categorie = document.querySelector(".categorie").value;
+    var lib = document.querySelector(".updateLib").value;
+    var categorie = document.querySelector(".updateCat").value;
+    var id = document.querySelector(".updateId").value;
 
     var formData = new FormData();
     formData.append("create", "1");
+    formData.append("id", id);
     formData.append("lib", lib);
     formData.append("categorie", categorie);
 
@@ -59,11 +61,11 @@ function openUpdateModalListener(e){
             console.log(result.errortext);
         }else{
             var lib = result.content.lib;
-            var comment = result.content.comment;
+            var categorie = result.content.categorie;
 
-            document.querySelector(".updateId").value = id;
             document.querySelector(".updateLib").value = lib;
-            document.querySelector(".updateComment").value = comment;
+            document.querySelector(".updateCat").value = categorie;
+            document.querySelector(".updateId").value = id;
         }
     }).catch(err => console.log(err));
 }
