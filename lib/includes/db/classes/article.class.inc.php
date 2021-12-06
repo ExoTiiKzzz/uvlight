@@ -6,11 +6,11 @@ class Article{
 
     public function db_get_all(){
 		global $conn;
-		$request = "SELECT art_ID, art_nom, art_commentaire, fk_cat_ID, fk_cas_ID FROM ".DB_TABLE_ARTICLE." WHERE art_is_visible = 1 AND art_ID != 0";
+		$request = "SELECT art_ID as arrkey, art_ID, art_nom, art_commentaire, fk_cat_ID, fk_cas_ID FROM ".DB_TABLE_ARTICLE." WHERE art_is_visible = 1 AND art_ID != 0";
 
 		try{
 			$sql = $conn->query($request);
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
+			return $sql->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE|\PDO::FETCH_ASSOC);
 		}catch(PDOException $e){
 			return $this->errmessage.$e->getMessage();
 		}
@@ -81,28 +81,26 @@ class Article{
 
 
 
-	public function db_create($article_nom='', $article_commentaire='', $categorie='', $casier=''){
-		global $conn, $oCasier, $oCategorie;
+	public function db_create($article_nom='', $article_commentaire='',$fournisseur='', $categorie='', $casier=''){
+		global $conn, $oCasier, $oCategorie, $oTiers;
 
+        $fk_tiers_id = (int) $oTiers->db_get_by_lib($fournisseur)["tie_ID"];
 		$fk_categorie_id = (int) $oCategorie->db_get_by_lib($categorie)["cat_ID"];
 		$fk_casier_id = (int) $oCasier->db_get_by_lib($casier)["cas_ID"];
-		if(!$article_nom || !$fk_categorie_id || !$fk_casier_id){
+		if(!$article_nom || !$fk_categorie_id || !$fk_casier_id || !$fk_tiers_id){
             $response["error"] = true;
             $response["errortext"] = "Données invalide";
 			return $response;
 		}
 
-		$request = "INSERT INTO ".DB_TABLE_ARTICLE."(art_nom, art_commentaire, fk_cat_ID, fk_cas_ID) VALUES(:article_nom, :article_commentaire, :fk_categorie_id, :fk_casier_id);";
+		$request = "INSERT INTO ".DB_TABLE_ARTICLE."(art_nom, art_commentaire, fk_tiers_ID, fk_cat_ID, fk_cas_ID) VALUES(:article_nom, :article_commentaire,:fk_tiers_ID, :fk_categorie_id, :fk_casier_id);";
 		$sql = $conn->prepare($request);
 		if(!$article_commentaire) $article_commentaire = "0";
 		try{
-			$sql->execute([":article_nom" => $article_nom, ":article_commentaire" => $article_commentaire, ":fk_categorie_id" => $fk_categorie_id, ":fk_casier_id" => $fk_casier_id]);
+			$sql->execute([":article_nom" => $article_nom, ":article_commentaire" => $article_commentaire,":fk_tiers_ID" => $fk_tiers_id, ":fk_categorie_id" => $fk_categorie_id, ":fk_casier_id" => $fk_casier_id]);
             $id = $conn->lastInsertId();
             $conn->prepare("INSERT INTO ".DB_TABLE_LIGNES_COMMANDE."(Lign_quantite, Lign_is_vente, fk_art_ID, fk_com_ID) VALUES(0, 1, $id, 0), (0, 0, $id, 0)")->execute();
-			$return = [];
-			$return["lastid"] = $id;
-			$return["cat"] = $oCategorie->db_get_by_id((int) $fk_categorie_id)["cat_nom"];
-			$return["cas"] = $oCasier->db_get_by_id((int) $fk_casier_id)["cas_lib"];
+			$return["error"] = false;
 			return $return;
 		}catch(PDOException $e){
 			return $this->errmessage.$e->getMessage();

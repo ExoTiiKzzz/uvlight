@@ -23,7 +23,7 @@ if(isset($_POST["create"])){
 }elseif(isset($_POST["getdata"])){
     echo json_encode($oCommande->db_get_by_id($_POST["id"]));
 }elseif(isset($_POST["getDocuments"])){
-    echo json_encode($oCommande->get_documents($_POST["id"]));
+    echo json_encode($oCommande->db_get_documents($_POST["id"]));
 }else{
     header("location: index.php");
 }

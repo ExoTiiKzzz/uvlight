@@ -32,6 +32,7 @@
         echo $oListe->build_liste("liste_articles", $oArticle->db_get_all(), "art_nom");
         echo $oListe->build_liste("liste_categories", $oCategorie->db_get_all(), "cat_nom");
         echo $oListe->build_liste("liste_casiers", $oCasier->db_get_all(), "cas_lib");
+        echo $oListe->build_liste("liste_fournisseurs", $oTiers->db_get_all_fournisseurs(), "tie_raison_sociale");
         require './components/main.php';
 ?>
 

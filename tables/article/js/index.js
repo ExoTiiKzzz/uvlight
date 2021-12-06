@@ -8,14 +8,15 @@ $(document).ready(function(){
             'url':'ajaxfile.php'
         },
         columns: [
-            { data: 'checkbox' },
+            { data: 'checkbox'},
             { data: 'art_id' },
             { data: 'art_nom' },
             { data: 'art_commentaire' },
             { data: 'stock' },
+            { data: 'fournisseur'},
             { data: 'categorie' },
             { data: 'casier' },
-            { data: 'actions' }
+            { data: 'actions'}
         ],
         deferRender:    true,
         scrollCollapse: true,
@@ -46,12 +47,16 @@ createBtn.addEventListener("click", (e) =>{
     e.preventDefault();
 
     var lib = document.querySelector(".createLib").value;
+    var fournisseur = document.querySelector(".createFourni").value;
     var comment = document.querySelector(".createComment").value;
     var cas = document.querySelector(".createCas").value;
     var cat = document.querySelector(".createCat").value;
 
+    console.log(fournisseur);
+
     var formData = new FormData();
     formData.append("create", "1");
+    formData.append("fournisseur", fournisseur);
     formData.append("lib", lib);
     formData.append("comment", comment);
     formData.append("cas", cas);
@@ -70,6 +75,7 @@ createBtn.addEventListener("click", (e) =>{
         }else{
             drawTable();
             document.querySelector(".createCloseBtn").click();
+            document.querySelector(".createFourni").value = "";
             document.querySelector(".createLib").value = "";
             document.querySelector(".createComment").value = "";
             document.querySelector(".createCas").value = "";

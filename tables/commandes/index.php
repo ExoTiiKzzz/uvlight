@@ -111,6 +111,7 @@
                             <select id="etat_document" class="select_etat custom-select"></select>
                         </div>
                         <div class="form-group">
+                            <span class="seeDocumentsSpan" style="display: none">Documents associés : </span>
                             <button class="seeDocuments btn btn-primary">Voir les documents associés</button>
                         </div>
                         <div class="form-group">

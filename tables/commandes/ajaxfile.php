@@ -11,6 +11,7 @@ $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
 $searchValue = $_POST['search']['value']; // Search value
 
 if($columnName === "checkbox" || $columnName === "actions" || $columnName === "createdate") $columnName = "Com_ID";
+if($columnName === "etat") $columnName = "fk_etat_ID";
 
 $searchArray = array();
 
