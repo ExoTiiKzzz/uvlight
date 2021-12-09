@@ -40,8 +40,8 @@ updateBtns.forEach(element => {
     element.addEventListener("click", openUpdateModalListener);
 });
 
-function openUpdateModalListener(e){
-    const id = e.target.dataset.index;
+function openUpdateModalListener(event){
+    const id = event.target.dataset.index;
     console.log(id)
 
     var formData = new FormData();

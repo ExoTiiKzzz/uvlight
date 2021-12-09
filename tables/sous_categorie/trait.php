@@ -17,7 +17,7 @@ if(isset($_POST["create"])){
     if($res != false){
         $response["error"] = false;
         $response["content"]["lib"] = $res["scat_lib"];
-        $response["content"]["categorie"] = $res["cat_ID"];
+        $response["content"]["categorie"] = $res["cat_nom"];
     }else{
         $response["error"] = true;
         $response["errortext"] = $res;
@@ -27,7 +27,6 @@ if(isset($_POST["create"])){
     $res = $oSousCategorie->db_update($_POST["id"], $_POST["lib"], $_POST["categorie"]);
     if($res != false){
         $response["error"] = false;
-        $response["existingid"] = $oSousCategorie->db_get_one()["scat_ID"];
     }else{
         $response["error"] = true;
         $response["errortext"] = $res;
@@ -51,7 +50,7 @@ if(isset($_POST["create"])){
         $response["errortext"] = "Une erreur s'est produite, veuillez reessayer";
     }
     echo json_encode($response);
-/*}elseif(isset($_POST["multi_delete"])){
+}elseif(isset($_POST["multi_delete"])){
     $array = $_POST["array"];
     $finalarray = json_decode($array, true);
     $ids = [];
@@ -66,7 +65,7 @@ if(isset($_POST["create"])){
     }else{
         $response = "pb";
     }
-    echo json_encode($response);*/
+    echo json_encode($response);
 }else{
     // header("location: index.php");
     echo "coucou";
