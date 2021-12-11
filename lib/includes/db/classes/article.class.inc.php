@@ -16,6 +16,40 @@ class Article{
 		}
     }
 
+    public function db_get_all_by_fournisseur(string $fournisseur) : array{
+        global $conn;
+        $request = "SELECT art_ID, art_nom FROM ".DB_TABLE_ARTICLE." WHERE fk_tiers_ID = 
+                    (SELECT tie_ID FROM ".DB_TABLE_TIERS." WHERE tie_raison_sociale = :fournisseur)";
+        try {
+            $sql = $conn->prepare($request);
+            $sql->bindValue(":fournisseur", $fournisseur, PDO::PARAM_STR);
+            if($sql->execute() !== false){
+                $result = $sql->fetchAll();
+                if(!empty($result)){
+                    $response["error"] = false;
+                    $response["content"] = "";
+                    foreach($result as $ligne){
+                        $response["content"].= "<option value='".$ligne["art_nom"]."'></option>";
+                    }
+                }else{
+                    $response["error"] = true;
+                    $response["errortext"] = "Aucun article disponible";
+                    $response["code"] = 404;
+                }
+            }else{
+                $response["error"] = true;
+                $response["errortext"] = "Une erreur s'est produite, vérifier le nom du fournisseur";
+            }
+            return $response;
+        } catch(PDOException $e){
+            $response["error"] = true;
+            $response["errortext"] = $e->getMessage();
+            return $response;
+        }
+
+
+    }
+
 
     /**
      * @param int $article_id Une description

@@ -26,6 +26,8 @@ define('DB_TABLE_PRODUIT', 'produit');
 define('DB_TABLE_COMMANDE', 'commande');
 define('DB_TABLE_LIGNES_COMMANDE', 'lignes_commande');
 define('DB_TABLE_SOUS_CATEGORIE', 'sous_categorie');
+define('DB_TABLE_LIGNES_RECEPTION', 'lignes_reception');
+define('DB_TABLE_RECEPTION', 'reception');
 
 // err message
 define('BASIC_ERROR', 'Une erreur s\'est produite, signalez la à l\'administrateur \n');

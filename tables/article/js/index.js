@@ -133,6 +133,7 @@ commandBtn.addEventListener("click", (e) => {
     let comment = document.querySelector(".createCommandComment").value;
     console.log(comment);
     let articles = [], quantitys = [];
+    let fourni = document.querySelector(".commandFourni").value;
 
     articleEls = document.querySelectorAll(".commandArticle");
 
@@ -149,6 +150,7 @@ commandBtn.addEventListener("click", (e) => {
     formData.append("comment", comment);
     formData.append("article", JSON.stringify(articles));
     formData.append("quantity", JSON.stringify(quantitys));
+    formData.append("tiers", fourni);
 
     fetch(url, {
         method: "POST",
@@ -212,4 +214,39 @@ function commandAddArticle(index){
 
 function commandDeleteArticle(index){
     document.querySelector(".commandListArticles").removeChild(document.querySelector(".row[data-index='"+index+"']"));
+}
+
+let commandTiers = document.querySelector(".commandFourni");
+commandTiers.addEventListener("blur", loadFourniList);
+
+function loadFourniList(event){
+    if(event.target.value == ""){
+        return;
+    }
+    let fourni = event.target.value;
+
+    var formData = new FormData();
+    formData.append("getFourniArticles", "1");
+    formData.append("fournisseur", fourni);
+
+    fetch(url, {
+        method: "POST",
+        body: formData
+    })
+        .then(res => res.json())
+        .then(data => {
+            if(data.error === true){
+                document.querySelector(".commandBtn").disabled = true;
+                if(typeof data.code !== undefined){
+                    if(data.code === 404){
+                        document.getElementById("liste_articles").innerHTML = "<option value='Aucun article'></option>";
+                    }
+                }
+                console.log(data.errortext);
+            }else{
+                document.querySelector(".commandBtn").removeAttribute("disabled");
+
+                document.getElementById("liste_articles").innerHTML = data.content;
+            }
+        })
 }

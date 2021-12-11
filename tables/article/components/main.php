@@ -1,5 +1,7 @@
 <div class="main-container sidenav-open">
+    <datalist id="liste_articles">
 
+    </datalist>
 
     <button type='button' class='my-3 btn btn-success' data-toggle='modal' data-target='#createmodal'> Créer un article </button>
     <button type='button' class='mx-3 btn btn-success' data-toggle='modal' data-target='#command'> Créer une commande </button>

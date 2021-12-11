@@ -2,7 +2,6 @@
 
 require '../../lib/includes/defines.inc.php';
 
-
 if(isset($_POST["create"])){
     echo json_encode($oArticle->db_create($_POST["lib"], $_POST["comment"], $_POST["fournisseur"], $_POST["cat"], $_POST["cas"]));
 }elseif(isset($_POST["update"])){
@@ -63,7 +62,9 @@ if(isset($_POST["create"])){
     }
     echo json_encode($response);
 }elseif(isset($_POST["command"])){
-    echo json_encode($oCommande->db_create_command($_POST["comment"], json_decode($_POST["quantity"]), json_decode($_POST["article"])));
+    echo json_encode($oCommande->db_create_command($_POST["comment"], json_decode($_POST["quantity"]), json_decode($_POST["article"]), $_POST["tiers"]));
+}elseif(isset($_POST["getFourniArticles"])){
+    echo json_encode($oArticle->db_get_all_by_fournisseur($_POST["fournisseur"]));
 }
 else{
     header("location: index.php");

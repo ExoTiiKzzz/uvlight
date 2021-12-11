@@ -24,6 +24,8 @@ if(isset($_POST["create"])){
     echo json_encode($oCommande->db_get_by_id($_POST["id"]));
 }elseif(isset($_POST["getDocuments"])){
     echo json_encode($oCommande->db_get_documents($_POST["id"]));
+}elseif(isset($_POST["updateCommand"])){
+    echo json_encode($oCommande->db_update_lignes_commande(json_decode($_POST["array"]), $_POST["com_ID"],$_POST["comment"]));
 }else{
     header("location: index.php");
 }

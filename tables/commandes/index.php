@@ -32,9 +32,6 @@
   ?>
 
     <div class="main-container sidenav-open">
-        <div class="form-group row col-6 p-4">
-            <button class="btn btn-success" data-toggle='modal' data-target='#createModal' name="create" type="button">Passer une commande</button>
-        </div>
 
         <div class="table-container">
             <table id="table">

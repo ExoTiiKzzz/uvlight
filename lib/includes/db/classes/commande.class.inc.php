@@ -54,7 +54,7 @@ class Commande
         return $result;
     }
 
-    public function db_create_command($comment, $quantity, $article): array{
+    public function db_create_command($comment, $quantity, $article, $tiers): array{
         global $conn;
 
         $listearticle = str_repeat ('?, ',  count ($article) - 1) . '?';
@@ -76,23 +76,27 @@ class Commande
             foreach($article as $subel){
                 if($subel === $element["art_nom"]) {
                     $article[$cpt] = $element["art_ID"];
-                    $tiers_ID = $element["fk_tiers_ID"];
                 }
                 $cpt++;
             }
         }
 
-        $conn->query("INSERT INTO ".DB_TABLE_COMMANDE."(fk_etat_ID) VALUES(1)");
+        $request = "SELECT tie_ID FROM ".DB_TABLE_TIERS." WHERE tie_raison_sociale =:tiers";
+        $sql = $conn->prepare($request);
+        $sql->bindValue(":tiers", $tiers);
+        $sql->execute();
+        $res = (int) $sql->fetch()["tie_ID"];
+
+        $conn->query("INSERT INTO ".DB_TABLE_COMMANDE."(fk_etat_ID, fk_tiers_ID) VALUES(1, $res)");
         $commandeID = $conn->lastInsertId();
         $commandLines = $this->db_insert_command_lines($commandeID, $article, $quantity);
         if($commandLines["error"] === true){
             $response["error"] = true;
             $response["errortext"] = $commandLines["errortext"];
-            $response["content"] = $article;
             return $response;
             die;
         }
-        $createDoc = $this->db_create_document($comment, 3, $commandeID, $tiers_ID);
+        $createDoc = $this->db_create_document($comment, 3, $commandeID);
         if($createDoc["error"] === true){
             $response["error"] = true;
             $response["errortext"] = $createDoc["errortext"];
@@ -107,14 +111,13 @@ class Commande
 
     }
 
-    private function db_create_document(string $comment, int $typeID , int $commandeID , int $tiers_ID): array{
+    private function db_create_document(string $comment, int $typeID , int $commandeID): array{
         global $conn;
-        $request = "INSERT INTO ".DB_TABLE_DOCUMENT."(doc_commentaire, fk_typdo_ID, fk_com_ID, fk_tiers_ID) VALUES(:comment, :type_ID, :commande_ID, :tiers_ID)";
+        $request = "INSERT INTO ".DB_TABLE_DOCUMENT."(doc_commentaire, fk_typdo_ID, fk_com_ID) VALUES(:comment, :type_ID, :commande_ID)";
         $sql = $conn->prepare($request);
         $sql->bindValue(":comment", $comment);
         $sql->bindValue(":type_ID", $typeID, PDO::PARAM_INT);
         $sql->bindValue(":commande_ID", $commandeID, PDO::PARAM_INT);
-        $sql->bindValue(":tiers_ID", $tiers_ID, PDO::PARAM_INT);
         try {
             $sql->execute();
             if($sql){
@@ -221,7 +224,9 @@ class Commande
 
     public function db_get_lignes_commande(int $com_ID) : array {
         global $conn;
-        $request = "SELECT *, SUM(Lign_quantite - Lign_received_quantity) as difference FROM ".DB_TABLE_LIGNES_COMMANDE." WHERE fk_com_ID = :com_ID GROUP BY fk_art_ID";
+        $request = "SELECT *, SUM(Lign_quantite - Lign_received_quantity) as difference 
+                    FROM ".DB_TABLE_LIGNES_COMMANDE."
+                    WHERE fk_com_ID = :com_ID GROUP BY fk_art_ID";
         try {
             $sql = $conn->prepare($request);
             $sql->bindValue(":com_ID", $com_ID, PDO::PARAM_INT);
@@ -232,6 +237,62 @@ class Commande
                 return $response;
             }
             $result = $sql->fetchAll();
+            $response["error"] = false;
+            $response["data"] = $result;
+            return $response;
+        }catch (PDOException $e){
+            $response["error"] = true;
+            $response["errortext"] = $e->getMessage();
+            return $response;
+        }
+    }
+
+    public function updateCommand(int $com_ID, array $lignes) : array {
+
+    }
+
+    private function updateLigne(int $com_ID, int $article_ID, int $quantite) : array {
+        global $conn;
+        $request = "UPDATE ".DB_TABLE_LIGNES_COMMANDE." 
+                    SET Lign_received_quantity = Lign_received_quantity + :quantite
+                    WHERE fk_art_ID = :article_ID AND fk_com_ID = :command_ID";
+        try {
+            $sql = $conn->prepare($request);
+            $sql->bindValue(":quantite", $quantite, PDO::PARAM_INT);
+            $sql->bindValue(":article_ID", $article_ID, PDO::PARAM_INT);
+            $sql->bindValue(":command_ID", $com_ID, PDO::PARAM_INT);
+            $sql->execute();
+            if(!$sql){
+                $response["error"] = true;
+                $response["errortext"] = "Une erreur s'est produite";
+                return $response;
+            }
+            $result = $sql->fetchAll();
+            $response["error"] = false;
+            $response["data"] = $result;
+            return $response;
+        }catch (PDOException $e){
+            $response["error"] = true;
+            $response["errortext"] = $e->getMessage();
+            return $response;
+        }
+    }
+
+    public function db_get_fournisseur(int $com_ID) : array{
+        global $conn;
+        $request = "SELECT tie_raison_sociale FROM ".DB_TABLE_TIERS."
+                    INNER JOIN ".DB_TABLE_COMMANDE." ON tie_ID = fk_tiers_ID
+                    WHERE ".DB_TABLE_COMMANDE.".com_ID = :com_ID";
+        try {
+            $sql = $conn->prepare($request);
+            $sql->bindValue(":com_ID", $com_ID, PDO::PARAM_INT);
+            $sql->execute();
+            if(!$sql){
+                $response["error"] = true;
+                $response["errortext"] = "Une erreur s'est produite";
+                return $response;
+            }
+            $result = $sql->fetch();
             $response["error"] = false;
             $response["data"] = $result;
             return $response;
@@ -253,4 +314,58 @@ class Commande
 
         return $bool;
     }
+
+    public function db_update_lignes_commande(array $data, int $com_ID, string $commentaire) : array{
+        global $conn, $oEtatDocument;
+        $bool = false;
+        $request = "INSERT INTO ".DB_TABLE_DOCUMENT."(doc_commentaire, fk_typdo_ID, fk_com_ID) VALUES (:comment, 4,:com_ID)";
+
+        $sql = $conn->prepare($request);
+        $sql->bindValue(":com_ID", $com_ID, PDO::PARAM_INT);
+        $sql->bindValue(":comment", $commentaire);
+        $sql->execute();
+        $id = $conn->lastInsertId();
+        $request = "UPDATE ".DB_TABLE_LIGNES_COMMANDE." 
+                    SET Lign_received_quantity = Lign_received_quantity + :quantity
+                    WHERE fk_com_ID = :com_ID AND fk_art_ID = :art_ID";
+        foreach($data as $ligne){
+            if($ligne[1] != 0){
+                try {
+                    $sql = $conn->prepare($request);
+                    $sql->bindValue(":quantity", $ligne[1], PDO::PARAM_INT);
+                    $sql->bindValue(":com_ID", $com_ID, PDO::PARAM_INT);
+                    $sql->bindValue(":art_ID", $ligne[0], PDO::PARAM_INT);
+                    if($sql->execute() === false){
+                        $bool = true;
+                        $response["errortext"] = "Une erreur s'est produite";
+                    }
+                } catch(PDOException $e){
+                    $bool = true;
+                    $response["errortext"] = $e->getMessage();
+                }
+            }
+        }
+        $request = "INSERT INTO ".DB_TABLE_LIGNES_RECEPTION."(Lignr_quantite, fk_art_ID, fk_doc_ID) 
+                    VALUES(:quantity, :art_ID, :doc_ID)";
+        $bool = false;
+        foreach($data as $ligne){
+            try {
+                $sql = $conn->prepare($request);
+                $sql->bindValue(":quantity", $ligne[1], PDO::PARAM_INT);
+                $sql->bindValue(":art_ID", $ligne[0], PDO::PARAM_INT);
+                $sql->bindValue(":doc_ID", $id, PDO::PARAM_INT);
+                if($sql->execute() === false){
+                    $bool = true;
+                    $response["errortext"] = "Une erreur s'est produite";
+                }
+            } catch(PDOException $e){
+                $bool = true;
+                $response["errortext"] = $e->getMessage();
+            }
+        }
+        $response["error"] = $bool;
+        return $response;
+    }
+
+
 }
