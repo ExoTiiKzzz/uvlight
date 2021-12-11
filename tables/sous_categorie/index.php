@@ -115,7 +115,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modifier la catégorie</h5>
+                    <h5 class="modal-title">Modifier la sous catégorie</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -129,7 +129,7 @@
                         </div>
                         
                         <div class="form-group">
-                            <input placeholder="Catégorie référente" class="form-control updateCat" name="categorie_ref" >
+                            <input placeholder="Catégorie référente" class="form-control updateCat" name="categorie_ref" list="list_categorie">
                         </div>
                     </div>
 

@@ -22,7 +22,7 @@
     
             global $conn;
     
-            $request = "SELECT * FROM ".DB_TABLE_SOUS_CATEGORIE." WHERE id = :scat_ID";
+            $request = "SELECT * FROM ".DB_TABLE_SOUS_CATEGORIE." INNER JOIN ".DB_TABLE_CATEGORIE." ON fk_cat_ID = cat_ID WHERE scat_id = :scat_ID";
             $sql = $conn->prepare($request);
             $sql->bindValue(':scat_ID', $id, PDO::PARAM_INT);
     
@@ -43,12 +43,12 @@
         public function db_create($libelle='', $categorie=''){
             global $conn, $oCategorie;
             
-            $cat_ID = $oCategorie->db_get_by_lib($categorie)['cat_ID'];
+            $cat_ID = $oCategorie->db_get_by_lib($categorie)["cat_ID"];
 
             $request = "INSERT INTO ".DB_TABLE_SOUS_CATEGORIE." (scat_lib, fk_cat_ID) VALUES (:scat_lib, :fk_cat_ID)";
             $sql = $conn->prepare($request);
             $sql->bindValue(':scat_lib', $libelle, PDO::PARAM_STR);
-            $sql->bindValue(':fk_cat_ID', $cat_ID, PDO::PARAM_STR);
+            $sql->bindValue(':fk_cat_ID', $cat_ID, PDO::PARAM_INT);
     
             try{
                 $sql->execute();
@@ -70,7 +70,22 @@
             }
         }
 
-        /*public function db_update($categorie_id=0, $newlib='', $newcat=''){
+        public function db_soft_delete_one($id=0){
+    
+            global $conn;
+    
+            $request = "UPDATE ".DB_TABLE_SOUS_CATEGORIE." SET scat_is_visible = 0 WHERE scat_ID = :id;";
+            $sql = $conn->prepare($request);
+            $sql->bindValue(':id', $id, PDO::PARAM_INT);
+            try{
+                $sql->execute();
+                return true;
+            }catch(PDOException $e){
+                return $this->errmessage.$e->getMessage();
+            }
+        }
+
+        public function db_update($sous_categorie_id=0, $newlib='', $newcat=''){
             $sous_categorie_id = (int) $sous_categorie_id;
             if(!$sous_categorie_id || !$newlib || !$newcat){
                 return false;
@@ -78,17 +93,55 @@
     
             global $conn;
     
-            $request = "UPDATE ".DB_TABLE_SOUS_CATEGORIE." SET sous_cat_lib = :scat_lib, cat = :cat WHERE scat_ID = :id";
+            $request = "UPDATE ".DB_TABLE_SOUS_CATEGORIE." SET scat_lib = :scat_lib, fk_cat_ID = (SELECT cat_ID FROM ".DB_TABLE_CATEGORIE." WHERE cat_nom = :cat) WHERE scat_ID = :id";
             $sql = $conn->prepare($request);
-            $sql->bindValue(':nom', $newlib, PDO::PARAM_STR);
+            $sql->bindValue(':scat_lib', $newlib, PDO::PARAM_STR);
             $sql->bindValue(':cat', $newcat, PDO::PARAM_STR);
-            $sql->bindValue(':id', $categorie_id, PDO::PARAM_INT);
+            $sql->bindValue(':id', $sous_categorie_id, PDO::PARAM_INT);
             try{
                 $sql->execute();
                 return true;
             }catch(PDOException $e){
                 return $this->errmessage.$e->getMessage();
             }
-        }*/
+        }
+
+        public function db_soft_delete_multi($id_array){
+            if(!is_array($id_array)){
+                return false;
+            }
+    
+            foreach ($id_array as $key => $value) {
+                if(is_nan($id_array[$key]) || !$id_array[$key]){
+                    return false;
+                }
+            }
+    
+            global $conn;
+    
+            $variables = $id_array;
+            $placeholders = str_repeat ('?, ',  count ($variables) - 1) . '?';
+    
+            $sql = $conn -> prepare ("UPDATE ".DB_TABLE_SOUS_CATEGORIE." SET scat_is_visible = 0 WHERE scat_ID IN($placeholders)");
+            try{
+                $sql->execute($variables);
+                return true;
+            }catch(PDOException $e){
+                return $this->errmessage.$e->getMessage();
+            }
+        }
+
+        public function db_soft_delete_all(){
+            global $conn;
+    
+            $request = "UPDATE ".DB_TABLE_SOUS_CATEGORIE." SET scat_is_visible = 0";
+            $sql = $conn->prepare($request);
+            try{
+                $sql->execute();
+                return true;
+            }catch(PDOException $e){
+                return $this->errmessage.$e->getMessage();
+            }
+        }
     }
 ?>
