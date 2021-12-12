@@ -75,11 +75,7 @@ createBtn.addEventListener("click", (e) =>{
         }else{
             drawTable();
             document.querySelector(".createCloseBtn").click();
-            document.querySelector(".createFourni").value = "";
-            document.querySelector(".createLib").value = "";
-            document.querySelector(".createComment").value = "";
-            document.querySelector(".createCas").value = "";
-            document.querySelector(".createCat").value = "";
+            emptyInputs();
             updateListeArticle(lib);
         }
     })
@@ -123,6 +119,11 @@ function openUpdateModalListener(e){
             document.querySelector(".updateComment").value = comment;
             document.querySelector(".updateCas").value = cas;
             document.querySelector(".updateCat").value = cat;
+            document.querySelector(".seeTarifs").dataset.index = id;
+
+            result.content.tarifs.forEach(el => {
+                document.querySelector(".updateTarifInput[data-index='"+el.tar_ID+"']").value = el.prix;
+            });
         }
     }).catch(err => console.log(err));
 }
@@ -247,6 +248,33 @@ function loadFourniList(event){
                 document.querySelector(".commandBtn").removeAttribute("disabled");
 
                 document.getElementById("liste_articles").innerHTML = data.content;
+            }
+        })
+}
+
+const updateTarifEls = document.querySelectorAll(".updateTarifInput");
+updateTarifEls.forEach(el => {
+    el.addEventListener("blur", updateTarif);
+})
+
+function updateTarif(event){
+    let art_ID = parseInt(document.querySelector(".seeTarifs").dataset.index);
+    let tar_ID = parseInt(event.target.dataset.index);
+    let prix = parseFloat(event.target.value);
+    let formData = new FormData();
+    formData.append("updateTarif", "1");
+    formData.append("art_ID", art_ID);
+    formData.append("tar_ID", tar_ID);
+    formData.append("prix", prix);
+
+    fetch(url, {
+        method: "POST",
+        body: formData
+    })
+        .then(res => res.json())
+        .then(data => {
+            if(data.error === true){
+                console.log(data.errortext);
             }
         })
 }

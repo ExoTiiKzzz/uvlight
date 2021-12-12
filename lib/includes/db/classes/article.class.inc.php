@@ -19,7 +19,7 @@ class Article{
     public function db_get_all_by_fournisseur(string $fournisseur) : array{
         global $conn;
         $request = "SELECT art_ID, art_nom FROM ".DB_TABLE_ARTICLE." WHERE fk_tiers_ID = 
-                    (SELECT tie_ID FROM ".DB_TABLE_TIERS." WHERE tie_raison_sociale = :fournisseur)";
+                    (SELECT tie_ID FROM ".DB_TABLE_TIERS." WHERE tie_raison_sociale = :fournisseur) AND art_is_visible = 1";
         try {
             $sql = $conn->prepare($request);
             $sql->bindValue(":fournisseur", $fournisseur, PDO::PARAM_STR);
@@ -62,7 +62,7 @@ class Article{
 			return false;
 		}
 
-		global $conn;
+		global $conn, $oTarif;
 
 		$request = "SELECT * FROM ".DB_TABLE_ARTICLE." 
 					INNER JOIN ".DB_TABLE_CASIER." ON ".DB_TABLE_ARTICLE.".fk_cas_ID = ".DB_TABLE_CASIER.".cas_ID
@@ -72,7 +72,13 @@ class Article{
 		$sql->bindValue(':id', $article_id, PDO::PARAM_INT);
 		try{
 			$sql->execute();
-			return $sql->fetch(PDO::FETCH_ASSOC);
+            $result = [];
+			$result["content"] = $sql->fetch(PDO::FETCH_ASSOC);
+            $tarifs = $oTarif->db_get_grid($article_id);
+            if($tarifs["error"] === false){
+                $result["content"]["tarifs"] = $tarifs["content"];
+            }
+            return $result;
 		}catch(PDOException $e){
 			return $this->errmessage.$e->getMessage();
 		}
@@ -116,7 +122,7 @@ class Article{
 
 
 	public function db_create($article_nom='', $article_commentaire='',$fournisseur='', $categorie='', $casier=''){
-		global $conn, $oCasier, $oCategorie, $oTiers;
+		global $conn, $oCasier, $oCategorie, $oTiers, $oTarif;
 
         $fk_tiers_id = (int) $oTiers->db_get_by_lib($fournisseur)["tie_ID"];
 		$fk_categorie_id = (int) $oCategorie->db_get_by_lib($categorie)["cat_ID"];
@@ -134,10 +140,18 @@ class Article{
 			$sql->execute([":article_nom" => $article_nom, ":article_commentaire" => $article_commentaire,":fk_tiers_ID" => $fk_tiers_id, ":fk_categorie_id" => $fk_categorie_id, ":fk_casier_id" => $fk_casier_id]);
             $id = $conn->lastInsertId();
             $conn->prepare("INSERT INTO ".DB_TABLE_LIGNES_COMMANDE."(Lign_quantite, Lign_is_vente, fk_art_ID, fk_com_ID) VALUES(0, 1, $id, 0), (0, 0, $id, 0)")->execute();
-			$return["error"] = false;
+            $creategrid = $oTarif->db_create_grid($id);
+            if($creategrid["error"] === true){
+                $return["error"] = true;
+                $return["errortext"] = $creategrid["errortext"];
+            }else{
+                $return["error"] = false;
+            }
 			return $return;
 		}catch(PDOException $e){
-			return $this->errmessage.$e->getMessage();
+            $return["error"] = true;
+            $return["errortext"] = $e->getMessage();
+			return $return;
 		}
 	}
 

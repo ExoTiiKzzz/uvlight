@@ -8,7 +8,7 @@ body, .modal-content{
 }
 
 table thead{
-    background:#E8F4FA;
+    background: #707070;
     color: #213140;
 }
 table td, th {
@@ -69,20 +69,16 @@ table th{
     color: #fff;
 }
 
-.dataTable thead{
-    background: #707070;
-}
-
-.dataTable thead th{
+thead th{
     padding: 15px 5px 15px 5px;
 }
 
-.dataTable tbody tr{
+tbody tr{
     background: rgb(170, 170, 170);
     color: #fff;
 }
 
-.dataTable tr td{
+tr td{
     padding: 8px 0px ;
 }
 

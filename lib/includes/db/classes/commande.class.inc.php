@@ -185,7 +185,7 @@ class Commande
 
     }
 
-    public function db_get_detailed_documents(int $id): array{
+    public function db_get_detailed_all_documents(int $id): array{
         global $conn;
         foreach(SELF::TYPE_DOCUMENT as $type => $value){
             $response["content"][$value] = $this->db_get_document_by_type($type, $id);
@@ -196,6 +196,31 @@ class Commande
         $response["error"] = false;
         return $response;
     }
+
+    public function get_lignes_livraison(int $doc_ID): array{
+        global $conn;
+        $request = "SELECT Lignr_quantite, art_nom FROM ".DB_TABLE_LIGNES_RECEPTION." 
+                    INNER JOIN ".DB_TABLE_ARTICLE." ON fk_art_ID = art_ID
+                    WHERE fk_doc_ID = :doc_id";
+        $sql = $conn->prepare($request);
+        $sql->bindValue(':doc_id', $doc_ID, PDO::PARAM_INT);
+        try {
+            $sql->execute();
+            if($sql){
+                $response["error"] = false;
+                $response["data"] = $sql->fetchAll();
+            }else{
+                $response["error"] = true;
+                $response["errortext"] = "Une erreur s'est produite";
+            }
+        }catch (PDOException $e){
+            $response["error"] = true;
+            $response["errortext"] = $e->getMessage();
+        }
+        return $response;
+
+    }
+
 
     private function db_get_document_by_type(int $type, int $com_ID) : array{
         global $conn;

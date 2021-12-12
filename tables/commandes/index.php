@@ -109,7 +109,7 @@
                         </div>
                         <div class="form-group">
                             <span class="seeDocumentsSpan" style="display: none">Documents associés : </span>
-                            <button class="seeDocuments btn btn-primary">Voir les documents associés</button>
+                            <a href="" class="seeDocuments btn btn-primary">Voir les documents associés</a>
                         </div>
                         <div class="form-group">
                             <div class="documents">

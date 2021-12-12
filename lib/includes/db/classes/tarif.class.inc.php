@@ -133,5 +133,77 @@ class Tarif{
             return $this->errmessage.$e->getMessage();
         }
     }
+
+    public function db_create_grid(int $art_ID): array{
+        global $conn;
+
+        $request = "INSERT INTO ".DB_TABLE_PAYE."(tar_ID, art_ID) VALUES (0 ,:art)";
+        for($i = 1; $i<=20; $i++){
+            $request.= ",($i, :art$i)";
+        }
+        $sql = $conn->prepare($request);
+        $sql->bindValue(":art", $art_ID);
+        for($i = 1; $i<=20; $i++){
+            $sql->bindValue(":art$i", $art_ID);
+        }
+        try {
+            $sql->execute();
+            if($sql === false){
+                $response["error"] = true;
+                $response["errortext"] = "Une erreur s'est produite lors de la création des tarifs";
+            }else{
+                $response["error"] = false;
+            }
+        }catch (PDOException $e){
+            $response["error"] = true;
+            $response["errortext"] = $e->getMessage();
+        }
+        return  $response;
+    }
+
+    public function db_get_grid(int $art_ID): array{
+        global $conn;
+
+        $request = "SELECT tar_ID, pay_tarif_vente as prix  FROM ".DB_TABLE_PAYE." WHERE art_ID = :art_id AND tar_ID != 0";
+        $sql = $conn->prepare($request);
+        $sql->bindValue(":art_id", $art_ID);
+        try {
+            $sql->execute();
+            if($sql === false){
+                $response["error"] = true;
+                $response["errortext"] = "Une erreur s'est produite lors de la création des tarifs";
+            }else{
+                $response["error"] = false;
+                $response["content"] = $sql->fetchAll();
+            }
+        }catch (PDOException $e){
+            $response["error"] = true;
+            $response["errortext"] = $e->getMessage();
+        }
+        return  $response;
+    }
+
+    public function db_update_grid(int $tar_ID, int $art_ID, float $prix): array{
+        global $conn;
+
+        $request = "UPDATE ".DB_TABLE_PAYE." SET pay_tarif_vente = :prix WHERE tar_ID = :tar_ID AND art_ID = :art_ID";
+        $sql = $conn->prepare($request);
+        $sql->bindValue(":prix", $prix);
+        $sql->bindValue(":tar_ID", $tar_ID, PDO::PARAM_INT);
+        $sql->bindValue(":art_ID", $art_ID, PDO::PARAM_INT);
+        try {
+            $sql->execute();
+            if($sql === false){
+                $response["error"] = true;
+                $response["errortext"] = "Une erreur s'est produite lors de la création des tarifs";
+            }else{
+                $response["error"] = false;
+            }
+        }catch (PDOException $e){
+            $response["error"] = true;
+            $response["errortext"] = $e->getMessage();
+        }
+        return  $response;
+    }
 }
 ?>

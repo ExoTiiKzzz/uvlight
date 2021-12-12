@@ -36,7 +36,7 @@ function updateCommand(){
             if(data.error === true){
                 console.log(data.errortext);
             }else{
-                table.api().draw();
+                location.reload();
             }
         })
 }
@@ -52,3 +52,12 @@ function checkQuantity(event){
     if(parseInt(value) < 0) event.target.value = 0;
     if(value == "") event.target.value = 0;
 }
+
+const accordionButtons = document.querySelectorAll(".accordion-button");
+accordionButtons.forEach(el => {
+    let id = el.dataset.index;
+    el.addEventListener("click", () => {
+        document.querySelector(".fal[data-index='"+id+"']").classList.toggle("fa-minus")
+        document.querySelector(".fal[data-index='"+id+"']").classList.toggle("fa-plus")
+    })
+})

@@ -11,23 +11,29 @@
             <form action="trait.php" method="post" class="update_form" onsubmit="return checkForm(0)">
                 <div class="mx-auto modal-body col-10">
                     <div class="form-group">
-                        <div data-index="0" class="alert alert-danger" style="display: none">Le nom de l'article doit faire entre 1 et 50 charactères maximum</div>
                         <input type="hidden" class="updateId">
-                        <input class="form-control name_input updateLib" data-index="0" style="margin: 0 auto" type="text" name="article_name" required>
+                        <label for="updateLib">Nom de l'article</label>
+                        <input id="updateLib" class="form-control name_input updateLib" data-index="0" style="margin: 0 auto" type="text" name="article_name" required>
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control updateComment" rows="3" name="article_commentaire"></textarea>
+                        <label for="updateComment">Commentaire</label>
+                        <textarea id="updateComment" class="form-control updateComment" rows="3" name="article_commentaire"></textarea>
                     </div>
 
                     <div class="form-group">
-                        <input list='liste_categories' class="form-control updateCat">
+                        <label for="updateCat">Catégorie</label>
+                        <input id="updateCat" list='liste_categories' class="form-control updateCat">
                     </div>
 
                     <div class="form-group">
-                        <input list='liste_casiers' class="form-control updateCas">
+                        <label for="updateCas">Casier</label>
+                        <input id="updateCas" list='liste_casiers' class="form-control updateCas">
                     </div>
-                    
-                    
+
+                    <button type='button' class='my-3 btn btn-success seeTarifs form-control' data-toggle='modal' data-target='#tarifs'>Grille des tarifs </button>
+
+
+
                 </div>
             
                 <div class="modal-footer">

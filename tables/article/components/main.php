@@ -34,6 +34,7 @@
     <?php require './components/createModal.html'; ?>
     <?php require './components/commandModal.html'; ?>
     <?php require './components/updateModal.html' ?>
+    <?php require './components/tarifsModal.php' ?>
 
 
 

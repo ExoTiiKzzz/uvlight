@@ -93,26 +93,6 @@ seeDocumentsBtn.addEventListener("click", seeDocuments);
 
 function seeDocuments(event){
     let id = event.target.dataset.index;
-    let formData = new FormData();
-    formData.append("getDocuments", "1");
-    formData.append("id", id);
-
-    fetch(url, {
-        method: "POST",
-        body: formData
-    })
-        .then(res => res.json())
-        .then(data => {
-            if(data.error === true){
-                console.log(data.errortext);
-            }else{
-                document.querySelector(".seeDocumentsSpan").style.display = "block";
-                document.querySelector(".seeDocuments").style.display = "none";
-                content = '';
-                data.data.forEach(el => {
-                    content += "<div class='document'><a href='./commande.php?id="+id+"' class='btn btn-secondary'>"+data.types[el.fk_typdo_ID]+"</a></div>";
-                })
-                document.querySelector(".documents").innerHTML = content;
-            }
-        })
+    console.log(document.querySelector(".seeDocuments"))
+    document.querySelector(".seeDocuments").href = "./commande.php?id="+id+"";
 }

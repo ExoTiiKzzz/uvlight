@@ -18,10 +18,11 @@ if(isset($_POST["create"])){
     $res = $oArticle->db_get_by_id($_POST["id"]);
     if($res != false){
         $response["error"] = false;
-        $response["content"]["lib"] = $res["art_nom"];
-        $response["content"]["comment"] = $res["art_commentaire"];
-        $response["content"]["cas"] = $res["cas_lib"];
-        $response["content"]["cat"] = $res["cat_nom"];
+        $response["content"]["lib"] = $res["content"]["art_nom"];
+        $response["content"]["comment"] = $res["content"]["art_commentaire"];
+        $response["content"]["cas"] = $res["content"]["cas_lib"];
+        $response["content"]["cat"] = $res["content"]["cat_nom"];
+        $response["content"]["tarifs"] = $res["content"]["tarifs"];
     }else{
         $response["error"] = true;
         $response["errortext"] = $res;
@@ -65,6 +66,8 @@ if(isset($_POST["create"])){
     echo json_encode($oCommande->db_create_command($_POST["comment"], json_decode($_POST["quantity"]), json_decode($_POST["article"]), $_POST["tiers"]));
 }elseif(isset($_POST["getFourniArticles"])){
     echo json_encode($oArticle->db_get_all_by_fournisseur($_POST["fournisseur"]));
+}elseif(isset($_POST["updateTarif"])){
+    echo json_encode($oTarif->db_update_grid($_POST["tar_ID"], $_POST["art_ID"], $_POST["prix"]));
 }
 else{
     header("location: index.php");

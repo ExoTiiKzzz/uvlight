@@ -14,14 +14,43 @@ echo sidenav($path);
     <?php
         require '../static/css/table.css';
     ?>
+    body{
+        overflow-y: scroll;
+    }
+    thead{
+       background-color: #707070;
+    }
     th{
         width: 25%;
+    }
+    .accordion{
+       width: 100%;
+        box-shadow: none;
+    }
+
+    .accordion-button{
+        width: 100%;
+    }
+    .accordion h2{
+        font-size: 1.5rem;
+        margin-bottom: 0;
+    }
+    .accordion button{
+        padding: 10px 0;
+        background-color: rgb(170, 170, 170);
+    }
+    .accordion table{
+        margin-bottom: 20px;
+    }
+    .accordion i{
+        float: left;
+        margin-left: 20px;
     }
 </style>
 <?php
 
 $articles = $oArticle->db_get_all();
-$data = $oCommande->db_get_detailed_documents($_GET['id']);
+$data = $oCommande->db_get_detailed_all_documents($_GET['id']);
 $fournisseur = $oCommande->db_get_fournisseur($_GET["id"]);
 $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
 ?>
@@ -29,6 +58,7 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
 
 <div class="main-container sidenav-open mb-5">
     <?php
+
         if($data["error"] === true){
             echo $data["errortext"];
         }else{
@@ -41,7 +71,7 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
             </div>
                 <div class="label mb-4 row d-flex p-3">
                     <div class="align">
-                        <span class="font-weight-bold border-bottom border-white">Éléments : </span>
+                        <span class="font-weight-bold border-bottom border-white">Récapitulatif de la commande : </span>
                     </div>
                     <div class="ml-auto">
                         <button data-toggle="modal" data-target="#command" class="btn btn-primary">Créer un bon de récéption</button>
@@ -58,9 +88,73 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
                         </thead>
                     </table>
                 </div>
+                <div class="label mb-4 row d-flex p-3">
+                    <div class="align">
+                        <span class="font-weight-bold border-bottom border-white">Bons de réception : </span>
+                    </div>
+                </div>
+                <div class="accordion" id="accordionrecep">
+                <?php
+                    $cpt = 1;
+                    foreach($data["content"] as $cate){ ?>
+                        <?php
+                        if($cate["error"] === false && !empty($cate["data"]) && $cate["data"][0]["fk_typdo_ID"] === 4){
+                            ?>
+                    <?php
+                            foreach($cate["data"] as $ligne){ ?>
+                                <?php
+                                $lignes_recep = $oCommande->get_lignes_livraison($ligne["doc_ID"]);
+                                if($lignes_recep["error"] === false){
+                                    ?>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading<?= $cpt ?>">
+                                            <button class="accordion-button" type="button" data-index="<?= $cpt ?>" data-bs-toggle="collapse" data-bs-target="#collapse<?= $cpt ?>" aria-expanded="true" aria-controls="collapse<?= $cpt ?>">
+                                               <i data-index="<?= $cpt ?>" class="seeMore fal fa-plus"></i> Bon de livraison numéro <?= $cpt ?> (<?= $ligne["doc_create_datetime"] ?>)
+                                            </button>
+                                        </h2>
+                                        <div id="collapse<?= $cpt ?>" class="accordion-collapse collapse  accordion-flush" aria-labelledby="heading<?= $cpt ?>">
+                                            <div class="accordion-body">
+                                                <table>
+                                                    <thead>
+                                                    <th>Article</th>
+                                                    <th>Quantité</th>
+                                                    </thead>
+                                                    <tbody>
+                                                    <?php
+                                                    $cptlignes = 0;
+                                                    foreach($lignes_recep["data"] as $ligne_recep){
+                                                        if($ligne_recep){
+                                                            ?>
+                                                            <tr>
+                                                                <td><?= $ligne_recep["art_nom"] ?></td>
+                                                                <td><?= $ligne_recep["Lignr_quantite"] ?></td>
+                                                            </tr>
+                                                            <?php
+                                                        }
+                                                        $cptlignes++;
+                                                    }
+                                                    ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                    $cpt++;
+                                }
+                            }
+                        }
+
+                        ?>
+                        <?php
+                    }
+                ?>
+                </div>
 
 
-                <!-- Modal -->
+
+
+                <!-- Modal bon de récéption-->
 
                 <div class="modal fade" id="command" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
@@ -113,7 +207,7 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
 
         }
     ?>
-</>
+</div>
 
 
 <!-- jQuery Library -->
@@ -125,7 +219,8 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
 <script src="./js/commande.js"></script>
 
 <script src="../script/table.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 
 <script> //initialisation datatable
     let url_string = window.location.href;
