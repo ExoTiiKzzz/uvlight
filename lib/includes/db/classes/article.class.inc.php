@@ -19,7 +19,8 @@ class Article{
     public function db_get_all_by_fournisseur(string $fournisseur) : array{
         global $conn;
         $request = "SELECT art_ID, art_nom FROM ".DB_TABLE_ARTICLE." WHERE fk_tiers_ID = 
-                    (SELECT tie_ID FROM ".DB_TABLE_TIERS." WHERE tie_raison_sociale = :fournisseur) AND art_is_visible = 1";
+                    (SELECT tie_ID FROM ".DB_TABLE_TIERS." WHERE tie_raison_sociale = :fournisseur) 
+                    AND art_is_visible = 1 AND art_ID IN (SELECT fk_art_ID FROM ".DB_TABLE_LIGNES_COMMANDE.")";
         try {
             $sql = $conn->prepare($request);
             $sql->bindValue(":fournisseur", $fournisseur, PDO::PARAM_STR);

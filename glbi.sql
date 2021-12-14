@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 11, 2021 at 05:49 PM
+-- Generation Time: Dec 14, 2021 at 07:32 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.0.13
 
@@ -47,7 +47,7 @@ INSERT INTO `article` (`art_ID`, `art_nom`, `art_commentaire`, `fk_tiers_ID`, `f
 (8, 'oihoiha', 'a', 15, 2, 18, 1),
 (9, 'aaaaaa', 'a', 15, 2, 15, 1),
 (10, 'abcd', 'abcd', 15, 1, 12, 1),
-(11, 'portiere', 'une superbe portiere', 15, 5, 12, 1);
+(11, 'portiere', 'une superbe portiere', 15, 5, 22, 1);
 
 -- --------------------------------------------------------
 
@@ -36097,7 +36097,8 @@ CREATE TABLE `commande` (
 INSERT INTO `commande` (`Com_ID`, `Com_create_datetime`, `fk_etat_ID`, `fk_tiers_ID`) VALUES
 (0, '2021-12-09 15:15:09', 1, 16),
 (75, '2021-12-09 15:24:08', 1, 15),
-(76, '2021-12-09 16:43:39', 1, 15);
+(76, '2021-12-09 16:43:39', 1, 15),
+(77, '2021-12-14 08:45:58', 1, 15);
 
 -- --------------------------------------------------------
 
@@ -36308,7 +36309,10 @@ INSERT INTO `document` (`doc_ID`, `doc_create_datetime`, `doc_commentaire`, `fk_
 (9, '0000-00-00 00:00:00', 'Test', 4, 75),
 (10, '2021-12-09 17:26:13', 'Un autre essai', 4, 75),
 (11, '2021-12-09 17:43:39', 'caca', 3, 76),
-(12, '2021-12-09 17:44:01', 'pipi', 4, 76);
+(12, '2021-12-09 17:44:01', 'pipi', 4, 76),
+(13, '2021-12-14 09:45:58', 'Un commentaire de malade mental', 3, 77),
+(14, '2021-12-14 10:17:59', 'Recu effectué', 4, 77),
+(15, '2021-12-14 10:18:13', 'Un autre reçu', 4, 77);
 
 -- --------------------------------------------------------
 
@@ -36380,7 +36384,23 @@ INSERT INTO `lignes_commande` (`Lign_ID`, `Lign_quantite`, `Lign_is_vente`, `Lig
 (8565, 250, 0, 0, 27, 11, 75),
 (8566, 0, 0, 0, 0, 0, 0),
 (8567, 500, 0, 0, 200, 10, 76),
-(8568, 0, 0, 0, 0, 0, 0);
+(8568, 0, 0, 0, 0, 0, 0),
+(8569, 800, 0, 0, 350, 10, 77),
+(8570, 0, 0, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lignes_facture`
+--
+
+CREATE TABLE `lignes_facture` (
+  `Lignf_ID` int(11) NOT NULL,
+  `Lignf_quantite` int(11) NOT NULL,
+  `fk_tar_ID` int(11) NOT NULL,
+  `fk_art_ID` int(11) NOT NULL,
+  `fk_doc_ID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -36401,7 +36421,9 @@ CREATE TABLE `lignes_reception` (
 
 INSERT INTO `lignes_reception` (`Lignr_ID`, `Lignr_quantite`, `fk_art_ID`, `fk_doc_ID`) VALUES
 (12, 12, 11, 10),
-(13, 200, 10, 12);
+(13, 200, 10, 12),
+(14, 150, 10, 14),
+(15, 200, 10, 15);
 
 -- --------------------------------------------------------
 
@@ -36582,20 +36604,10 @@ CREATE TABLE `type_document` (
 --
 
 INSERT INTO `type_document` (`typdo_ID`, `typdo_lib`, `typdo_is_visible`) VALUES
-(1, 'Devis', 0),
-(2, 'Test', 0),
-(3, 'Truc de ouf', 1),
-(4, 'please', 0),
-(5, 'Dernier essai', 0),
-(6, 'Dernier essaieeeee', 1),
-(7, 'Test', 0),
-(8, 'Test', 1),
-(9, 'Test', 1),
-(10, 'Test', 1),
-(11, 'Eliot le gros conz', 0),
-(12, 'cool', 1),
-(13, 'testaaa', 1),
-(14, 'allezllaaaaaaa', 1);
+(1, 'Devis', 1),
+(2, 'Facture', 1),
+(3, 'Bon de commande', 1),
+(4, 'Bon de livraison', 1);
 
 -- --------------------------------------------------------
 
@@ -36796,6 +36808,15 @@ ALTER TABLE `lignes_commande`
   ADD KEY `commande_ID` (`fk_com_ID`);
 
 --
+-- Indexes for table `lignes_facture`
+--
+ALTER TABLE `lignes_facture`
+  ADD PRIMARY KEY (`Lignf_ID`),
+  ADD KEY `tarif` (`fk_tar_ID`),
+  ADD KEY `article` (`fk_art_ID`),
+  ADD KEY `document` (`fk_doc_ID`);
+
+--
 -- Indexes for table `lignes_reception`
 --
 ALTER TABLE `lignes_reception`
@@ -36896,7 +36917,7 @@ ALTER TABLE `cities`
 -- AUTO_INCREMENT for table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `Com_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `Com_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT for table `communes`
@@ -36914,7 +36935,7 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `document`
 --
 ALTER TABLE `document`
-  MODIFY `doc_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `doc_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `etats_document`
@@ -36926,13 +36947,19 @@ ALTER TABLE `etats_document`
 -- AUTO_INCREMENT for table `lignes_commande`
 --
 ALTER TABLE `lignes_commande`
-  MODIFY `Lign_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8569;
+  MODIFY `Lign_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8571;
+
+--
+-- AUTO_INCREMENT for table `lignes_facture`
+--
+ALTER TABLE `lignes_facture`
+  MODIFY `Lignf_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `lignes_reception`
 --
 ALTER TABLE `lignes_reception`
-  MODIFY `Lignr_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `Lignr_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `produit`
@@ -37031,6 +37058,14 @@ ALTER TABLE `document`
 --
 ALTER TABLE `lignes_commande`
   ADD CONSTRAINT `commande_ID` FOREIGN KEY (`fk_com_ID`) REFERENCES `commande` (`Com_ID`);
+
+--
+-- Constraints for table `lignes_facture`
+--
+ALTER TABLE `lignes_facture`
+  ADD CONSTRAINT `article` FOREIGN KEY (`fk_art_ID`) REFERENCES `article` (`art_ID`),
+  ADD CONSTRAINT `document` FOREIGN KEY (`fk_doc_ID`) REFERENCES `document` (`doc_ID`),
+  ADD CONSTRAINT `tarif` FOREIGN KEY (`fk_tar_ID`) REFERENCES `tarif` (`tar_ID`);
 
 --
 -- Constraints for table `lignes_reception`

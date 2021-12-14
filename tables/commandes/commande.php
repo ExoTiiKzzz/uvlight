@@ -74,6 +74,7 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
                         <span class="font-weight-bold border-bottom border-white">Récapitulatif de la commande : </span>
                     </div>
                     <div class="ml-auto">
+                        <a href="../facture/?id=<?= $_GET['id'] ?>" class="btn btn-success">Facturer</a>
                         <button data-toggle="modal" data-target="#command" class="btn btn-primary">Créer un bon de récéption</button>
                     </div>
                 </div>
@@ -90,7 +91,7 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
                 </div>
                 <div class="label mb-4 row d-flex p-3">
                     <div class="align">
-                        <span class="font-weight-bold border-bottom border-white">Bons de réception : </span>
+                        <span class="font-weight-bold border-bottom border-white">Bons de livraison : </span>
                     </div>
                 </div>
                 <div class="accordion" id="accordionrecep">

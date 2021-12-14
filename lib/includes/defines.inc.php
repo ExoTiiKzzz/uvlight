@@ -28,37 +28,40 @@ define('DB_TABLE_LIGNES_COMMANDE', 'lignes_commande');
 define('DB_TABLE_SOUS_CATEGORIE', 'sous_categorie');
 define('DB_TABLE_LIGNES_RECEPTION', 'lignes_reception');
 define('DB_TABLE_RECEPTION', 'reception');
+define('DB_TABLE_LIGNES_FACTURE', 'lignes_facture');
 
 // err message
 define('BASIC_ERROR', 'Une erreur s\'est produite, signalez la à l\'administrateur \n');
 
 //define paths
 define('DB_CLASS_DIR', 'db/classes/');
+define('INC', '.class.inc.php');
 
 
 // get main classes
-include_once DB_CLASS_DIR.'casier.class.inc.php';
-include_once DB_CLASS_DIR.'categorie.class.inc.php';
-include_once DB_CLASS_DIR.'etat_document.class.inc.php';
-include_once DB_CLASS_DIR.'tarif.class.inc.php';
-include_once DB_CLASS_DIR.'type_reglement.class.inc.php';
-include_once DB_CLASS_DIR.'type_document.class.inc.php';
-include_once DB_CLASS_DIR.'type_societe.class.inc.php';
-include_once DB_CLASS_DIR.'article.class.inc.php';
-include_once DB_CLASS_DIR.'articlequantite.class.inc.php';
-include_once DB_CLASS_DIR.'communes.class.inc.php';
-include_once DB_CLASS_DIR.'compose.class.inc.php';
-include_once DB_CLASS_DIR.'region.class.inc.php';
-include_once DB_CLASS_DIR.'departement.class.inc.php';
-include_once DB_CLASS_DIR.'user.class.inc.php';
-include_once DB_CLASS_DIR.'login.class.inc.php';
-include_once DB_CLASS_DIR.'tiers.class.inc.php';
-include_once DB_CLASS_DIR.'type_tiers.class.inc.php';
-include_once DB_CLASS_DIR.'produit.class.inc.php';
-include_once DB_CLASS_DIR.'generator.class.inc.php';
-include_once DB_CLASS_DIR.'liste.class.inc.php';
-include_once DB_CLASS_DIR.'sous_categorie.class.inc.php';
-include_once DB_CLASS_DIR.'commande.class.inc.php';
+include_once DB_CLASS_DIR.'casier'.INC;
+include_once DB_CLASS_DIR.'categorie'.INC;
+include_once DB_CLASS_DIR.'etat_document'.INC;
+include_once DB_CLASS_DIR.'tarif'.INC;
+include_once DB_CLASS_DIR.'type_reglement'.INC;
+include_once DB_CLASS_DIR.'type_document'.INC;
+include_once DB_CLASS_DIR.'type_societe'.INC;
+include_once DB_CLASS_DIR.'article.class'.INC;
+include_once DB_CLASS_DIR.'articlequantite'.INC;
+include_once DB_CLASS_DIR.'communes'.INC;
+include_once DB_CLASS_DIR.'compose'.INC;
+include_once DB_CLASS_DIR.'region'.INC;
+include_once DB_CLASS_DIR.'departement'.INC;
+include_once DB_CLASS_DIR.'user'.INC;
+include_once DB_CLASS_DIR.'login'.INC;
+include_once DB_CLASS_DIR.'tiers'.INC;
+include_once DB_CLASS_DIR.'type_tiers'.INC;
+include_once DB_CLASS_DIR.'produit'.INC;
+include_once DB_CLASS_DIR.'generator'.INC;
+include_once DB_CLASS_DIR.'liste'.INC;
+include_once DB_CLASS_DIR.'sous_categorie'.INC;
+include_once DB_CLASS_DIR.'commande'.INC;
+include_once DB_CLASS_DIR.'facture'.INC;
 //include_once DB_CLASS_DIR.'../../../../server/bootstrap.php';
 
 // get main objects
@@ -82,6 +85,7 @@ $oTypeDocument = new Type_Document();
 $oListe = new Liste();
 $oSousCategorie = new Sous_categorie();
 $oCommande = new Commande();
+$oFacture = new Facture();
 
 $isProd = false;
 
