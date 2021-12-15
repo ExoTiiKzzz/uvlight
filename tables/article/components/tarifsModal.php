@@ -46,7 +46,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary tarifsCloseBtn" data-dismiss="modal">Fermer</button>
-                <button type="button" class="btn btn-primary saveBtn">Enregistrer</button>
+                <button type="button" class="btn btn-primary saveBtn" data-dismiss="modal">Enregistrer</button>
             </div>
         </div>
     </div>

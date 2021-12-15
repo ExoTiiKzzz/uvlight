@@ -221,6 +221,41 @@ class Commande
 
     }
 
+    public function db_get_all_received_articles(int $com_ID): array{
+        global $conn;
+
+        $docs = $this->db_get_document_by_type(4, $com_ID);
+        if($docs["error"] === true){
+            $response["error"] = true;
+            $response["errortext"] = $docs["errortext"];
+        }else{
+            $request = "SELECT SUM(Lignr_quantite) as total, art_nom, art_ID
+                    FROM ".DB_TABLE_LIGNES_RECEPTION." LR
+                    INNER JOIN ".DB_TABLE_ARTICLE." A ON LR.fk_art_ID = A.art_ID
+                    WHERE fk_doc_ID IN(";
+            foreach ($docs["data"] as $doc){
+                $request.= (int) $doc["doc_ID"].", ";
+            }
+            $request.= "0) GROUP BY art_ID";
+            $sql = $conn->prepare($request);
+            try {
+                $sql->execute();
+                if($sql === false){
+                    $response["error"] = true;
+                    $response["errortext"] = "Une erreure s'est produite";
+                }else{
+                    $response["error"] = false;
+                    $response["content"] = $sql->fetchAll();
+                }
+            }catch (PDOException $e){
+                $response["error"] = true;
+                $response["errortext"] = $e->getMessage();
+            }
+        }
+        return $response;
+
+    }
+
 
     private function db_get_document_by_type(int $type, int $com_ID) : array{
         global $conn;

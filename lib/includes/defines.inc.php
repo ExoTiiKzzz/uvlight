@@ -46,7 +46,7 @@ include_once DB_CLASS_DIR.'tarif'.INC;
 include_once DB_CLASS_DIR.'type_reglement'.INC;
 include_once DB_CLASS_DIR.'type_document'.INC;
 include_once DB_CLASS_DIR.'type_societe'.INC;
-include_once DB_CLASS_DIR.'article.class'.INC;
+include_once DB_CLASS_DIR.'article'.INC;
 include_once DB_CLASS_DIR.'articlequantite'.INC;
 include_once DB_CLASS_DIR.'communes'.INC;
 include_once DB_CLASS_DIR.'compose'.INC;
