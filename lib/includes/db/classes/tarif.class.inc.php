@@ -36,6 +36,27 @@ class Tarif{
         }
     }
 
+    public function db_get_by_tiers(int $tiers_ID) : array {
+        global $conn;
+        $request = "SELECT fk_tar_ID FROM ".DB_TABLE_TIERS." WHERE tie_ID = :tiers";
+        $sql = $conn->prepare($request);
+        $sql->bindValue(":tiers", $tiers_ID, PDO::PARAM_INT);
+        try {
+            $sql->execute();
+            if($sql === false){
+                $response["error"] = true;
+                $response["errortext"] = "Une erreur s'est produite";
+            }else{
+                $response["error"] = false;
+                $response["content"] = $sql->fetch();
+            }
+        }catch (PDOException $e){
+            $response["error"] = true;
+            $response["errortext"] = $e->getMessage();
+        }
+        return  $response;
+    }
+
     public function db_create($libelle=''){
 
         if(!$libelle){
@@ -198,6 +219,26 @@ class Tarif{
                 $response["errortext"] = "Une erreur s'est produite lors de la création des tarifs";
             }else{
                 $response["error"] = false;
+            }
+        }catch (PDOException $e){
+            $response["error"] = true;
+            $response["errortext"] = $e->getMessage();
+        }
+        return  $response;
+    }
+
+    public function db_get_all_tarifs() : array{
+        global $conn;
+        $request = "SELECT CONCAT(art_ID,'-',tar_ID) as arrkey, pay_tarif_vente as prix FROM ".DB_TABLE_PAYE;
+        $sql = $conn->prepare($request);
+        try {
+            $sql->execute();
+            if($sql === false){
+                $response["error"] = true;
+                $response["errortext"] = "Une erreur s'est produite lors de la création des tarifs";
+            }else{
+                $response["error"] = false;
+                $response["content"] = $sql->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE|\PDO::FETCH_ASSOC);
             }
         }catch (PDOException $e){
             $response["error"] = true;

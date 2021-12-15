@@ -340,7 +340,7 @@ class Commande
 
     public function db_get_fournisseur(int $com_ID) : array{
         global $conn;
-        $request = "SELECT tie_raison_sociale FROM ".DB_TABLE_TIERS."
+        $request = "SELECT tie_raison_sociale, tie_ID, fk_tar_ID FROM ".DB_TABLE_TIERS."
                     INNER JOIN ".DB_TABLE_COMMANDE." ON tie_ID = fk_tiers_ID
                     WHERE ".DB_TABLE_COMMANDE.".com_ID = :com_ID";
         try {
