@@ -20,6 +20,7 @@
 <?php
 
         $data = $oCategorie->db_get_all();
+        $scat_data = $oSousCategorie->db_get_all();
 
   ?>
 
@@ -106,8 +107,9 @@
                 Supprimer les éléments selectionnés.
             </button>
         </div>
-        <button type="submit" data-target='#scat_modal' name="scat" class="mt-3 btn btn-primary">Voir les sous-catégories</button>
+        <button type="button" data-target='#scat_modal' data-toggle='modal' name="scat" class="mt-3 btn btn-primary">Voir les sous-catégories</button>
     </div>
+
 
     <div class="modal fade" id="scat_modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -120,13 +122,36 @@
                 </div>
                 <form action="trait.php" method="post" class="update_form" onsubmit="return checkForm(0)">
                     <div class="mx-auto modal-body col-10">
-                        
+                        <table id="table">
+                            <thead>
+                                <th style='text-align :center'>ID</th>
+                                <th style='text-align :center'>Lib</th>
+                                <th style='text-align :center'>Catégorie Référente</th>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                    foreach ($scat_data as $key) {
+                                        $id = $key["scat_ID"]; ?>
+                                        <tr data-value="<?php echo $id ?>" data-rowindex="<?php echo $id ?>">
+                                            <td>
+                                                <center><?php echo $id ?></center>
+                                            </td>
+                                            <td>
+                                                <center><?php echo $key["scat_lib"] ?></center>
+                                            </td>
+                                            <td>
+                                                <center><?php echo $key["cat_nom"] ?></center>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                    }
+                                ?>
+                            </tbody>
+                        </table>
                     </div>
                 
                     <div class="modal-footer">
-                        <form action="../sous_categorie/index.php">
-                            <button type="submit" name="scat" class="mt-3 btn btn-primary">Acceder aux sous-catégories</button>
-                        </form>
+                        <button type="submit" name="scat" class="mt-3 btn btn-primary">Consulter les sous-catégories</button>
                     </div>
                 </form>
             </div>
@@ -185,6 +210,7 @@
     <script src="../script/table.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
+    
     <script> //initialisation datatable
         var table = $('#table');
         $(document).ready(function(){

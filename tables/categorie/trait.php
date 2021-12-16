@@ -69,6 +69,9 @@ if(isset($_POST["create"])){
         $response = "pb";
     }
     echo json_encode($response);
+}elseif(isset($_POST['scat'])){
+    $scat = '../sous_categorie/';
+    header("location: ${scat}");
 }else{
     // header("location: index.php");
     echo "coucou";
