@@ -106,9 +106,31 @@
                 Supprimer les éléments selectionnés.
             </button>
         </div>
-        <form action="../sous_categorie/index.php">
-            <button type="submit" name="scat" class="mt-3 btn btn-primary">Acceder aux sous-catégories</button>
-        </form>
+        <button type="submit" data-target='#scat_modal' name="scat" class="mt-3 btn btn-primary">Voir les sous-catégories</button>
+    </div>
+
+    <div class="modal fade" id="scat_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sous catégories</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="trait.php" method="post" class="update_form" onsubmit="return checkForm(0)">
+                    <div class="mx-auto modal-body col-10">
+                        
+                    </div>
+                
+                    <div class="modal-footer">
+                        <form action="../sous_categorie/index.php">
+                            <button type="submit" name="scat" class="mt-3 btn btn-primary">Acceder aux sous-catégories</button>
+                        </form>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
 

@@ -42,7 +42,7 @@
 
         public function db_create($libelle='', $categorie=''){
             global $conn, $oCategorie;
-            
+ 
             $cat_ID = $oCategorie->db_get_by_lib($categorie)["cat_ID"];
 
             $request = "INSERT INTO ".DB_TABLE_SOUS_CATEGORIE." (scat_lib, fk_cat_ID) VALUES (:scat_lib, :fk_cat_ID)";

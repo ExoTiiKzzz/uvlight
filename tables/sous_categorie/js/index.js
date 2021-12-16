@@ -4,9 +4,11 @@ const createBtn = document.querySelector(".createBtn");
 
 createBtn.addEventListener("click", (e) =>{
 
-    var lib = document.querySelector(".updateLib").value;
-    var categorie = document.querySelector(".updateCat").value;
+    var lib = document.querySelector(".createLib").value;
+    var categorie = document.querySelector(".categorie").value;
     var id = document.querySelector(".updateId").value;
+
+    console.log(categorie);
 
     var formData = new FormData();
     formData.append("create", "1");

@@ -26,6 +26,16 @@ body{
     padding-left: 200px;
 }
 
+.header-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.Nclient{
+    font-size: 2em;
+    padding-left: 200px;
+}
+
 .logo{
     margin-right: 200px;
     height: 350px;
