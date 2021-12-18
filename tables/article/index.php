@@ -9,6 +9,8 @@
     echo navbar($path);
     echo sidenav($path);
 ?>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <style>
     <?php 
         require '../static/css/table.css';
@@ -16,6 +18,12 @@
         require '../../assets/css/navbar.css';
         require '../../assets/css/sidenav.css';
     ?>
+    .produitArticleContainer{
+        display: none;
+    }
+    .produitArticleContainer.active{
+        display: block;
+    }
 </style>
 
 <body>
@@ -32,6 +40,7 @@
         echo $oListe->build_liste("liste_categories", $oCategorie->db_get_all(), "cat_nom");
         echo $oListe->build_liste("liste_casiers", $oCasier->db_get_all(), "cas_lib");
         echo $oListe->build_liste("liste_fournisseurs", $oTiers->db_get_all_fournisseurs(), "tie_raison_sociale");
+        echo $oListe->build_liste("all_articles", $oArticle->db_get_all(), "art_nom");
         require './components/main.php';
 ?>
 

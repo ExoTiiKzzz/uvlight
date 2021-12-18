@@ -52,7 +52,8 @@ createBtn.addEventListener("click", (e) =>{
     var cas = document.querySelector(".createCas").value;
     var cat = document.querySelector(".createCat").value;
 
-    console.log(fournisseur);
+
+
 
     var formData = new FormData();
     formData.append("create", "1");
@@ -61,12 +62,19 @@ createBtn.addEventListener("click", (e) =>{
     formData.append("comment", comment);
     formData.append("cas", cas);
     formData.append("cat", cat);
-
+    if(document.querySelector(".createIsProduit").checked === true){
+        let articlesEls = document.querySelectorAll(".createArtLib");
+        let articles = [];
+        articlesEls.forEach(el => {
+            formData.append("articles[]", el.value);
+            formData.append("quantitys[]", document.querySelector(".createArtQte[data-index='"+el.dataset.index+"']").value);
+        });
+    }
     fetch(url,
         {
             method: "POST",
             body: formData
-        }    
+        }
     )
     .then(response => response.json())
     .then(result => {
@@ -278,3 +286,37 @@ function updateTarif(event){
             }
         })
 }
+
+
+const isProduitBtn = document.querySelector(".createIsProduit");
+isProduitBtn.addEventListener("change",() => {
+    document.querySelector(".produitArticleContainer").classList.toggle("active");
+})
+
+function deleteArticle(event){
+    let row = document.querySelector(".articlesContainer .row[data-index='"+event.target.dataset.index+"']");
+    document.querySelector(".articlesContainer").removeChild(row);
+}
+
+document.querySelector(".deleteArticleRow").addEventListener("click", deleteArticle);
+
+const addArticleBtn = document.querySelector(".addArticleBtn");
+var index = 1;
+addArticleBtn.addEventListener("click", () =>{
+    let content = "<div class=\"form-group col-7\">\n" +
+                        "<input class=\"form-control createArtLib\" list=\"all_articles\" placeholder=\"Article\" data-index=\""+index+"\" required autocomplete=\"off\" required>\n" +
+                    "</div>\n" +
+                    "<div class=\"form-group col-3\">\n" +
+                        "<input placeholder=\"Quantité\" class=\"form-control createArtQte\" data-index=\""+index+"\" required>\n" +
+                    "</div>\n" +
+                    "<div class=\"form-group col-2\">\n" +
+                        "<button class=\"btn btn-danger form-control deleteArticleRow\" data-index=\""+index+"\">&times;</button>\n" +
+                    "</div>\n";
+    let row = document.createElement("div");
+    row.classList.add("row")
+    row.dataset.index = index;
+    row.innerHTML = content;
+    document.querySelector(".articlesContainer").appendChild(row);
+    document.querySelector(".deleteArticleRow[data-index='"+index+"']").addEventListener("click", deleteArticle);
+    index++;
+})

@@ -34,6 +34,30 @@
                         <label for="casier">Casier : </label>
                         <input id="casier" list='liste_casiers' class="form-control createCas" placeholder="Commencer à écrire puis sélectionner ce qui vous convient">
                     </div>
+
+                    <div class="form-group">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input createIsProduit" type="checkbox" id="isproduit">
+                            <label class="form-check-label" for="isproduit"><h5>Produit composé</h5></label>
+                        </div>
+                    </div>
+
+                    <div class="produitArticleContainer">
+                        <div class="articlesContainer">
+                            <div class="row" data-index="0">
+                                <div class="form-group col-7">
+                                    <input class="form-control createArtLib" list="all_articles" placeholder="Article" data-index="0"  required autocomplete="off" required>
+                                </div>
+                                <div class="form-group col-3">
+                                    <input placeholder="Quantité" class="form-control createArtQte" data-index="0" required>
+                                </div>
+                                <div class="form-group col-2">
+                                    <button class="btn btn-danger form-control deleteArticleRow" data-index="0">&times;</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-success addArticleBtn">Ajouter un article</button>
+                    </div>
                     
                     
                 </div>

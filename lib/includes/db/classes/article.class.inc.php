@@ -122,7 +122,7 @@ class Article{
 
 
 
-	public function db_create($article_nom='', $article_commentaire='',$fournisseur='', $categorie='', $casier=''){
+	public function db_create($article_nom='', $article_commentaire='',$fournisseur='', $categorie='', $casier='', $articles = [], $quantitys = []){
 		global $conn, $oCasier, $oCategorie, $oTiers, $oTarif;
 
         $fk_tiers_id = (int) $oTiers->db_get_by_lib($fournisseur)["tie_ID"];
@@ -134,12 +134,24 @@ class Article{
 			return $response;
 		}
 
-		$request = "INSERT INTO ".DB_TABLE_ARTICLE."(art_nom, art_commentaire, fk_tiers_ID, fk_cat_ID, fk_cas_ID) VALUES(:article_nom, :article_commentaire,:fk_tiers_ID, :fk_categorie_id, :fk_casier_id);";
+		$request = "INSERT INTO ".DB_TABLE_ARTICLE."(art_nom, art_commentaire, fk_tiers_ID, fk_cat_ID, fk_cas_ID, art_is_composed) VALUES(:article_nom, :article_commentaire,:fk_tiers_ID, :fk_categorie_id, :fk_casier_id, :iscomposed);";
 		$sql = $conn->prepare($request);
 		if(!$article_commentaire) $article_commentaire = "0";
+        $iscomposed = 0;
+        if(!empty($articles)) $iscomposed = 1;
 		try{
-			$sql->execute([":article_nom" => $article_nom, ":article_commentaire" => $article_commentaire,":fk_tiers_ID" => $fk_tiers_id, ":fk_categorie_id" => $fk_categorie_id, ":fk_casier_id" => $fk_casier_id]);
+			$sql->execute([":article_nom" => $article_nom, ":article_commentaire" => $article_commentaire,":fk_tiers_ID" => $fk_tiers_id, ":fk_categorie_id" => $fk_categorie_id, ":fk_casier_id" => $fk_casier_id, ":iscomposed" => $iscomposed]);
             $id = $conn->lastInsertId();
+            if($iscomposed === 1){
+                $request = "INSERT INTO ".DB_TABLE_COMPOSE." VALUES (:pro_ID, (SELECT art_ID FROM ".DB_TABLE_ARTICLE." WHERE art_nom = :article LIMIT 1), :quantity)";
+                for($i=0; $i<count($articles); $i++){
+                    $sql = $conn->prepare($request);
+                    $sql->bindValue(":pro_ID", $id, PDO::PARAM_INT);
+                    $sql->bindValue(":article", $articles[$i]);
+                    $sql->bindValue(":quantity", $quantitys[$i], PDO::PARAM_INT);
+                    $sql->execute();
+                }
+            }
             $conn->prepare("INSERT INTO ".DB_TABLE_LIGNES_COMMANDE."(Lign_quantite, Lign_is_vente, fk_art_ID, fk_com_ID) VALUES(0, 1, $id, 0), (0, 0, $id, 0)")->execute();
             $creategrid = $oTarif->db_create_grid($id);
             if($creategrid["error"] === true){

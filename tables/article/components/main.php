@@ -4,7 +4,7 @@
     </datalist>
 
     <button type='button' class='my-3 btn btn-success' data-toggle='modal' data-target='#createmodal'> Créer un article </button>
-    <button type='button' class='mx-3 btn btn-success' data-toggle='modal' data-target='#command'> Créer une commande </button>
+    <button type='button' class='mx-3 btn btn-success' data-toggle='modal' data-target='#command'> Commande fournisseur </button>
 
     <div class="table-container" style="margin-right: 0px;">
         <table id="table">

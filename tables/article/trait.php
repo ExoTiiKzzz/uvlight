@@ -3,7 +3,8 @@
 require '../../lib/includes/defines.inc.php';
 
 if(isset($_POST["create"])){
-    echo json_encode($oArticle->db_create($_POST["lib"], $_POST["comment"], $_POST["fournisseur"], $_POST["cat"], $_POST["cas"]));
+    if(isset($_POST["articles"]))  echo json_encode($oArticle->db_create($_POST["lib"], $_POST["comment"], $_POST["fournisseur"], $_POST["cat"], $_POST["cas"], $_POST["articles"], $_POST["quantitys"]));
+    else echo json_encode($oArticle->db_create($_POST["lib"], $_POST["comment"], $_POST["fournisseur"], $_POST["cat"], $_POST["cas"]));
 }elseif(isset($_POST["update"])){
     $res = $oArticle->db_update($_POST["id"], $_POST["lib"], $_POST["comment"], $_POST["cat"], $_POST["cas"]);
     if($res != false){
