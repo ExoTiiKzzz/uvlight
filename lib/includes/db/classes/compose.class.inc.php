@@ -46,7 +46,10 @@ class Compose{
 
 		global $conn;
 
-		$request = "SELECT * FROM ".DB_TABLE_COMPOSE." WHERE pro_ID = :produit_id";
+		$request = "SELECT art_nom as article, compo_quantite as quantite 
+                    FROM ".DB_TABLE_COMPOSE." C
+                    INNER JOIN ".DB_TABLE_ARTICLE." A ON C.art_ID = A.art_ID
+                    WHERE pro_ID = :produit_id";
 		$sql = $conn->prepare($request);
 		$sql->bindValue(':produit_id', $produit_id, PDO::PARAM_INT);
 

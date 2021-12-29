@@ -9,7 +9,7 @@
     echo navbar($path);
     echo sidenav($path);
 ?>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="../../assets/css/bootstrap5.min.css" rel="stylesheet">
 
 <style>
     <?php 
@@ -18,12 +18,14 @@
         require '../../assets/css/navbar.css';
         require '../../assets/css/sidenav.css';
     ?>
-    .produitArticleContainer{
+    .produitArticleContainer, .seeTarifs{
         display: none;
     }
-    .produitArticleContainer.active{
+    .produitArticleContainer.active, .seeTarifs.active{
         display: block;
     }
+
+
 </style>
 
 <body>

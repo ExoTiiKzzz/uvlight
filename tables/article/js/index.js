@@ -1,4 +1,5 @@
 var table = $('#table');
+var fourniListe;
 $(document).ready(function(){
     table.dataTable({
         processing: true,
@@ -33,16 +34,20 @@ function emptyInputs(){
 
 }
 
-function checkForm(formid){
-    if(0 > document.querySelector(".name_input[data-index='"+formid+"']").value.length > 50){
-        document.querySelector(".alert-danger[data-index='"+formid+"']").style.display = "block";
-        return false;
-    }else{
-        return true;
-    }
-}
 
 const createBtn = document.querySelector(".createBtn");
+const openCreateBtn = document.querySelector(".openCreateBtn");
+openCreateBtn.addEventListener("click", openCreateModalListener);
+function openCreateModalListener(){
+    document.querySelector(".createBtn").innerText = "Créer";
+    document.querySelector(".createBtn").dataset.action = "create";
+    document.querySelector(".createIsProduit").disabled = false;
+    document.querySelector(".createIsProduit").checked = false;
+    document.querySelector(".produitArticleContainer").classList.remove("active");
+    document.querySelector(".seeTarifs").style.display = "none";
+    document.querySelector(".articlesContainer").innerHTML = "";
+    addArticleListener();
+}
 createBtn.addEventListener("click", (e) =>{
     e.preventDefault();
 
@@ -56,7 +61,10 @@ createBtn.addEventListener("click", (e) =>{
 
 
     var formData = new FormData();
-    formData.append("create", "1");
+    formData.append(document.querySelector(".createBtn").dataset.action, "1");
+    if(document.querySelector(".createBtn").dataset.action == "update"){
+        formData.append("id", document.querySelector(".updateId").value);
+    }
     formData.append("fournisseur", fournisseur);
     formData.append("lib", lib);
     formData.append("comment", comment);
@@ -106,6 +114,8 @@ function openUpdateModalListener(e){
     formData.append("getData", "1");
     formData.append("id", id);
 
+    document.querySelector(".createBtn").innerText = "Enregistrer";
+
     fetch(url,
         {
             method: "POST",
@@ -117,17 +127,51 @@ function openUpdateModalListener(e){
         if(result.error === true){
             console.log(result.errortext);
         }else{
-            var lib = result.content.lib;
-            var comment = result.content.comment;
-            var cas = result.content.cas;
-            var cat = result.content.cat;
+            let lib = result.content.lib;
+            let comment = result.content.comment;
+            let cas = result.content.cas;
+            let cat = result.content.cat;
+            let fourni = result.content.fourni;
+            let isComposed = result.content.isComposed;
 
+            if(isComposed === 1){
+
+                document.querySelector(".createIsProduit").checked = true;
+                document.querySelector(".createIsProduit").disabled = true;
+                document.querySelector(".produitArticleContainer").classList.add("active");
+                let articles = result.content.articles;
+                let index = 0;
+                document.querySelector(".articlesContainer").innerHTML = "";
+                articles.forEach(el => {
+                    let content = "<div class=\"form-group col-7\">\n" +
+                        "<input class=\"form-control createArtLib\" list=\"all_articles\" value='"+articles[index]["article"]+"' placeholder=\"Article\" data-index=\""+index+"\" autocomplete=\"off\">\n" +
+                        "</div>\n" +
+                        "<div class=\"form-group col-3\">\n" +
+                        "<input placeholder=\"Quantité\" class=\"form-control createArtQte\" value='"+articles[index]["quantite"]+"' data-index=\""+index+"\">\n" +
+                        "</div>\n" +
+                        "<div class=\"form-group col-2\">\n" +
+                        "<button class=\"btn btn-danger form-control deleteArticleRow\" data-index=\""+index+"\">&times;</button>\n" +
+                        "</div>\n";
+                    let row = document.createElement("div");
+                    row.classList.add("row")
+                    row.dataset.index = index;
+                    row.innerHTML = content;
+                    document.querySelector(".articlesContainer").appendChild(row);
+                    document.querySelector(".deleteArticleRow[data-index='"+index+"']").addEventListener("click", deleteArticle);
+                    index++;
+                })
+            }
+            document.querySelector(".modalTitle").innerText = "Modifier l'article " + lib;
             document.querySelector(".updateId").value = id;
-            document.querySelector(".updateLib").value = lib;
-            document.querySelector(".updateComment").value = comment;
-            document.querySelector(".updateCas").value = cas;
-            document.querySelector(".updateCat").value = cat;
+            document.querySelector(".createFourni").value = fourni;
+            document.querySelector(".createFourni").disabled = true;
+            document.querySelector(".createLib").value = lib;
+            document.querySelector(".createComment").value = comment;
+            document.querySelector(".createCas").value = cas;
+            document.querySelector(".createCat").value = cat;
             document.querySelector(".seeTarifs").dataset.index = id;
+            document.querySelector(".seeTarifs").classList.add("active");
+            document.querySelector(".createBtn").dataset.action = "update";
 
             result.content.tarifs.forEach(el => {
                 document.querySelector(".updateTarifInput[data-index='"+el.tar_ID+"']").value = el.prix;
@@ -145,6 +189,9 @@ commandBtn.addEventListener("click", (e) => {
     let fourni = document.querySelector(".commandFourni").value;
 
     articleEls = document.querySelectorAll(".commandArticle");
+
+    let bool = true;
+
 
     articleEls.forEach(article => {
         let index = article.dataset.index;
@@ -200,13 +247,13 @@ function getMaxCommandArticleIndex(){
 function commandAddArticle(index){
     let textToAdd = '<div class="form-group col-5">' +
                         '<label for="article">Nom de l\'article : </label>' +
-                        '<input placeholder="Nom de l\'article" class="form-control name_input commandArticle"' +
-                                'style="margin: 0 auto" type="text" list="liste_articles" data-index="'+index+'" required>' +
+                        '<input placeholder="Nom de l\'article" class="form-control commandArticle"' +
+                                'style="margin: 0 auto" type="text" list="liste_articles" data-index="'+index+'">' +
                     '</div>' +
                     '<div class="form-group col-4">' +
                         '<label for="article">Quantité souhaitée : </label>' +
-                        '<input placeholder="Quantité" class="form-control name_input commandQuantite"' +
-                                'style="margin: 0 auto" type="number" data-index="'+index+'" required>' +
+                        '<input placeholder="Quantité" class="form-control commandQuantite"' +
+                                'style="margin: 0 auto" type="number" data-index="'+index+'">' +
                     '</div>'+
                     '<div class="form-group col-3" >'+
                             '<label> Retirer </label>'+
@@ -254,8 +301,12 @@ function loadFourniList(event){
                 console.log(data.errortext);
             }else{
                 document.querySelector(".commandBtn").removeAttribute("disabled");
-
-                document.getElementById("liste_articles").innerHTML = data.content;
+                let list = "";
+                fourniListe = data.content;
+                fourniListe.forEach(el => {
+                    list += "<option value='"+el.art_nom+"'></option>";
+                });
+                document.getElementById("liste_articles").innerHTML = list;
             }
         })
 }
@@ -298,20 +349,20 @@ function deleteArticle(event){
     document.querySelector(".articlesContainer").removeChild(row);
 }
 
-document.querySelector(".deleteArticleRow").addEventListener("click", deleteArticle);
-
 const addArticleBtn = document.querySelector(".addArticleBtn");
 var index = 1;
-addArticleBtn.addEventListener("click", () =>{
+addArticleBtn.addEventListener("click", addArticleListener);
+
+function addArticleListener(){
     let content = "<div class=\"form-group col-7\">\n" +
-                        "<input class=\"form-control createArtLib\" list=\"all_articles\" placeholder=\"Article\" data-index=\""+index+"\" required autocomplete=\"off\" required>\n" +
-                    "</div>\n" +
-                    "<div class=\"form-group col-3\">\n" +
-                        "<input placeholder=\"Quantité\" class=\"form-control createArtQte\" data-index=\""+index+"\" required>\n" +
-                    "</div>\n" +
-                    "<div class=\"form-group col-2\">\n" +
-                        "<button class=\"btn btn-danger form-control deleteArticleRow\" data-index=\""+index+"\">&times;</button>\n" +
-                    "</div>\n";
+        "<input class=\"form-control createArtLib\" list=\"all_articles\" placeholder=\"Article\" data-index=\""+index+"\" autocomplete=\"off\">\n" +
+        "</div>\n" +
+        "<div class=\"form-group col-3\">\n" +
+        "<input placeholder=\"Quantité\" class=\"form-control createArtQte\" data-index=\""+index+"\">\n" +
+        "</div>\n" +
+        "<div class=\"form-group col-2\">\n" +
+        "<button class=\"btn btn-danger form-control deleteArticleRow\" data-index=\""+index+"\">&times;</button>\n" +
+        "</div>\n";
     let row = document.createElement("div");
     row.classList.add("row")
     row.dataset.index = index;
@@ -319,4 +370,4 @@ addArticleBtn.addEventListener("click", () =>{
     document.querySelector(".articlesContainer").appendChild(row);
     document.querySelector(".deleteArticleRow[data-index='"+index+"']").addEventListener("click", deleteArticle);
     index++;
-})
+}

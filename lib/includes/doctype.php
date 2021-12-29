@@ -7,13 +7,13 @@ function doctype($title, $path){
         <meta name="viewport" content="width=device-width">
         
         <!-- CSS only -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"/>
-        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
+        <link rel="stylesheet" href="'.$path.'uvlight/assets/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="'.$path.'uvlight/assets/fontawesome/css/all.css"/>
         <!-- JS, Popper.js, and jQuery -->
         <!-- jQuery Library -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="'.$path.'uvlight/assets/js/jquery.js"></script>
+        <script src="'.$path.'uvlight/assets/js/popper.js"></script>
+        <script src="'.$path.'uvlight/assets/js/sweetalert.js"></script>
         <link rel="stylesheet" href="'.$path.'uvlight/assets/css/main.css">
         <link rel="stylesheet" href="'.$path.'uvlight/assets/css/navbar.css">
         <link rel="stylesheet" href="'.$path.'uvlight/assets/css/sidenav.css">

@@ -6,15 +6,8 @@ if(isset($_POST["create"])){
     if(isset($_POST["articles"]))  echo json_encode($oArticle->db_create($_POST["lib"], $_POST["comment"], $_POST["fournisseur"], $_POST["cat"], $_POST["cas"], $_POST["articles"], $_POST["quantitys"]));
     else echo json_encode($oArticle->db_create($_POST["lib"], $_POST["comment"], $_POST["fournisseur"], $_POST["cat"], $_POST["cas"]));
 }elseif(isset($_POST["update"])){
-    $res = $oArticle->db_update($_POST["id"], $_POST["lib"], $_POST["comment"], $_POST["cat"], $_POST["cas"]);
-    if($res != false){
-        $response["error"] = false;
-        $response["existingid"] = $oArticle->db_get_one();
-    }else{
-        $response["error"] = true;
-        $response["errortext"] = $res;
-    }
-    echo json_encode($response);
+    if(isset($_POST["articles"]))  echo json_encode($oArticle->db_update($_POST["id"],$_POST["lib"], $_POST["comment"], $_POST["fournisseur"], $_POST["cat"], $_POST["cas"], $_POST["articles"], $_POST["quantitys"]));
+    else echo json_encode($oArticle->db_update($_POST["id"],$_POST["lib"], $_POST["comment"], $_POST["fournisseur"], $_POST["cat"], $_POST["cas"]));
 }elseif(isset($_POST["getData"])){
     $res = $oArticle->db_get_by_id($_POST["id"]);
     if($res != false){
@@ -24,6 +17,9 @@ if(isset($_POST["create"])){
         $response["content"]["cas"] = $res["content"]["cas_lib"];
         $response["content"]["cat"] = $res["content"]["cat_nom"];
         $response["content"]["tarifs"] = $res["content"]["tarifs"];
+        $response["content"]["fourni"] = $res["content"]["tie_raison_sociale"];
+        $response["content"]["isComposed"] = $res["content"]["art_is_composed"];
+        $response["content"]["articles"] = $res["content"]["articles"];
     }else{
         $response["error"] = true;
         $response["errortext"] = $res;

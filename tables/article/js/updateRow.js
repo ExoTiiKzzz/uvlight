@@ -35,4 +35,4 @@ function updateRow(){
     
 }
 
-updateBtn.addEventListener("click", updateRow);
+// updateBtn.addEventListener("click", updateRow);

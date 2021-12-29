@@ -28,10 +28,7 @@ class Article{
                 $result = $sql->fetchAll();
                 if(!empty($result)){
                     $response["error"] = false;
-                    $response["content"] = "";
-                    foreach($result as $ligne){
-                        $response["content"].= "<option value='".$ligne["art_nom"]."'></option>";
-                    }
+                    $response["content"] = $result;
                 }else{
                     $response["error"] = true;
                     $response["errortext"] = "Aucun article disponible";
@@ -63,11 +60,12 @@ class Article{
 			return false;
 		}
 
-		global $conn, $oTarif;
+		global $conn, $oTarif, $oCompose;
 
 		$request = "SELECT * FROM ".DB_TABLE_ARTICLE." 
 					INNER JOIN ".DB_TABLE_CASIER." ON ".DB_TABLE_ARTICLE.".fk_cas_ID = ".DB_TABLE_CASIER.".cas_ID
 					INNER JOIN ".DB_TABLE_CATEGORIE." ON ".DB_TABLE_ARTICLE.".fk_cat_ID = ".DB_TABLE_CATEGORIE.".cat_ID
+					INNER JOIN ".DB_TABLE_TIERS." ON ".DB_TABLE_ARTICLE.".fk_tiers_ID = ".DB_TABLE_TIERS.".tie_ID
 					WHERE art_ID = :id";
 		$sql = $conn->prepare($request);
 		$sql->bindValue(':id', $article_id, PDO::PARAM_INT);
@@ -78,6 +76,9 @@ class Article{
             $tarifs = $oTarif->db_get_grid($article_id);
             if($tarifs["error"] === false){
                 $result["content"]["tarifs"] = $tarifs["content"];
+            }
+            if($result["content"]["art_is_composed"] === 1){
+                $result["content"]["articles"] = $oCompose->db_get_by_produit_id($article_id);
             }
             return $result;
 		}catch(PDOException $e){
@@ -168,30 +169,67 @@ class Article{
 		}
 	}
 
-	public function db_update($article_id=0, $article_nom='', $article_commentaire='', $categorie=0, $casier=0){
-		$article_id = (int) $article_id;
-		global $conn, $oCasier, $oCategorie;
-		$fk_categorie_id = (int) $oCategorie->db_get_by_lib($categorie)["cat_ID"];
-		$fk_casier_id = (int) $oCasier->db_get_by_lib($casier)["cas_ID"];
+    public function db_update($id,$article_nom='', $article_commentaire='',$fournisseur='', $categorie='', $casier='', $articles = [], $quantitys = []){
+        global $conn, $oCasier, $oCategorie, $oTiers, $oTarif;
 
-		if(!$article_id || !$fk_categorie_id || !$fk_casier_id){
-			return false;
-		}
+        $fk_tiers_id = (int) $oTiers->db_get_by_lib($fournisseur)["tie_ID"];
+        $fk_categorie_id = (int) $oCategorie->db_get_by_lib($categorie)["cat_ID"];
+        $fk_casier_id = (int) $oCasier->db_get_by_lib($casier)["cas_ID"];
 
-		$request = "UPDATE ".DB_TABLE_ARTICLE." SET art_nom= :art_nom, art_commentaire = :art_commentaire, fk_cat_ID = :fk_cat_ID, fk_cas_ID = :fk_cas_ID WHERE art_ID = :article_ID";
-		$sql = $conn->prepare($request);
-		try{
-			$sql->execute([
-                ":art_nom" => $article_nom,
-                ":art_commentaire" => $article_commentaire,
-                ":fk_cat_ID" => $fk_categorie_id,
-                ":fk_cas_ID" => $fk_casier_id,
-                ":article_ID" => $article_id]);
-			return true;
-		}catch(PDOException $e){
-			return $this->errmessage.$e->getMessage();
-		}
-	}
+        $request = "UPDATE ".DB_TABLE_ARTICLE." SET art_nom = :article_nom, 
+                                                art_commentaire = :article_commentaire, 
+                                                fk_tiers_ID = :fk_tiers_ID, 
+                                                fk_cat_ID = :fk_categorie_id, 
+                                                fk_cas_ID = :fk_casier_id, 
+                                                art_is_composed = :iscomposed
+                                                WHERE art_ID = :art_ID;";
+        $sql = $conn->prepare($request);
+        if(!$article_commentaire) $article_commentaire = "0";
+        $iscomposed = 0;
+        if(!empty($articles)) $iscomposed = 1;
+        try{
+            $bool = false;
+            $sql->execute([":article_nom" => $article_nom,
+                            ":article_commentaire" => $article_commentaire,
+                            ":fk_tiers_ID" => $fk_tiers_id,
+                            ":fk_categorie_id" => $fk_categorie_id,
+                            ":fk_casier_id" => $fk_casier_id,
+                            ":iscomposed" => $iscomposed,
+                            ":art_ID" => $id]);
+            if($sql === false){
+                $bool = true;
+                $return["errortext"] = "Problème lors de la modification d'article";
+            }
+            if($iscomposed === 1){
+                $request = "DELETE FROM ".DB_TABLE_COMPOSE." WHERE pro_ID = :pro_ID";
+                $sql = $conn->prepare($request);
+                $sql->bindValue(":pro_ID", $id, PDO::PARAM_INT);
+                $sql->execute();
+                if($sql === false){
+                    $bool = true;
+                    $return["errortext"] = "Problème lors de la suppression des éléments de la composition";
+                }
+                $request = "INSERT INTO ".DB_TABLE_COMPOSE." VALUES (:pro_ID, (SELECT art_ID FROM ".DB_TABLE_ARTICLE." WHERE art_nom = :article LIMIT 1), :quantity)";
+                for($i=0; $i<count($articles); $i++){
+                    $sql = $conn->prepare($request);
+                    $sql->bindValue(":pro_ID", $id, PDO::PARAM_INT);
+                    $sql->bindValue(":article", $articles[$i]);
+                    $sql->bindValue(":quantity", $quantitys[$i], PDO::PARAM_INT);
+                    $sql->execute();
+                    if($sql === false){
+                        $bool = true;
+                        $return["errortext"] = "Problème lors de l'insertion dans la table compose";
+                    }
+                }
+            }
+            $return["error"] = $bool;
+            return $return;
+        }catch(PDOException $e){
+            $return["error"] = true;
+            $return["errortext"] = $e->getMessage();
+            return $return;
+        }
+    }
 
 	public function db_soft_delete_one($article_id=0){
 		$article_id = (int) $article_id;
