@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 14, 2021 at 07:32 PM
+-- Generation Time: Dec 30, 2021 at 10:08 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.0.13
 
@@ -34,20 +34,24 @@ CREATE TABLE `article` (
   `fk_tiers_ID` int(11) NOT NULL,
   `fk_cat_ID` int(11) NOT NULL,
   `fk_cas_ID` int(11) NOT NULL,
-  `art_is_visible` int(1) NOT NULL DEFAULT 1
+  `art_is_visible` int(1) NOT NULL DEFAULT 1,
+  `art_is_composed` int(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `article`
 --
 
-INSERT INTO `article` (`art_ID`, `art_nom`, `art_commentaire`, `fk_tiers_ID`, `fk_cat_ID`, `fk_cas_ID`, `art_is_visible`) VALUES
-(0, 'Vide', 'vide', 16, 1, 22, 0),
-(7, 'test', 'test', 15, 2, 8, 1),
-(8, 'oihoiha', 'a', 15, 2, 18, 1),
-(9, 'aaaaaa', 'a', 15, 2, 15, 1),
-(10, 'abcd', 'abcd', 15, 1, 12, 1),
-(11, 'portiere', 'une superbe portiere', 15, 5, 22, 1);
+INSERT INTO `article` (`art_ID`, `art_nom`, `art_commentaire`, `fk_tiers_ID`, `fk_cat_ID`, `fk_cas_ID`, `art_is_visible`, `art_is_composed`) VALUES
+(13, 'Portiere', 'Commentaires', 15, 5, 9, 0, 0),
+(14, 'Moteur', 'Commentaire', 15, 2, 18, 1, 0),
+(15, 'Coffre', 'Commentaire', 15, 3, 11, 1, 0),
+(16, 'Vitre', 'Commentaire', 15, 6, 5, 1, 0),
+(17, 'Portiere 2', 'Commentaire', 14, 6, 5, 1, 0),
+(18, 'Portiere 4', 'Commentaire', 15, 6, 12, 1, 0),
+(19, 'Voiture', 'Voiture de fou', 15, 2, 16, 1, 1),
+(20, 'Voiture v96', 'Voiture qui coure', 15, 6, 12, 1, 1),
+(21, 'Article de malade mental', 'Commentiare de fou', 14, 6, 9, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -36086,6 +36090,7 @@ INSERT INTO `cities` (`c_id`, `department_code`, `insee_code`, `zip_code`, `c_na
 CREATE TABLE `commande` (
   `Com_ID` int(11) NOT NULL,
   `Com_create_datetime` timestamp NOT NULL DEFAULT current_timestamp(),
+  `com_is_client` int(1) NOT NULL DEFAULT 0,
   `fk_etat_ID` int(11) NOT NULL DEFAULT 1,
   `fk_tiers_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -36094,11 +36099,12 @@ CREATE TABLE `commande` (
 -- Dumping data for table `commande`
 --
 
-INSERT INTO `commande` (`Com_ID`, `Com_create_datetime`, `fk_etat_ID`, `fk_tiers_ID`) VALUES
-(0, '2021-12-09 15:15:09', 1, 16),
-(75, '2021-12-09 15:24:08', 1, 15),
-(76, '2021-12-09 16:43:39', 1, 15),
-(77, '2021-12-14 08:45:58', 1, 15);
+INSERT INTO `commande` (`Com_ID`, `Com_create_datetime`, `com_is_client`, `fk_etat_ID`, `fk_tiers_ID`) VALUES
+(0, '2021-12-16 07:12:48', 0, 1, 15),
+(79, '2021-12-16 07:14:52', 0, 1, 15),
+(80, '2021-12-16 12:30:33', 0, 1, 15),
+(81, '2021-12-16 12:34:53', 0, 1, 15),
+(82, '2021-12-16 12:37:16', 0, 1, 14);
 
 -- --------------------------------------------------------
 
@@ -36140,7 +36146,14 @@ INSERT INTO `compose` (`pro_ID`, `art_ID`, `compo_quantite`) VALUES
 (11, 0, 18),
 (12, 0, 75),
 (13, 0, 75),
-(14, 0, 14);
+(14, 0, 14),
+(19, 14, 1),
+(19, 15, 1),
+(19, 16, 4),
+(20, 14, 18),
+(20, 16, 18),
+(21, 14, 1),
+(21, 17, 48);
 
 -- --------------------------------------------------------
 
@@ -36305,14 +36318,14 @@ CREATE TABLE `document` (
 --
 
 INSERT INTO `document` (`doc_ID`, `doc_create_datetime`, `doc_commentaire`, `fk_typdo_ID`, `fk_com_ID`) VALUES
-(8, '0000-00-00 00:00:00', 'aca', 3, 75),
-(9, '0000-00-00 00:00:00', 'Test', 4, 75),
-(10, '2021-12-09 17:26:13', 'Un autre essai', 4, 75),
-(11, '2021-12-09 17:43:39', 'caca', 3, 76),
-(12, '2021-12-09 17:44:01', 'pipi', 4, 76),
-(13, '2021-12-14 09:45:58', 'Un commentaire de malade mental', 3, 77),
-(14, '2021-12-14 10:17:59', 'Recu effectué', 4, 77),
-(15, '2021-12-14 10:18:13', 'Un autre reçu', 4, 77);
+(16, '2021-12-16 08:14:52', 'Commentaire tah les fous', 3, 79),
+(17, '2021-12-16 08:17:07', '', 4, 79),
+(18, '2021-12-16 13:30:33', 'Un super commentaire', 3, 80),
+(19, '2021-12-16 13:30:58', '', 4, 80),
+(20, '2021-12-16 13:34:53', '', 3, 81),
+(21, '2021-12-16 13:37:16', '', 3, 82),
+(22, '2021-12-27 18:54:57', 'Commentaire tah les fous', 4, 82),
+(23, '2021-12-27 23:28:07', '', 4, 82);
 
 -- --------------------------------------------------------
 
@@ -36377,16 +36390,36 @@ CREATE TABLE `lignes_commande` (
 --
 
 INSERT INTO `lignes_commande` (`Lign_ID`, `Lign_quantite`, `Lign_is_vente`, `Lign_is_received`, `Lign_received_quantity`, `fk_art_ID`, `fk_com_ID`) VALUES
-(8561, 0, 1, 0, 0, 10, 0),
-(8562, 0, 0, 0, 0, 10, 0),
-(8563, 0, 1, 0, 0, 11, 0),
-(8564, 0, 0, 0, 0, 11, 0),
-(8565, 250, 0, 0, 27, 11, 75),
-(8566, 0, 0, 0, 0, 0, 0),
-(8567, 500, 0, 0, 200, 10, 76),
-(8568, 0, 0, 0, 0, 0, 0),
-(8569, 800, 0, 0, 350, 10, 77),
-(8570, 0, 0, 0, 0, 0, 0);
+(8573, 0, 1, 0, 0, 13, 0),
+(8574, 0, 0, 0, 0, 13, 0),
+(8575, 0, 1, 0, 0, 14, 0),
+(8576, 0, 0, 0, 0, 14, 0),
+(8577, 0, 1, 0, 0, 15, 0),
+(8578, 0, 0, 0, 0, 15, 0),
+(8579, 0, 1, 0, 0, 16, 0),
+(8580, 0, 0, 0, 0, 16, 0),
+(8581, 150, 0, 0, 120, 13, 79),
+(8582, 120, 0, 0, 70, 14, 79),
+(8583, 80, 0, 0, 60, 15, 79),
+(8584, 150, 0, 0, 130, 16, 79),
+(8585, 0, 0, 0, 0, 0, 0),
+(8586, 150, 0, 0, 120, 14, 80),
+(8587, 0, 0, 0, 0, 0, 0),
+(8588, 0, 1, 0, 0, 17, 0),
+(8589, 0, 0, 0, 0, 17, 0),
+(8590, 0, 1, 0, 0, 18, 0),
+(8591, 0, 0, 0, 0, 18, 0),
+(8592, 10, 0, 0, 0, 18, 81),
+(8593, 10, 0, 0, 0, 17, 81),
+(8594, 0, 0, 0, 0, 0, 0),
+(8595, 5000, 0, 0, 5000, 17, 82),
+(8596, 0, 0, 0, 0, 0, 0),
+(8597, 0, 1, 0, 0, 19, 0),
+(8598, 0, 0, 0, 0, 19, 0),
+(8599, 0, 1, 0, 0, 20, 0),
+(8600, 0, 0, 0, 0, 20, 0),
+(8601, 0, 1, 0, 0, 21, 0),
+(8602, 0, 0, 0, 0, 21, 0);
 
 -- --------------------------------------------------------
 
@@ -36420,10 +36453,13 @@ CREATE TABLE `lignes_reception` (
 --
 
 INSERT INTO `lignes_reception` (`Lignr_ID`, `Lignr_quantite`, `fk_art_ID`, `fk_doc_ID`) VALUES
-(12, 12, 11, 10),
-(13, 200, 10, 12),
-(14, 150, 10, 14),
-(15, 200, 10, 15);
+(16, 120, 13, 17),
+(17, 70, 14, 17),
+(18, 60, 15, 17),
+(19, 130, 16, 17),
+(20, 120, 14, 19),
+(21, 2500, 17, 22),
+(22, 2500, 17, 23);
 
 -- --------------------------------------------------------
 
@@ -36436,6 +36472,201 @@ CREATE TABLE `paye` (
   `art_ID` int(11) NOT NULL,
   `pay_tarif_vente` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `paye`
+--
+
+INSERT INTO `paye` (`tar_ID`, `art_ID`, `pay_tarif_vente`) VALUES
+(0, 13, ''),
+(1, 13, '10'),
+(2, 13, '11'),
+(3, 13, '12'),
+(4, 13, '13'),
+(5, 13, '14'),
+(6, 13, '15'),
+(7, 13, '16'),
+(8, 13, '17'),
+(9, 13, '18'),
+(10, 13, '19'),
+(11, 13, '20'),
+(12, 13, '21'),
+(13, 13, '22'),
+(14, 13, '23'),
+(15, 13, '24'),
+(16, 13, '25'),
+(17, 13, '26'),
+(18, 13, '27'),
+(19, 13, '28'),
+(20, 13, '29'),
+(0, 14, ''),
+(1, 14, '30'),
+(2, 14, '31'),
+(3, 14, '32'),
+(4, 14, '33'),
+(5, 14, '34'),
+(6, 14, '35'),
+(7, 14, '36'),
+(8, 14, '37'),
+(9, 14, '38'),
+(10, 14, '39'),
+(11, 14, '40'),
+(12, 14, '41'),
+(13, 14, '42'),
+(14, 14, '43'),
+(15, 14, '44'),
+(16, 14, '45'),
+(17, 14, '46'),
+(18, 14, '47'),
+(19, 14, '48'),
+(20, 14, '49'),
+(0, 15, ''),
+(1, 15, '51'),
+(2, 15, '52'),
+(3, 15, '53'),
+(4, 15, '54'),
+(5, 15, '55'),
+(6, 15, '56'),
+(7, 15, '57'),
+(8, 15, '58'),
+(9, 15, '59'),
+(10, 15, '60'),
+(11, 15, '61'),
+(12, 15, '62'),
+(13, 15, '63'),
+(14, 15, '64'),
+(15, 15, '65'),
+(16, 15, '66'),
+(17, 15, '67'),
+(18, 15, '68'),
+(19, 15, '69'),
+(20, 15, '70'),
+(0, 16, ''),
+(1, 16, '80'),
+(2, 16, '81'),
+(3, 16, '82'),
+(4, 16, '83'),
+(5, 16, '84'),
+(6, 16, '85'),
+(7, 16, '86'),
+(8, 16, '87'),
+(9, 16, '88'),
+(10, 16, '89'),
+(11, 16, '90'),
+(12, 16, '91'),
+(13, 16, '92'),
+(14, 16, '93'),
+(15, 16, '94'),
+(16, 16, '95'),
+(17, 16, '96'),
+(18, 16, '97'),
+(19, 16, '98'),
+(20, 16, '99'),
+(0, 17, ''),
+(1, 17, ''),
+(2, 17, ''),
+(3, 17, ''),
+(4, 17, ''),
+(5, 17, ''),
+(6, 17, ''),
+(7, 17, ''),
+(8, 17, ''),
+(9, 17, ''),
+(10, 17, ''),
+(11, 17, ''),
+(12, 17, ''),
+(13, 17, ''),
+(14, 17, ''),
+(15, 17, ''),
+(16, 17, ''),
+(17, 17, ''),
+(18, 17, ''),
+(19, 17, ''),
+(20, 17, ''),
+(0, 18, ''),
+(1, 18, ''),
+(2, 18, ''),
+(3, 18, ''),
+(4, 18, ''),
+(5, 18, ''),
+(6, 18, ''),
+(7, 18, ''),
+(8, 18, ''),
+(9, 18, ''),
+(10, 18, ''),
+(11, 18, ''),
+(12, 18, ''),
+(13, 18, ''),
+(14, 18, ''),
+(15, 18, ''),
+(16, 18, ''),
+(17, 18, ''),
+(18, 18, ''),
+(19, 18, ''),
+(20, 18, ''),
+(0, 19, ''),
+(1, 19, ''),
+(2, 19, ''),
+(3, 19, ''),
+(4, 19, ''),
+(5, 19, ''),
+(6, 19, ''),
+(7, 19, ''),
+(8, 19, ''),
+(9, 19, ''),
+(10, 19, ''),
+(11, 19, ''),
+(12, 19, ''),
+(13, 19, ''),
+(14, 19, ''),
+(15, 19, ''),
+(16, 19, ''),
+(17, 19, ''),
+(18, 19, ''),
+(19, 19, ''),
+(20, 19, ''),
+(0, 20, ''),
+(1, 20, ''),
+(2, 20, ''),
+(3, 20, ''),
+(4, 20, ''),
+(5, 20, ''),
+(6, 20, ''),
+(7, 20, ''),
+(8, 20, ''),
+(9, 20, ''),
+(10, 20, ''),
+(11, 20, ''),
+(12, 20, ''),
+(13, 20, ''),
+(14, 20, ''),
+(15, 20, ''),
+(16, 20, ''),
+(17, 20, ''),
+(18, 20, ''),
+(19, 20, ''),
+(20, 20, ''),
+(0, 21, ''),
+(1, 21, ''),
+(2, 21, ''),
+(3, 21, ''),
+(4, 21, ''),
+(5, 21, ''),
+(6, 21, ''),
+(7, 21, ''),
+(8, 21, ''),
+(9, 21, ''),
+(10, 21, ''),
+(11, 21, ''),
+(12, 21, ''),
+(13, 21, ''),
+(14, 21, ''),
+(15, 21, ''),
+(16, 21, ''),
+(17, 21, ''),
+(18, 21, ''),
+(19, 21, ''),
+(20, 21, '');
 
 -- --------------------------------------------------------
 
@@ -36471,7 +36702,8 @@ INSERT INTO `produit` (`pro_ID`, `pro_lib`, `pro_commentaire`, `fk_cas_ID`, `pro
 (13, 'eee', 'aaa', 3, 1),
 (14, 'fff', 'hhh', 3, 1),
 (15, 'test', 'Commentaire', 1, 1),
-(16, 'test', 'commentaire', 1, 1);
+(16, 'test', 'commentaire', 1, 1),
+(17, 'Thomas', 'uoygvduygdbuadgbaaub', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -36893,7 +37125,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `article`
 --
 ALTER TABLE `article`
-  MODIFY `art_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `art_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `casier`
@@ -36917,7 +37149,7 @@ ALTER TABLE `cities`
 -- AUTO_INCREMENT for table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `Com_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `Com_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `communes`
@@ -36935,7 +37167,7 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `document`
 --
 ALTER TABLE `document`
-  MODIFY `doc_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `doc_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `etats_document`
@@ -36947,7 +37179,7 @@ ALTER TABLE `etats_document`
 -- AUTO_INCREMENT for table `lignes_commande`
 --
 ALTER TABLE `lignes_commande`
-  MODIFY `Lign_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8571;
+  MODIFY `Lign_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8603;
 
 --
 -- AUTO_INCREMENT for table `lignes_facture`
@@ -36959,13 +37191,13 @@ ALTER TABLE `lignes_facture`
 -- AUTO_INCREMENT for table `lignes_reception`
 --
 ALTER TABLE `lignes_reception`
-  MODIFY `Lignr_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `Lignr_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `produit`
 --
 ALTER TABLE `produit`
-  MODIFY `pro_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `pro_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `regions`
