@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 12, 2021 at 09:59 PM
+-- Generation Time: Jan 02, 2022 at 08:53 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.4.21
 
@@ -34,16 +34,18 @@ CREATE TABLE `article` (
   `fk_tiers_ID` int(11) NOT NULL,
   `fk_cat_ID` int(11) NOT NULL,
   `fk_cas_ID` int(11) NOT NULL,
-  `art_is_visible` int(1) NOT NULL DEFAULT 1
+  `art_is_visible` int(1) NOT NULL DEFAULT 1,
+  `art_is_composed` int(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `article`
 --
 
-INSERT INTO `article` (`art_ID`, `art_nom`, `art_commentaire`, `fk_tiers_ID`, `fk_cat_ID`, `fk_cas_ID`, `art_is_visible`) VALUES
-(27, 'Chaussure de sport', 'Des chaussures haut de gamme', 18, 10, 33, 1),
-(28, 'Skis', 'Des skis magnifiques', 18, 11, 34, 1);
+INSERT INTO `article` (`art_ID`, `art_nom`, `art_commentaire`, `fk_tiers_ID`, `fk_cat_ID`, `fk_cas_ID`, `art_is_visible`, `art_is_composed`) VALUES
+(0, 'Vide', '', 15, 2, 17, 0, 0),
+(22, 'Portière', 'Portière magnifique', 15, 5, 2, 1, 0),
+(24, 'Moteur', 'MOTEUR', 15, 2, 8, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -62,10 +64,37 @@ CREATE TABLE `casier` (
 --
 
 INSERT INTO `casier` (`cas_ID`, `cas_lib`, `cas_is_visible`) VALUES
-(32, 'ssss', 1),
-(33, 'B8956', 1),
-(34, 'da84da', 1),
-(35, 'ad598dsaea', 1);
+(1, 'testeeee', 1),
+(2, 'cacaeeeee', 1),
+(3, 'Test', 1),
+(4, 'dadad', 1),
+(5, 'geraud', 1),
+(6, 'test', 1),
+(7, 'dadf', 0),
+(8, 'dada', 1),
+(9, 'clement', 1),
+(10, 'efrr', 1),
+(11, 'dazdazz*e', 1),
+(12, 'coucoucava', 1),
+(13, 'dada', 1),
+(14, 'fdfaz', 1),
+(15, 'dfaf', 1),
+(16, 'djudbajd', 1),
+(17, 'B4750zaaaa', 1),
+(18, 'jadajdv', 1),
+(19, 'casier', 1),
+(20, 'testeeeee', 1),
+(21, 'Casier', 1),
+(22, 'allezssss', 1),
+(23, 'dadad', 1),
+(24, 'zefzfsq', 1),
+(25, 'dsasae', 1),
+(26, 's', 1),
+(27, 'e', 1),
+(28, 'as', 1),
+(29, 's', 1),
+(30, 'ea', 1),
+(31, 'sa', 1);
 
 -- --------------------------------------------------------
 
@@ -85,9 +114,15 @@ CREATE TABLE `categorie` (
 --
 
 INSERT INTO `categorie` (`cat_ID`, `cat_nom`, `cat_description`, `cat_is_visible`) VALUES
-(10, 'Chaussures', 'Toutes les chaussures', 1),
-(11, 'Skis', 'Tout les skis seront ici', 1),
-(12, 'Pentalons', 'abcd', 1);
+(1, 'testaaa', 'comoneee', 1),
+(2, 'a', 'ad', 1),
+(3, 'b', 'ad', 1),
+(4, 'c', 'adad', 1),
+(5, 'd', 'dada', 1),
+(6, 'e', 'assa', 1),
+(7, 'c', 'dada', 1),
+(8, 'd', 'adada', 1),
+(9, 'e', 'dadsa', 1);
 
 -- --------------------------------------------------------
 
@@ -36049,6 +36084,7 @@ INSERT INTO `cities` (`c_id`, `department_code`, `insee_code`, `zip_code`, `c_na
 CREATE TABLE `commande` (
   `Com_ID` int(11) NOT NULL,
   `Com_create_datetime` timestamp NOT NULL DEFAULT current_timestamp(),
+  `com_is_client` int(1) NOT NULL DEFAULT 0,
   `fk_etat_ID` int(11) NOT NULL DEFAULT 1,
   `fk_tiers_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -36057,9 +36093,11 @@ CREATE TABLE `commande` (
 -- Dumping data for table `commande`
 --
 
-INSERT INTO `commande` (`Com_ID`, `Com_create_datetime`, `fk_etat_ID`, `fk_tiers_ID`) VALUES
-(0, '2021-12-12 20:35:57', 1, 0),
-(80, '2021-12-12 20:53:49', 1, 18);
+INSERT INTO `commande` (`Com_ID`, `Com_create_datetime`, `com_is_client`, `fk_etat_ID`, `fk_tiers_ID`) VALUES
+(0, '2021-12-16 07:12:48', 0, 1, 15),
+(92, '2021-12-31 21:16:22', 0, 1, 15),
+(93, '2021-12-31 21:17:38', 1, 1, 16),
+(94, '2022-01-02 19:44:23', 1, 1, 16);
 
 -- --------------------------------------------------------
 
@@ -36248,8 +36286,61 @@ CREATE TABLE `document` (
 --
 
 INSERT INTO `document` (`doc_ID`, `doc_create_datetime`, `doc_commentaire`, `fk_typdo_ID`, `fk_com_ID`) VALUES
-(18, '2021-12-12 21:53:49', 'Une commande banale', 3, 80),
-(19, '2021-12-12 21:54:23', 'Nous avons reçu', 4, 80);
+(32, '2021-12-31 22:16:22', 'Besoin urgent', 3, 92),
+(33, '2021-12-31 22:17:10', '', 4, 92),
+(34, '2021-12-31 22:17:21', '', 4, 92),
+(35, '2021-12-31 22:17:38', 'Aa', 3, 93),
+(36, '2021-12-31 23:09:29', '', 4, 93),
+(37, '2021-12-31 23:13:39', '', 4, 93),
+(38, '2021-12-31 23:13:46', '', 4, 93),
+(39, '2021-12-31 23:17:48', '', 4, 93),
+(40, '2022-01-02 12:14:55', 'Commentaire de malade mental', 2, 93),
+(41, '2022-01-02 12:15:30', 'Commentaire de malade mental', 2, 93),
+(42, '2022-01-02 13:22:14', 'Commentaire de malade mental', 2, 93),
+(43, '2022-01-02 13:22:51', 'Commentaire de malade mental', 2, 93),
+(44, '2022-01-02 13:23:32', 'Commentaire de malade mental', 2, 93),
+(45, '2022-01-02 13:23:56', 'Commentaire de malade mental', 2, 93),
+(46, '2022-01-02 13:26:02', 'Commentaire de malade mental', 2, 93),
+(47, '2022-01-02 13:27:09', 'Commentaire de malade mental', 2, 93),
+(48, '2022-01-02 13:27:35', 'Commentaire de malade mental', 2, 93),
+(49, '2022-01-02 13:28:29', 'Commentaire de malade mental', 2, 93),
+(50, '2022-01-02 13:33:31', 'Un commentaire tout gentil', 2, 93),
+(51, '2022-01-02 13:34:36', 'Un commentaire tout gentil', 2, 93),
+(52, '2022-01-02 13:35:31', 'Un commentaire tout gentil', 2, 93),
+(53, '2022-01-02 13:36:41', 'Un commentaire tout gentil', 2, 93),
+(54, '2022-01-02 13:37:46', 'Un commentaire tout gentil', 2, 93),
+(55, '2022-01-02 13:38:43', 'Un commentaire tout gentil', 2, 93),
+(56, '2022-01-02 13:39:41', 'Un commentaire tout gentil', 2, 93),
+(57, '2022-01-02 13:40:25', 'Un commentaire tout gentil', 2, 93),
+(58, '2022-01-02 13:46:46', 'Commentaire de fifou', 2, 93),
+(59, '2022-01-02 13:54:11', '', 2, 93),
+(60, '2022-01-02 13:54:12', '', 2, 93),
+(61, '2022-01-02 13:56:30', '', 2, 93),
+(62, '2022-01-02 13:59:28', '', 2, 93),
+(63, '2022-01-02 14:01:00', '', 2, 93),
+(64, '2022-01-02 19:23:26', '', 2, 93),
+(65, '2022-01-02 19:23:37', '', 2, 93),
+(66, '2022-01-02 19:23:39', '', 2, 93),
+(67, '2022-01-02 19:24:00', '', 2, 93),
+(68, '2022-01-02 19:24:01', '', 2, 93),
+(69, '2022-01-02 19:24:21', '', 2, 93),
+(70, '2022-01-02 19:24:22', '', 2, 93),
+(71, '2022-01-02 19:26:45', '', 2, 93),
+(72, '2022-01-02 19:26:48', '', 2, 93),
+(73, '2022-01-02 19:27:33', '', 2, 93),
+(74, '2022-01-02 19:29:30', '', 2, 93),
+(75, '2022-01-02 20:36:45', '', 2, 93),
+(76, '2022-01-02 20:36:48', '', 2, 93),
+(77, '2022-01-02 20:37:12', '', 2, 93),
+(78, '2022-01-02 20:37:34', '', 2, 93),
+(79, '2022-01-02 20:40:52', '', 2, 93),
+(80, '2022-01-02 20:41:41', '', 2, 93),
+(81, '2022-01-02 20:42:03', '', 2, 93),
+(82, '2022-01-02 20:42:13', '', 2, 93),
+(83, '2022-01-02 20:44:23', 'Commande normale', 3, 94),
+(84, '2022-01-02 20:45:05', '', 4, 94),
+(85, '2022-01-02 20:46:04', '', 2, 94),
+(86, '2022-01-02 20:46:08', '', 2, 94);
 
 -- --------------------------------------------------------
 
@@ -36296,6 +36387,37 @@ INSERT INTO `etats_document` (`et_ID`, `et_lib`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `informations_factures`
+--
+
+CREATE TABLE `informations_factures` (
+  `Info_ID` int(11) NOT NULL,
+  `Info_reduc` float NOT NULL,
+  `fk_tar_ID` int(11) NOT NULL,
+  `fk_doc_ID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `informations_factures`
+--
+
+INSERT INTO `informations_factures` (`Info_ID`, `Info_reduc`, `fk_tar_ID`, `fk_doc_ID`) VALUES
+(3, 0, 14, 73),
+(4, 450.12, 14, 74),
+(5, 0, 14, 75),
+(6, 0, 14, 76),
+(7, 0, 14, 77),
+(8, 0, 14, 78),
+(9, 0, 14, 79),
+(10, 0, 14, 80),
+(11, 0, 14, 81),
+(12, 0, 14, 82),
+(13, 0, 14, 85),
+(14, 0, 14, 86);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `lignes_commande`
 --
 
@@ -36314,21 +36436,68 @@ CREATE TABLE `lignes_commande` (
 --
 
 INSERT INTO `lignes_commande` (`Lign_ID`, `Lign_quantite`, `Lign_is_vente`, `Lign_is_received`, `Lign_received_quantity`, `fk_art_ID`, `fk_com_ID`) VALUES
-(8599, 0, 1, 0, 0, 27, 0),
-(8600, 0, 0, 0, 0, 27, 0),
-(8601, 0, 1, 0, 0, 28, 0),
-(8602, 0, 0, 0, 0, 28, 0),
-(8603, 500, 0, 0, 150, 27, 80),
-(8604, 148, 0, 0, 15, 28, 80),
-(8605, 0, 0, 0, 0, 0, 0);
+(8617, 0, 1, 0, 0, 22, 0),
+(8618, 0, 0, 0, 0, 22, 0),
+(8619, 1500, 0, 0, 1500, 22, 92),
+(8620, 0, 0, 0, 0, 0, 0),
+(8621, 500, 1, 0, 460, 22, 93),
+(8622, 0, 0, 0, 0, 0, 0),
+(8623, 0, 1, 0, 0, 24, 0),
+(8624, 0, 0, 0, 0, 24, 0),
+(8625, 70, 1, 0, 15, 22, 94),
+(8626, 12, 1, 0, 4, 24, 94),
+(8627, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `lignes_reception`
+-- Table structure for table `lignes_facture`
 --
 
-CREATE TABLE `lignes_reception` (
+CREATE TABLE `lignes_facture` (
+  `Lignf_ID` int(11) NOT NULL,
+  `Lignf_quantite` int(11) NOT NULL,
+  `fk_art_ID` int(11) NOT NULL,
+  `fk_doc_ID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `lignes_facture`
+--
+
+INSERT INTO `lignes_facture` (`Lignf_ID`, `Lignf_quantite`, `fk_art_ID`, `fk_doc_ID`) VALUES
+(3, 150, 22, 48),
+(18, 0, 0, 57),
+(19, 220, 22, 57),
+(20, 0, 0, 58),
+(21, 460, 22, 58),
+(22, 0, 0, 59),
+(23, 460, 22, 59),
+(24, 0, 0, 60),
+(25, 460, 22, 60),
+(26, 0, 0, 61),
+(27, 220, 22, 61),
+(28, 0, 0, 62),
+(29, 460, 22, 62),
+(30, 0, 0, 63),
+(31, 460, 22, 63),
+(32, 0, 0, 73),
+(33, 460, 22, 73),
+(34, 0, 0, 74),
+(35, 460, 22, 74),
+(36, 0, 0, 75),
+(37, 0, 0, 76),
+(38, 0, 0, 77),
+(39, 0, 0, 78),
+(40, 0, 0, 79);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lignes_mouvement`
+--
+
+CREATE TABLE `lignes_mouvement` (
   `Lignr_ID` int(11) NOT NULL,
   `Lignr_quantite` int(11) NOT NULL,
   `fk_art_ID` int(11) NOT NULL,
@@ -36336,12 +36505,16 @@ CREATE TABLE `lignes_reception` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `lignes_reception`
+-- Dumping data for table `lignes_mouvement`
 --
 
-INSERT INTO `lignes_reception` (`Lignr_ID`, `Lignr_quantite`, `fk_art_ID`, `fk_doc_ID`) VALUES
-(18, 150, 27, 19),
-(19, 15, 28, 19);
+INSERT INTO `lignes_mouvement` (`Lignr_ID`, `Lignr_quantite`, `fk_art_ID`, `fk_doc_ID`) VALUES
+(25, 1500, 22, 33),
+(26, 400, 22, 36),
+(27, 50, 22, 37),
+(28, 10, 22, 39),
+(29, 15, 22, 84),
+(30, 4, 24, 84);
 
 -- --------------------------------------------------------
 
@@ -36350,8 +36523,8 @@ INSERT INTO `lignes_reception` (`Lignr_ID`, `Lignr_quantite`, `fk_art_ID`, `fk_d
 --
 
 CREATE TABLE `paye` (
-  `art_ID` int(11) NOT NULL,
   `tar_ID` int(11) NOT NULL,
+  `art_ID` int(11) NOT NULL,
   `pay_tarif_vente` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -36359,49 +36532,86 @@ CREATE TABLE `paye` (
 -- Dumping data for table `paye`
 --
 
-INSERT INTO `paye` (`art_ID`, `tar_ID`, `pay_tarif_vente`) VALUES
-(27, 0, 0),
-(27, 1, 0),
-(27, 2, 0),
-(27, 3, 0),
-(27, 4, 0),
-(27, 5, 0),
-(27, 6, 0),
-(27, 7, 0),
-(27, 8, 0),
-(27, 9, 0),
-(27, 10, 0),
-(27, 11, 0),
-(27, 12, 0),
-(27, 13, 0),
-(27, 14, 0),
-(27, 15, 0),
-(27, 16, 0),
-(27, 17, 0),
-(27, 18, 0),
-(27, 19, 0),
-(27, 20, 0),
-(28, 0, 0),
-(28, 1, 0),
-(28, 2, 0),
-(28, 3, 0),
-(28, 4, 0),
-(28, 5, 0),
-(28, 6, 0),
-(28, 7, 0),
-(28, 8, 0),
-(28, 9, 0),
-(28, 10, 0),
-(28, 11, 0),
-(28, 12, 0),
-(28, 13, 0),
-(28, 14, 0),
-(28, 15, 0),
-(28, 16, 0),
-(28, 17, 0),
-(28, 18, 0),
-(28, 19, 0),
-(28, 20, 0);
+INSERT INTO `paye` (`tar_ID`, `art_ID`, `pay_tarif_vente`) VALUES
+(0, 22, 0),
+(0, 24, 0),
+(1, 22, 10),
+(1, 24, 0),
+(2, 22, 15),
+(2, 24, 0),
+(3, 22, 10),
+(3, 24, 0),
+(4, 22, 10),
+(4, 24, 0),
+(5, 22, 10),
+(5, 24, 0),
+(6, 22, 10),
+(6, 24, 0),
+(7, 22, 10),
+(7, 24, 0),
+(8, 22, 10),
+(8, 24, 0),
+(9, 22, 10),
+(9, 24, 0),
+(10, 22, 10),
+(10, 24, 0),
+(11, 22, 10),
+(11, 24, 0),
+(12, 22, 10),
+(12, 24, 0),
+(13, 22, 10),
+(13, 24, 0),
+(14, 22, 10),
+(14, 24, 0),
+(15, 22, 10),
+(15, 24, 0),
+(16, 22, 0),
+(16, 24, 0),
+(17, 22, 10),
+(17, 24, 0),
+(18, 22, 10),
+(18, 24, 0),
+(19, 22, 10),
+(19, 24, 0),
+(20, 22, 10),
+(20, 24, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `produit`
+--
+
+CREATE TABLE `produit` (
+  `pro_ID` int(11) NOT NULL,
+  `pro_lib` varchar(50) NOT NULL,
+  `pro_commentaire` varchar(255) NOT NULL,
+  `fk_cas_ID` int(11) NOT NULL,
+  `pro_is_visible` int(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `produit`
+--
+
+INSERT INTO `produit` (`pro_ID`, `pro_lib`, `pro_commentaire`, `fk_cas_ID`, `pro_is_visible`) VALUES
+(1, 'Test', 'Commentaire', 28, 1),
+(2, 'a', 'b', 26, 0),
+(3, 'Leproduit', 'Un commentaire', 26, 0),
+(4, 'Cacapopo', 'pipi', 26, 0),
+(5, 'dada', 'dddd', 5, 0),
+(6, 'abc', 'def', 2, 0),
+(7, 'tess', 'hess', 8, 0),
+(8, 'quatre', 'quatro', 3, 0),
+(9, 'carrement', 'a la base', 7, 0),
+(10, 'a la base', 'PLK', 5, 1),
+(11, 'aaaaaa', 'PLK', 5, 1),
+(12, 'ghah', 'Polak', 12, 1),
+(13, 'eee', 'aaa', 3, 1),
+(14, 'fff', 'hhh', 3, 1),
+(15, 'test', 'Commentaire', 1, 1),
+(16, 'test', 'commentaire', 1, 1),
+(17, 'Thomas', 'uoygvduygdbuadgbaaub', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -36514,8 +36724,9 @@ CREATE TABLE `tiers` (
 --
 
 INSERT INTO `tiers` (`tie_ID`, `tie_raison_sociale`, `tie_adresse`, `tie_tel`, `tie_email`, `tie_IBAN`, `tie_BIC`, `tie_code_banque`, `tie_code_guichet`, `tie_num_compte`, `tie_cle_rib`, `tie_domiciliation`, `fk_com_ID`, `fk_typre_ID`, `fk_tar_id`, `fk_typso_ID`, `fk_typti_ID`, `tie_is_visible`) VALUES
-(0, 'Vide', 'Vide', 'Vide', 'Vide', 'Vide', 'Vide', 'Vide', 'Vide', 'Vide', '00', 'Vide', 14440, 1, 0, 1, 1, 1),
-(18, 'Nike', 'Rue des chaussures', '0123456789', 'nike@gmail.com', '0123', '0123', '0123', '0123', '0123', '12', 'Credit agricole', 29900, 3, 5, 4, 3, 1);
+(14, 'Cpartisqdvas', '14 rue du calvados', '01 23 45 67 89', 'mail@mail.fr', '451ad51as54eae', '1asa', 'adse', 'sad', 'as', 'ss', 'Quelque part', 26478, 3, 15, 8, 2, 1),
+(15, 'C\'est parti', '14 rue du calvadosss', '01 23 45 67 89', 'mail@mail.fr', '451ad51as54eae', '1asa', 'adse', 'sad', 'as', 'ss', 'Quelque part', 29900, 3, 14, 10, 2, 1),
+(16, 'Test', 'Adresse de fou', '0417895623', 'mail@mail.ru', 'a54adad', '5784', '7524', '552', '2424', '45', 'Credit agricole Paris', 4673, 3, 14, 11, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -36534,20 +36745,10 @@ CREATE TABLE `type_document` (
 --
 
 INSERT INTO `type_document` (`typdo_ID`, `typdo_lib`, `typdo_is_visible`) VALUES
-(1, 'Devis', 0),
-(2, 'Test', 0),
-(3, 'Truc de ouf', 1),
-(4, 'please', 0),
-(5, 'Dernier essai', 0),
-(6, 'Dernier essaieeeee', 1),
-(7, 'Test', 0),
-(8, 'Test', 1),
-(9, 'Test', 1),
-(10, 'Test', 1),
-(11, 'Eliot le gros conz', 0),
-(12, 'cool', 1),
-(13, 'testaaa', 1),
-(14, 'allezllaaaaaaa', 1);
+(1, 'Devis', 1),
+(2, 'Facture', 1),
+(3, 'Bon de commande', 1),
+(4, 'Bon de livraison', 1);
 
 -- --------------------------------------------------------
 
@@ -36656,7 +36857,6 @@ INSERT INTO `users` (`use_ID`, `use_name`, `use_password`, `use_firstname`, `use
 --
 ALTER TABLE `article`
   ADD PRIMARY KEY (`art_ID`),
-  ADD UNIQUE KEY `art_nom` (`art_nom`),
   ADD KEY `casier_ID` (`fk_cas_ID`),
   ADD KEY `categorie_ID` (`fk_cat_ID`),
   ADD KEY `tiers_ID` (`fk_tiers_ID`);
@@ -36741,6 +36941,14 @@ ALTER TABLE `etats_document`
   ADD PRIMARY KEY (`et_ID`);
 
 --
+-- Indexes for table `informations_factures`
+--
+ALTER TABLE `informations_factures`
+  ADD PRIMARY KEY (`Info_ID`),
+  ADD KEY `document2` (`fk_doc_ID`),
+  ADD KEY `tarif2` (`fk_tar_ID`);
+
+--
 -- Indexes for table `lignes_commande`
 --
 ALTER TABLE `lignes_commande`
@@ -36749,9 +36957,17 @@ ALTER TABLE `lignes_commande`
   ADD KEY `commande_ID` (`fk_com_ID`);
 
 --
--- Indexes for table `lignes_reception`
+-- Indexes for table `lignes_facture`
 --
-ALTER TABLE `lignes_reception`
+ALTER TABLE `lignes_facture`
+  ADD PRIMARY KEY (`Lignf_ID`),
+  ADD KEY `article` (`fk_art_ID`),
+  ADD KEY `document` (`fk_doc_ID`);
+
+--
+-- Indexes for table `lignes_mouvement`
+--
+ALTER TABLE `lignes_mouvement`
   ADD PRIMARY KEY (`Lignr_ID`),
   ADD KEY `article_ID` (`fk_art_ID`),
   ADD KEY `document_ID` (`fk_doc_ID`);
@@ -36760,8 +36976,14 @@ ALTER TABLE `lignes_reception`
 -- Indexes for table `paye`
 --
 ALTER TABLE `paye`
-  ADD KEY `article` (`art_ID`),
-  ADD KEY `tarif` (`tar_ID`);
+  ADD PRIMARY KEY (`tar_ID`,`art_ID`);
+
+--
+-- Indexes for table `produit`
+--
+ALTER TABLE `produit`
+  ADD PRIMARY KEY (`pro_ID`),
+  ADD KEY `ref_casier` (`fk_cas_ID`);
 
 --
 -- Indexes for table `regions`
@@ -36825,19 +37047,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `article`
 --
 ALTER TABLE `article`
-  MODIFY `art_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `art_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `casier`
 --
 ALTER TABLE `casier`
-  MODIFY `cas_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `cas_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `categorie`
 --
 ALTER TABLE `categorie`
-  MODIFY `cat_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `cat_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `cities`
@@ -36849,7 +37071,7 @@ ALTER TABLE `cities`
 -- AUTO_INCREMENT for table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `Com_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `Com_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- AUTO_INCREMENT for table `communes`
@@ -36867,7 +37089,7 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `document`
 --
 ALTER TABLE `document`
-  MODIFY `doc_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `doc_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT for table `etats_document`
@@ -36876,16 +37098,34 @@ ALTER TABLE `etats_document`
   MODIFY `et_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `informations_factures`
+--
+ALTER TABLE `informations_factures`
+  MODIFY `Info_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
 -- AUTO_INCREMENT for table `lignes_commande`
 --
 ALTER TABLE `lignes_commande`
-  MODIFY `Lign_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8606;
+  MODIFY `Lign_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8628;
 
 --
--- AUTO_INCREMENT for table `lignes_reception`
+-- AUTO_INCREMENT for table `lignes_facture`
 --
-ALTER TABLE `lignes_reception`
-  MODIFY `Lignr_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+ALTER TABLE `lignes_facture`
+  MODIFY `Lignf_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+
+--
+-- AUTO_INCREMENT for table `lignes_mouvement`
+--
+ALTER TABLE `lignes_mouvement`
+  MODIFY `Lignr_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT for table `produit`
+--
+ALTER TABLE `produit`
+  MODIFY `pro_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `regions`
@@ -36903,7 +37143,7 @@ ALTER TABLE `tarif`
 -- AUTO_INCREMENT for table `tiers`
 --
 ALTER TABLE `tiers`
-  MODIFY `tie_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `tie_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `type_document`
@@ -36974,24 +37214,37 @@ ALTER TABLE `document`
   ADD CONSTRAINT `type_document` FOREIGN KEY (`fk_typdo_ID`) REFERENCES `type_document` (`typdo_ID`);
 
 --
+-- Constraints for table `informations_factures`
+--
+ALTER TABLE `informations_factures`
+  ADD CONSTRAINT `document2` FOREIGN KEY (`fk_doc_ID`) REFERENCES `document` (`doc_ID`),
+  ADD CONSTRAINT `tarif2` FOREIGN KEY (`fk_tar_ID`) REFERENCES `tarif` (`tar_ID`);
+
+--
 -- Constraints for table `lignes_commande`
 --
 ALTER TABLE `lignes_commande`
   ADD CONSTRAINT `commande_ID` FOREIGN KEY (`fk_com_ID`) REFERENCES `commande` (`Com_ID`);
 
 --
--- Constraints for table `lignes_reception`
+-- Constraints for table `lignes_facture`
 --
-ALTER TABLE `lignes_reception`
+ALTER TABLE `lignes_facture`
+  ADD CONSTRAINT `article` FOREIGN KEY (`fk_art_ID`) REFERENCES `article` (`art_ID`),
+  ADD CONSTRAINT `document` FOREIGN KEY (`fk_doc_ID`) REFERENCES `document` (`doc_ID`);
+
+--
+-- Constraints for table `lignes_mouvement`
+--
+ALTER TABLE `lignes_mouvement`
   ADD CONSTRAINT `article_ID` FOREIGN KEY (`fk_art_ID`) REFERENCES `article` (`art_ID`),
   ADD CONSTRAINT `document_ID` FOREIGN KEY (`fk_doc_ID`) REFERENCES `document` (`doc_ID`);
 
 --
--- Constraints for table `paye`
+-- Constraints for table `produit`
 --
-ALTER TABLE `paye`
-  ADD CONSTRAINT `article` FOREIGN KEY (`art_ID`) REFERENCES `article` (`art_ID`),
-  ADD CONSTRAINT `tarif` FOREIGN KEY (`tar_ID`) REFERENCES `tarif` (`tar_ID`);
+ALTER TABLE `produit`
+  ADD CONSTRAINT `ref_casier` FOREIGN KEY (`fk_cas_ID`) REFERENCES `casier` (`cas_ID`);
 
 --
 -- Constraints for table `tiers`
