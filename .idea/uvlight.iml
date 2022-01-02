@@ -16,6 +16,10 @@
       <excludeFolder url="file://$MODULE_DIR$/server/vendor/symfony/polyfill-php80" />
       <excludeFolder url="file://$MODULE_DIR$/server/vendor/spipu/html2pdf" />
       <excludeFolder url="file://$MODULE_DIR$/server/vendor/tecnickcom/tcpdf" />
+      <excludeFolder url="file://$MODULE_DIR$/server/vendor/dompdf/dompdf" />
+      <excludeFolder url="file://$MODULE_DIR$/server/vendor/phenx/php-font-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/server/vendor/phenx/php-svg-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/server/vendor/sabberworm/php-css-parser" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

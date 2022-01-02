@@ -54,7 +54,7 @@ class Commande
         return $result;
     }
 
-    public function db_create_command($comment, $quantity, $article, $tiers): array{
+    public function db_command($comment, $quantity, $article, $tiers, $type=0): array{
         global $conn;
 
         $listearticle = str_repeat ('?, ',  count ($article) - 1) . '?';
@@ -87,9 +87,10 @@ class Commande
         $sql->execute();
         $res = (int) $sql->fetch()["tie_ID"];
 
-        $conn->query("INSERT INTO ".DB_TABLE_COMMANDE."(fk_etat_ID, fk_tiers_ID) VALUES(1, $res)");
+        $type = (int) $type;
+        $conn->query("INSERT INTO ".DB_TABLE_COMMANDE."(fk_etat_ID, fk_tiers_ID, com_is_client) VALUES(1, $res, $type)");
         $commandeID = $conn->lastInsertId();
-        $commandLines = $this->db_insert_command_lines($commandeID, $article, $quantity);
+        $commandLines = $this->db_insert_command_lines($commandeID, $article, $quantity, $type);
         if($commandLines["error"] === true){
             $response["error"] = true;
             $response["errortext"] = $commandLines["errortext"];
@@ -109,6 +110,14 @@ class Commande
 
         return $response;
 
+    }
+
+    public function db_create_command($comment, $quantity, $article, $tiers): array{
+        return $this->db_command($comment, $quantity, $article, $tiers);
+    }
+
+    public function db_create_sale($comment, $quantity, $article, $tiers): array{
+        return $this->db_command($comment, $quantity, $article, $tiers, 1);
     }
 
     private function db_create_document(string $comment, int $typeID , int $commandeID): array{
@@ -132,13 +141,13 @@ class Commande
         return $response;
     }
 
-    private function db_insert_command_lines(int $commandeID, array $article, array $quantity): array{
+    private function db_insert_command_lines(int $commandeID, array $article, array $quantity, int $type = 0): array{
         global $conn;
         $request = "INSERT INTO ".DB_TABLE_LIGNES_COMMANDE."(Lign_quantite, Lign_is_vente, fk_art_ID, fk_com_ID) VALUES";
 
         $i = 0;
         foreach($article as $el){
-            $request .= "(:quantite$i, 0, :article$i, $commandeID), ";
+            $request .= "(:quantite$i, $type, :article$i, $commandeID), ";
             $i++;
         }
         $request .= "(0,0,0,0)";
@@ -221,7 +230,7 @@ class Commande
 
     }
 
-    public function db_get_all_received_articles(int $com_ID): array{
+    public function db_get_all_articles(int $com_ID): array{
         global $conn;
 
         $docs = $this->db_get_document_by_type(4, $com_ID);
@@ -338,7 +347,7 @@ class Commande
         }
     }
 
-    public function db_get_fournisseur(int $com_ID) : array{
+    public function db_get_tiers(int $com_ID) : array{
         global $conn;
         $request = "SELECT tie_raison_sociale, tie_ID, fk_tar_ID FROM ".DB_TABLE_TIERS."
                     INNER JOIN ".DB_TABLE_COMMANDE." ON tie_ID = fk_tiers_ID
@@ -425,6 +434,30 @@ class Commande
         }
         $response["error"] = $bool;
         return $response;
+    }
+
+    public function db_get_by_doc_ID($doc_ID) : array{
+        global $conn;
+        $request = "SELECT fk_com_ID FROM ".DB_TABLE_DOCUMENT." WHERE doc_ID = :doc_ID";
+        $sql = $conn->prepare($request);
+        $sql->bindValue(":doc_ID", $doc_ID);
+        try{
+            $sql->execute();
+            $res = $sql->fetch(PDO::FETCH_ASSOC);
+            if($res){
+                $response["error"] = false;
+                $response["content"] = $res["fk_com_ID"];
+                return $response;
+            }
+            $response["error"] = true;
+            $response["errortext"] = "Aucun document valide";
+            return $response;
+
+        }catch(PDOException $e){
+            $response["error"] = true;
+            $response["errortext"] = $e->getMessage();
+            return $response;
+        }
     }
 
 

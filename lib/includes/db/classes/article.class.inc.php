@@ -288,6 +288,17 @@ class Article{
 		}
 	}
 
+    public function db_get_all_by_article_name_arrkey(){
+        global $conn;
+        $request = "SELECT  art_nom as arrkey, art_ID, art_nom FROM ".DB_TABLE_ARTICLE;
+        try{
+            $sql = $conn->query($request);
+            return $sql->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE|\PDO::FETCH_ASSOC);
+        }catch(PDOException $e){
+            return $this->errmessage.$e->getMessage();
+        }
+    }
+
 }
 
 ?>

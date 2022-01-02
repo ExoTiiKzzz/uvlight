@@ -27,6 +27,12 @@ class Tiers{
         return $conn->query($request)->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE|\PDO::FETCH_ASSOC);
     }
 
+    public function db_get_all_clients(): array{
+        global $conn;
+        $request = "SELECT tie_ID, tie_ID as arrkey, tie_raison_sociale FROM ".DB_TABLE_TIERS." WHERE fk_typti_ID IN (1,3)";
+        return $conn->query($request)->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE|\PDO::FETCH_ASSOC);
+    }
+
     public function db_get_by_id($tiers_id=0){
         $tiers_id = (int) $tiers_id;
         if(!$tiers_id){

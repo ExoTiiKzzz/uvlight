@@ -19,7 +19,9 @@ if(isset($_POST["create"])){
         $response["content"]["tarifs"] = $res["content"]["tarifs"];
         $response["content"]["fourni"] = $res["content"]["tie_raison_sociale"];
         $response["content"]["isComposed"] = $res["content"]["art_is_composed"];
-        $response["content"]["articles"] = $res["content"]["articles"];
+        if($res["content"]["art_is_composed"] === 1){
+            $response["content"]["articles"] = $res["content"]["articles"];
+        }
     }else{
         $response["error"] = true;
         $response["errortext"] = $res;
@@ -60,7 +62,9 @@ if(isset($_POST["create"])){
     }
     echo json_encode($response);
 }elseif(isset($_POST["command"])){
-    echo json_encode($oCommande->db_create_command($_POST["comment"], json_decode($_POST["quantity"]), json_decode($_POST["article"]), $_POST["tiers"]));
+    echo json_encode($oCommande->db_command($_POST["comment"], json_decode($_POST["quantity"]), json_decode($_POST["article"]), $_POST["tiers"], 0));
+}elseif(isset($_POST["sale"])){
+    echo json_encode($oCommande->db_command($_POST["comment"], json_decode($_POST["quantity"]), json_decode($_POST["article"]), $_POST["tiers"], 1));
 }elseif(isset($_POST["getFourniArticles"])){
     echo json_encode($oArticle->db_get_all_by_fournisseur($_POST["fournisseur"]));
 }elseif(isset($_POST["updateTarif"])){

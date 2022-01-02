@@ -14,31 +14,35 @@ function updateCommand(){
         }
     })
 
-    let url_string = window.location.href;
-    let url = new URL(url_string);
-    let id = url.searchParams.get("id");
-    console.log(array);
-    array = JSON.stringify(array);
+    if(array.length > 0){
+        let url_string = window.location.href;
+        let url = new URL(url_string);
+        let id = url.searchParams.get("id");
+        console.log(array);
+        array = JSON.stringify(array);
 
-    let formData = new FormData();
-    formData.append("updateCommand", "1");
-    formData.append("array", array);
-    formData.append("com_ID", id);
-    formData.append("comment", comment);
+        let formData = new FormData();
+        formData.append("updateCommand", "1");
+        formData.append("array", array);
+        formData.append("com_ID", id);
+        formData.append("comment", comment);
 
-    fetch(trait_url, {
-        method: "POST",
-        body: formData
-    })
-        .then(res=> res.json())
-        .then(data => {
-            console.log(data);
-            if(data.error === true){
-                console.log(data.errortext);
-            }else{
-                location.reload();
-            }
+        fetch(trait_url, {
+            method: "POST",
+            body: formData
         })
+            .then(res=> res.json())
+            .then(data => {
+                console.log(data);
+                if(data.error === true){
+                    console.log(data.errortext);
+                }else{
+                    location.reload();
+                }
+            })
+    }else{
+        location.reload();
+    }
 }
 
 quantitysEl.forEach(el => {

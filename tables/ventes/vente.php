@@ -51,7 +51,7 @@ echo sidenav($path);
 
 $articles = $oArticle->db_get_all();
 $data = $oCommande->db_get_detailed_all_documents($_GET['id']);
-$fournisseur = $oCommande->db_get_fournisseur($_GET["id"]);
+$clients = $oCommande->db_get_tiers($_GET["id"]);
 $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
 ?>
 
@@ -66,7 +66,7 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
             <div class="row">
                 <div class="col-6 form-group">
                     <label>Fournisseur : </label>
-                    <span class="font-weight-bold text-uppercase"><?= $fournisseur['data']["tie_raison_sociale"] ?></span>
+                    <span class="font-weight-bold text-uppercase"><?= $clients['data']["tie_raison_sociale"] ?></span>
                 </div>
             </div>
                 <div class="label mb-4 row d-flex p-3">
@@ -74,7 +74,8 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
                         <span class="font-weight-bold border-bottom border-white">Récapitulatif de la commande : </span>
                     </div>
                     <div class="ml-auto">
-                        <button data-toggle="modal" data-target="#command" class="btn btn-primary">Créer un bon de récéption</button>
+                        <a href="../facture/?id=<?= $_GET['id'] ?>" class="btn btn-success">Facturer</a>
+                        <button data-toggle="modal" data-target="#command" class="btn btn-primary">Créer un bon de livraison</button>
                     </div>
                 </div>
 

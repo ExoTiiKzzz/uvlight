@@ -201,7 +201,7 @@ commandBtn.addEventListener("click", (e) => {
 
     // console.log(articles, quantitys);
 
-    let formData = new FormData;
+    let formData = new FormData();
     formData.append("command", "1");
     formData.append("comment", comment);
     formData.append("article", JSON.stringify(articles));
@@ -262,6 +262,7 @@ function commandAddArticle(index){
 
     let row = document.createElement("div");
     row.classList.add("row");
+    row.classList.add("commandRow");
     row.dataset.index = index;
     row.innerHTML = textToAdd;
 
@@ -370,4 +371,102 @@ function addArticleListener(){
     document.querySelector(".articlesContainer").appendChild(row);
     document.querySelector(".deleteArticleRow[data-index='"+index+"']").addEventListener("click", deleteArticle);
     index++;
+}
+
+
+
+
+
+//sale functions
+
+const saleBtn = document.querySelector(".saleBtn");
+
+saleBtn.addEventListener("click", (e) => {
+    let comment = document.querySelector(".createSaleComment").value;
+    let articles = [], quantitys = [];
+    let client = document.querySelector(".saleClient").value;
+
+    articleEls = document.querySelectorAll(".saleArticle");
+
+    let bool = true;
+
+
+    articleEls.forEach(article => {
+        let index = article.dataset.index;
+        articles[index] = article.value;
+        quantitys[index] = document.querySelector(".saleQuantite[data-index='"+index+"']").value;
+    })
+
+
+    let formData = new FormData;
+    formData.append("sale", "1");
+    formData.append("comment", comment);
+    formData.append("article", JSON.stringify(articles));
+    formData.append("quantity", JSON.stringify(quantitys));
+    formData.append("tiers", client);
+
+    fetch(url, {
+        method: "POST",
+        body: formData
+    })
+        .then(result => result.json())
+        .then(data => {
+            if(data.error === false){
+                drawTable();
+                document.querySelector(".saleCloseBtn").click();
+                document.querySelectorAll(".saleRow").forEach(el => {
+                    document.querySelector(".saleListArticles").removeChild(el);
+                })
+                saleAddArticle(getMaxSaleArticleIndex());
+                saleAddArticle(getMaxSaleArticleIndex());
+            }else{
+                console.log(data.errortext);
+            }
+        })
+
+})
+
+const saleAddArticleBtn = document.querySelector(".saleAddArticleBtn");
+
+saleAddArticleBtn.addEventListener("click", (e) => {
+    let id = getMaxSaleArticleIndex();
+    saleAddArticle(id);
+})
+
+function getMaxSaleArticleIndex(){
+    let articles = document.querySelectorAll(".saleArticle");
+    let maxindex;
+    articles[articles.length - 1] === undefined ? maxindex = 0 : maxindex = parseInt(articles[articles.length - 1].dataset.index) + 1;
+
+
+    return maxindex;
+}
+
+function saleAddArticle(index){
+    let textToAdd = '<div class="form-group col-5">' +
+        '<label for="article">Nom de l\'article : </label>' +
+        '<input placeholder="Nom de l\'article" class="form-control saleArticle"' +
+        'style="margin: 0 auto" type="text" list="all_articles" data-index="'+index+'">' +
+        '</div>' +
+        '<div class="form-group col-4">' +
+        '<label for="article">Quantité souhaitée : </label>' +
+        '<input placeholder="Quantité" class="form-control saleQuantite"' +
+        'style="margin: 0 auto" type="number" data-index="'+index+'">' +
+        '</div>'+
+        '<div class="form-group col-3" >'+
+        '<label> Retirer </label>'+
+        '<button class="form-control btn btn-danger saleDeleteArticle" onClick="saleDeleteArticle('+index+')">X</button>'+
+        '</div>';
+
+    let row = document.createElement("div");
+    row.classList.add("saleRow");
+    row.classList.add("row");
+    row.dataset.index = index;
+    row.innerHTML = textToAdd;
+
+    document.querySelector(".saleListArticles").appendChild(row);
+}
+
+function saleDeleteArticle(index){
+    document.querySelector(".saleListArticles").removeChild(document.querySelector(".saleRow[data-index='"+index+"']"));
 }

@@ -111,3 +111,28 @@ calculAll();
 
 
 
+const form = document.querySelector("#upload-form");
+
+console.log(form);
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let formData = new FormData(form);
+    fetch(form.action, {
+        method: "POST",
+        body: formData
+    })
+        .then(res => res.json())
+        .then(data => {
+            if(data.error === true){
+                console.log(data.errortext);
+            }else{
+                const url = new URL(window.location.href);
+                const id = url.searchParams.get('id')
+                location.href = "../ventes/vente.php?id="+id;
+            }
+        })
+})
+
+
+

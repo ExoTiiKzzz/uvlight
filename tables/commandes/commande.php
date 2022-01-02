@@ -51,7 +51,7 @@ echo sidenav($path);
 
 $articles = $oArticle->db_get_all();
 $data = $oCommande->db_get_detailed_all_documents($_GET['id']);
-$fournisseur = $oCommande->db_get_fournisseur($_GET["id"]);
+$fournisseur = $oCommande->db_get_tiers($_GET["id"]);
 $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
 ?>
 
@@ -65,7 +65,7 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
             ?>
             <div class="row">
                 <div class="col-6 form-group">
-                    <label>Fournisseur : </label>
+                    <label>Client : </label>
                     <span class="font-weight-bold text-uppercase"><?= $fournisseur['data']["tie_raison_sociale"] ?></span>
                 </div>
             </div>
@@ -74,8 +74,7 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
                         <span class="font-weight-bold border-bottom border-white">Récapitulatif de la commande : </span>
                     </div>
                     <div class="ml-auto">
-                        <a href="../facture/?id=<?= $_GET['id'] ?>" class="btn btn-success">Facturer</a>
-                        <button data-toggle="modal" data-target="#command" class="btn btn-primary">Créer un bon de récéption</button>
+                        <button data-toggle="modal" data-target="#command" class="btn btn-primary">Créer un bon de livraison</button>
                     </div>
                 </div>
 
@@ -85,7 +84,7 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
                             <th>Article</th>
                             <th>Quantité commandée</th>
                             <th>Quantité reçue</th>
-                            <th>Quantité manquante</th>
+                            <th>Quantité restante</th>
                         </thead>
                     </table>
                 </div>
@@ -155,13 +154,13 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
 
 
 
-                <!-- Modal bon de récéption-->
+                <!-- Modal bon de livraison-->
 
                 <div class="modal fade" id="command" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Bon de réception</h5>
+                                <h5 class="modal-title">Bon de livraison</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>

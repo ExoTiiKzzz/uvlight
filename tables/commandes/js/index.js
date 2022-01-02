@@ -94,5 +94,5 @@ seeDocumentsBtn.addEventListener("click", seeDocuments);
 function seeDocuments(event){
     let id = event.target.dataset.index;
     console.log(document.querySelector(".seeDocuments"))
-    document.querySelector(".seeDocuments").href = "./commande.php?id="+id+"";
+    document.querySelector(".seeDocuments").href = "./vente.php?id="+id+"";
 }

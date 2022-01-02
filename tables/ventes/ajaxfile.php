@@ -25,19 +25,19 @@ if($searchValue != ''){
 }
 
 ## Total number of records without filtering
-$stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ".DB_TABLE_COMMANDE ." WHERE Com_ID != 0 AND com_is_client = 0");
+$stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ".DB_TABLE_COMMANDE ." WHERE Com_ID != 0 AND com_is_client = 1");
 $stmt->execute();
 $records = $stmt->fetch();
 $totalRecords = $records['allcount'];
 
 ## Total number of records with filtering
-$stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ".DB_TABLE_COMMANDE." WHERE Com_ID != 0 AND com_is_client = 0".$searchQuery);
+$stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ".DB_TABLE_COMMANDE." WHERE Com_ID != 0 AND com_is_client = 1".$searchQuery);
 $stmt->execute($searchArray);
 $records = $stmt->fetch();
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$stmt = $conn->prepare("SELECT Com_ID, Com_create_datetime, fk_etat_ID FROM ".DB_TABLE_COMMANDE." WHERE Com_ID != 0 AND com_is_client = 0 ".$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
+$stmt = $conn->prepare("SELECT Com_ID, Com_create_datetime, fk_etat_ID FROM ".DB_TABLE_COMMANDE." WHERE Com_ID != 0 AND com_is_client = 1 ".$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
 
 // Bind values
 foreach($searchArray as $key=>$search){

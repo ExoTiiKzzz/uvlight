@@ -9,7 +9,7 @@
     echo navbar($path);
     echo sidenav($path);
 ?>
-<link href="../../assets/css/bootstrap5.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
     <?php 
@@ -43,6 +43,7 @@
         echo $oListe->build_liste("liste_casiers", $oCasier->db_get_all(), "cas_lib");
         echo $oListe->build_liste("liste_fournisseurs", $oTiers->db_get_all_fournisseurs(), "tie_raison_sociale");
         echo $oListe->build_liste("all_articles", $oArticle->db_get_all(), "art_nom");
+        echo $oListe->build_liste("liste_clients", $oTiers->db_get_all_clients(), "tie_raison_sociale");
         require './components/main.php';
 ?>
 

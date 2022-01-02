@@ -2,7 +2,8 @@
     "require": {
         "vlucas/phpdotenv": "^2.4",
         "nesbot/carbon": "^2.53",
-        "spipu/html2pdf": "^5.2"
+        "spipu/html2pdf": "^5.2",
+        "dompdf/dompdf": "^1.1"
     },
     "autoload": {
         "psr-4": {

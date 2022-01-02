@@ -4,7 +4,8 @@
     </datalist>
 
     <button type='button' class='my-3 btn btn-success openCreateBtn' data-toggle='modal' data-target='#createmodal'> Créer un article </button>
-    <button type='button' class='mx-3 btn btn-success' data-toggle='modal' data-target='#command'> Commande fournisseur </button>
+    <button type='button' class='ml-3 btn btn-success' data-toggle='modal' data-target='#command'> Commande fournisseur </button>
+    <button type='button' class='mx-3 btn btn-success' data-toggle='modal' data-target='#sale'> Commande client </button>
 
     <div class="table-container" style="margin-right: 0px;">
         <table id="table">
@@ -33,6 +34,7 @@
 
     <?php require './components/createModal.html'; ?>
     <?php require './components/commandModal.html'; ?>
+    <?php require './components/venteModal.html'; ?>
     <?php require './components/tarifsModal.php' ?>
 
 

@@ -9,9 +9,9 @@ echo doctype("Générer la facture ".$_GET['id'], $path);
 echo navbar($path);
 echo sidenav($path);
 
-$lignes_recues = $oCommande->db_get_all_received_articles($_GET["id"]);
+$lignes_recues = $oCommande->db_get_all_articles($_GET["id"]);
 $prix = $oTarif->db_get_all_tarifs();
-$fournisseur = $oCommande->db_get_fournisseur($_GET["id"])["data"];
+$tiers = $oCommande->db_get_tiers($_GET["id"])["data"];
 
 $max = 0;
 ?>
@@ -32,15 +32,22 @@ $max = 0;
     }
     ?>
 
+    <form action="./trait.php" method="post" id="upload-form">
+        <input type="hidden" name="data[com_ID]" value="<?= $_GET["id"]; ?>" />
     <h1 class="text-center mb-4 pb-4">Choisissez les articles à facturer</h1>
+
+    <div class="form-group">
+        <label for="comment">Commentaire : </label>
+        <textarea id="comment" name="data[comment]" rows="2" class="form-control" placeholder="Commentaire"></textarea>
+    </div>
     <div class="row form-group">
         <div class="col-2">
             <label for="tarif"><h5>Tarif :</h5></label>
-            <select id="tarif" class="form-control selectTarif" name="test">
+            <select id="tarif" class="form-control selectTarif" name="data[codetarif]">
                 <?php
 
                 foreach($oTarif->db_get_all() as $tarif){ ?>
-                    <option <?php if($tarif["tar_ID"] == $fournisseur["fk_tar_ID"]) echo "selected" ?> value="<?= $tarif['tar_ID'] ?>">T <?= $tarif['tar_ID'] ?></option>
+                    <option <?php if($tarif["tar_ID"] == $tiers["fk_tar_ID"]) echo "selected" ?> value="<?= $tarif['tar_ID'] ?>">T <?= $tarif['tar_ID'] ?></option>
                     <?php
                 }
                 ?>
@@ -69,10 +76,9 @@ $max = 0;
             <h3>Sous-Total</h3>
         </div>
     </div>
-    <form action="./trait.php" method="post">
         <?php
         foreach ($lignes_recues["content"] as $ligne){
-            $prixHT =$prix["content"][$ligne["art_ID"].'-'.$fournisseur["fk_tar_ID"]]['prix'];
+            $prixHT = $prix["content"][$ligne["art_ID"].'-'.$tiers["fk_tar_ID"]]['prix'];
             ?>
             <div class="row form-group">
                 <div class="col-2">
@@ -110,7 +116,8 @@ $max = 0;
                 <h4><b>Total HT avant remise:</b></h4>
             </div>
             <div class="col-2 form-control">
-                <span class="totalAvantHT"></span> €
+                 <span class="totalAvantHT"></span> €
+                <input type="hidden" name="totalHT" class="hiddenTotalHT" value="<?= $max / 1.20 ?>">
             </div>
         </div>
 
@@ -120,7 +127,7 @@ $max = 0;
                 <h4>Remise (%) :</h4>
             </div>
             <div class="col-2 p-0">
-                <input type="number" class="form-control remiseP" value="0">
+                <input type="number" step="0.01" class="form-control remiseP" value="0">
             </div>
         </div>
 
@@ -130,7 +137,7 @@ $max = 0;
                 <h4>Remise (€) :</h4>
             </div>
             <div class="col-2 p-0">
-                <input type="number" class="form-control remiseE" value="0">
+                <input name="data[remise]" step="0.01" type="number" class="form-control remiseE" value="0">
             </div>
         </div>
 
@@ -165,13 +172,14 @@ $max = 0;
         </div>
 
         <div class="float-right col-2 p-0">
-            <button class="btn btn-primary form-control ml-3" type="submit" name="prevalidation" value="1">Valider</button>
+            <input type="hidden" name="prevalidation" value="1">
+            <button class="btn btn-primary form-control ml-3" type="submit" >Valider</button>
         </div>
     </form>
 
 </div>
 
-<script> //initialisation datatable
+<script>
     const prix = <?php echo json_encode($prix["content"]) ?>;
     const max = <?php echo $max ?>;
 </script>
