@@ -20,14 +20,13 @@ function updateRow(){
     )
     .then(response => response.json())
     .then(result => {
-        console.log(result)
         if(result.error === true){
-            console.log(result.errortext);
+            errorHandler(result.errortext);
         }else{
             drawTable();
             document.querySelector(".updateCloseBtn").click();
         }
-    }).catch(err => console.log(err));
+    }).catch(err => errorHandler(err));
     
 }
 

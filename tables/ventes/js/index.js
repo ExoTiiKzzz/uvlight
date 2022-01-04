@@ -43,7 +43,6 @@ createBtn.addEventListener("click", () => {
     formData.append("comment", comment);
     formData.append("articles", articles);
     formData.append("quantites", quantites);
-    console.log(articles, quantites);
 
     // fetch(url, {
     //     method: "POST",
@@ -54,7 +53,7 @@ createBtn.addEventListener("click", () => {
     //     if(data.error === false){
             
     //     }else{
-    //         console.log(data.errortext);
+    //         errorHandler(data.errortext);
     //     }
     // })
 })
@@ -82,7 +81,7 @@ function updateModal(event){
             document.querySelector(".seeDocuments").dataset.index = id;
             updateBtn.dataset.index = id;
         }else{
-            console.log(data.errortext);
+            errorHandler(data.errortext);
         }
     })
 
@@ -93,6 +92,5 @@ seeDocumentsBtn.addEventListener("click", seeDocuments);
 
 function seeDocuments(event){
     let id = event.target.dataset.index;
-    console.log(document.querySelector(".seeDocuments"))
     document.querySelector(".seeDocuments").href = "./vente.php?id="+id+"";
 }

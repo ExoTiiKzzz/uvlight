@@ -40,8 +40,6 @@
         </div>
     </form>
 
-    <script src="./script/js/subform.js"></script>
-    <script src="./script/js/logincheckjwt.js"></script>
-    <!-- <script src="./script/js/https.js"></script> -->
+    <script src="script/js/login.js"></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 <?php 
 
+session_start();
 
 // define database tables names
 define('DB_TABLE_ARTICLE', 'article');

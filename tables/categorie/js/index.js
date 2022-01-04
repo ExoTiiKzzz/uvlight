@@ -21,12 +21,12 @@ createBtn.addEventListener("click", (e) =>{
     .then(response => response.json())
     .then(result => {
         if(result.error === true){
-            console.log(result.errortext);
+            errorHandler(result.errortext);
         }else{
             location.reload();
         }
     })
-    .catch(err => console.log(err));
+    .catch(err => errorHandler(err));
 })
 
 //updates buttons
@@ -53,7 +53,7 @@ function openUpdateModalListener(e){
     .then(response => response.json())
     .then(result => {
         if(result.error === true){
-            console.log(result.errortext);
+            errorHandler(result.errortext);
         }else{
             var lib = result.content.lib;
             var comment = result.content.comment;
@@ -62,5 +62,5 @@ function openUpdateModalListener(e){
             document.querySelector(".updateLib").value = lib;
             document.querySelector(".updateComment").value = comment;
         }
-    }).catch(err => console.log(err));
+    }).catch(err => errorHandler(err));
 }

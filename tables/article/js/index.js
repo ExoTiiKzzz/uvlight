@@ -87,7 +87,7 @@ createBtn.addEventListener("click", (e) =>{
     .then(response => response.json())
     .then(result => {
         if(result.error === true){
-            console.log(result.errortext);
+            errorHandler(result.errortext);
         }else{
             drawTable();
             document.querySelector(".createCloseBtn").click();
@@ -95,7 +95,7 @@ createBtn.addEventListener("click", (e) =>{
             updateListeArticle(lib);
         }
     })
-    .catch(err => console.log(err));
+    .catch(err => errorHandler(err));
 })
 
 
@@ -125,7 +125,7 @@ function openUpdateModalListener(e){
     .then(response => response.json())
     .then(result => {
         if(result.error === true){
-            console.log(result.errortext);
+            errorHandler(result.errortext);
         }else{
             let lib = result.content.lib;
             let comment = result.content.comment;
@@ -177,14 +177,13 @@ function openUpdateModalListener(e){
                 document.querySelector(".updateTarifInput[data-index='"+el.tar_ID+"']").value = el.prix;
             });
         }
-    }).catch(err => console.log(err));
+    }).catch(err => errorHandler(err));
 }
 
 const commandBtn = document.querySelector(".commandBtn");
 
 commandBtn.addEventListener("click", (e) => {
     let comment = document.querySelector(".createCommandComment").value;
-    console.log(comment);
     let articles = [], quantitys = [];
     let fourni = document.querySelector(".commandFourni").value;
 
@@ -199,7 +198,6 @@ commandBtn.addEventListener("click", (e) => {
         quantitys[index] = document.querySelector(".commandQuantite[data-index='"+index+"']").value;
     })
 
-    // console.log(articles, quantitys);
 
     let formData = new FormData();
     formData.append("command", "1");
@@ -222,7 +220,7 @@ commandBtn.addEventListener("click", (e) => {
                 })
                 commandAddArticle(getMaxCommandArticleIndex());
             }else{
-                console.log(data.errortext);
+                errorHandler(data.errortext);
             }
         })
 
@@ -299,7 +297,7 @@ function loadFourniList(event){
                         document.getElementById("liste_articles").innerHTML = "<option value='Aucun article'></option>";
                     }
                 }
-                console.log(data.errortext);
+                errorHandler(data.errortext);
             }else{
                 document.querySelector(".commandBtn").removeAttribute("disabled");
                 let list = "";
@@ -334,7 +332,7 @@ function updateTarif(event){
         .then(res => res.json())
         .then(data => {
             if(data.error === true){
-                console.log(data.errortext);
+                errorHandler(data.errortext);
             }
         })
 }
@@ -420,7 +418,7 @@ saleBtn.addEventListener("click", (e) => {
                 saleAddArticle(getMaxSaleArticleIndex());
                 saleAddArticle(getMaxSaleArticleIndex());
             }else{
-                console.log(data.errortext);
+                errorHandler(data.errortext);
             }
         })
 

@@ -32,9 +32,8 @@ function updateCommand(){
     })
         .then(res=> res.json())
         .then(data => {
-            console.log(data);
             if(data.error === true){
-                console.log(data.errortext);
+                errorHandler(data.errortext);
             }else{
                 location.reload();
             }

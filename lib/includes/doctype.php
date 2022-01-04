@@ -13,7 +13,6 @@ function doctype($title, $path){
         <!-- jQuery Library -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.0/umd/popper.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
         <link rel="stylesheet" href="'.$path.'uvlight/assets/css/main.css">
         <link rel="stylesheet" href="'.$path.'uvlight/assets/css/navbar.css">
         <link rel="stylesheet" href="'.$path.'uvlight/assets/css/sidenav.css">

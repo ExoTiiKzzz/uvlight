@@ -1,6 +1,7 @@
 <?php
 if(!isset($_GET["id"]) || empty($_GET["id"])) header('Location: ./');
 require '../../lib/includes/defines.inc.php';
+$oLogin->validate_SESSION();
 require '../../lib/includes/navbar.php';
 require '../../lib/includes/sidenav.php';
 require '../../lib/includes/doctype.php';

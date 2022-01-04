@@ -18,7 +18,6 @@ function updateCommand(){
         let url_string = window.location.href;
         let url = new URL(url_string);
         let id = url.searchParams.get("id");
-        console.log(array);
         array = JSON.stringify(array);
 
         let formData = new FormData();
@@ -33,9 +32,8 @@ function updateCommand(){
         })
             .then(res=> res.json())
             .then(data => {
-                console.log(data);
                 if(data.error === true){
-                    console.log(data.errortext);
+                    errorHandler(data.errortext);
                 }else{
                     location.reload();
                 }

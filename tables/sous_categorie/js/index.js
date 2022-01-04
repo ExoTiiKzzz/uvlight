@@ -25,13 +25,13 @@ createBtn.addEventListener("click", (e) =>{
     .then(response => response.json())
     .then(result => {
         if(result.error === true){
-            console.log(result.errortext);
+            errorHandler(result.errortext);
         }else{
             drawTable();
             document.querySelector(".createCloseBtn").click();
         }
     })
-    .catch(err => console.log(err));
+    .catch(err => errorHandler(err));
 })
 
 //updates buttons
@@ -60,7 +60,7 @@ function openUpdateModalListener(event){
     .then(result => {
         console.log(result)
         if(result.error === true){
-            console.log(result.errortext);
+            errorHandler(result.errortext);
         }else{
             var lib = result.content.lib;
             var categorie = result.content.categorie;
@@ -69,5 +69,5 @@ function openUpdateModalListener(event){
             document.querySelector(".updateCat").value = categorie;
             document.querySelector(".updateId").value = id;
         }
-    }).catch(err => console.log(err));
+    }).catch(err => errorHandler(err));
 }

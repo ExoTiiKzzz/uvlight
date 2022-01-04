@@ -1,6 +1,7 @@
 <?php
 if(!isset($_GET["id"]) || empty($_GET["id"])) header('Location: ../../');
 require '../../lib/includes/defines.inc.php';
+$oLogin->validate_SESSION();
 require '../../lib/includes/navbar.php';
 require '../../lib/includes/sidenav.php';
 require '../../lib/includes/doctype.php';
@@ -58,13 +59,13 @@ $max = 0;
 
     <div class="row form-group pb-4">
         <div class="col-2">
-            <h3>Référence article</h3>
-        </div>
-        <div class="col-2">
             <h3>Nom article</h3>
         </div>
         <div class="col-2">
             <h3>Prix HT</h3>
+        </div>
+        <div class="col-2">
+            <h3>Taxe produit</h3>
         </div>
         <div class="col-2">
             <h3>Prix TTC</h3>
@@ -82,10 +83,6 @@ $max = 0;
             ?>
             <div class="row form-group">
                 <div class="col-2">
-                    <div class="form-control"><?= $ligne["art_ID"] ?></div>
-                    <input type="hidden" value="<?= $ligne["art_ID"] ?>" name="data[article][]">
-                </div>
-                <div class="col-2">
                     <div class="form-control"><?= $ligne["art_nom"] ?></div>
                 </div>
                 <div class="col-2">
@@ -93,9 +90,16 @@ $max = 0;
                         <span class="prixHT" data-index="<?= $ligne["art_ID"] ?>"><?= $prixHT ?> </span> €
                     </div>
                 </div>
+
                 <div class="col-2">
                     <div class="form-control">
-                        <span class="prixTTC" data-index="<?= $ligne["art_ID"] ?>"><?= $prixHT * 1.20 ?> </span> €
+                        <span class="taxe" data-index="<?= $ligne["art_ID"] ?>" > <?= $ligne["art_taxe"]?></span> %
+                    </div>
+                    <input type="hidden" value="<?= $ligne["art_ID"] ?>" name="data[article][]">
+                </div>
+                <div class="col-2">
+                    <div class="form-control">
+                        <span class="prixTTC" data-index="<?= $ligne["art_ID"] ?>"><?= $prixHT + ($prixHT * (int) $ligne["art_taxe"] / 100) ?> </span> €
                     </div>
                 </div>
                 <div class="col-2">
@@ -103,11 +107,11 @@ $max = 0;
                 </div>
 
                 <div class="col-2 form-control">
-                    <span class="sousTotal" data-index="<?= $ligne["art_ID"] ?>"><?= $prixHT * 1.20 * $ligne['total'] ?></span> €
+                    <span class="sousTotal" data-index="<?= $ligne["art_ID"] ?>"></span> €
                 </div>
             </div>
             <?php
-            $max += $prixHT * 1.20 * $ligne['total'];
+            $max += ($prixHT + ($prixHT * (int) $ligne["art_taxe"] / 100)) * $ligne['total'];
         }
         ?>
         <div class="row form-group mt-5">
@@ -189,8 +193,12 @@ $max = 0;
 <script src="./index.js"></script>
 
 <script src="../../script/js/sidenav.js"></script>
+<script src="../../script/js/index.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+
+<script src="../script/table.js"></script>
 </body>
 </html>

@@ -19,7 +19,7 @@ function updateRow(){
     .then(response => response.json())
     .then(result => {
         if(result.error === true){
-            console.log(result.errortext);
+            errorHandler(result.errortext);
         }else{
 
             var existingid = document.querySelector("tr.odd").dataset.value;
@@ -66,7 +66,7 @@ function updateRow(){
             table.api().order( [ 1, 'asc' ] ).draw();
             document.querySelector(".updateCloseBtn").click();
         }
-    }).catch(err => console.log(err));
+    }).catch(err => errorHandler(err));
     
 }
 

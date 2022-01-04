@@ -1,20 +1,8 @@
 <?php
     require './lib/includes/defines.inc.php';
-    if(!isset($_COOKIE["user_jwt"])){
-        header("location: login.php");
-    }else{
-        $check = $oLogin->validate_token();
-        if(!$check){
-            header("location: login.php");
-        }else{
-            $user_id = $oLogin->get_user_id_jwt();
-            if(!$user_id){
-                header("location: login.php");
-            }else{
-                $user_details = $oUser->db_get_by_id($user_id);
-            }
-        }
-    }
+    $oLogin->validate_SESSION();
+    $user_details = $oUser->db_get_by_id($_SESSION['session_user_ID']);
+    unset($_SESSION['session_user_ID']);
     require './lib/includes/doctype.php';
     require './lib/includes/navbar.php';
     require './lib/includes/sidenav.php';

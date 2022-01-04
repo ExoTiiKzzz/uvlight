@@ -26,7 +26,7 @@ function updateRow(){
     .then(result => {
         console.log(result)
         if(result.error === true){
-            console.log(result.errortext);
+            errorHandler(result.errortext);
         }else{
             drawTable();
             document.querySelector(".updateCloseBtn").click();

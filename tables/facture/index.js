@@ -10,8 +10,8 @@ function updateAll(){
     quantitysEl.forEach(el => {
         let id = el.dataset.index +'-'+ tarif;
         let prixHT = prix[id].prix;
-        document.querySelector(".prixHT[data-index='"+el.dataset.index+"']").innerText = prixHT;
-        document.querySelector(".prixTTC[data-index='"+el.dataset.index+"']").innerText = parseFloat(prixHT * 1.20).toFixed(2);
+        document.querySelector(".prixHT[data-index='"+el.dataset.index+"']").innerText = prixht;
+        document.querySelector(".prixTTC[data-index='"+el.dataset.index+"']").innerText = parseFloat(prixht +( prixht * document.querySelector(".taxe[data-index='"+id+"']").innerText / 100) ).toFixed(2);
         calculAll();
         calculRemiseP();
     })
@@ -42,8 +42,8 @@ function calculAll(){
 function calculSousTotal(){
     quantitysEl.forEach(el => {
         let id =el.dataset.index;
-        let quantite = parseInt(el.value);
-        let prixTTC = parseInt(document.querySelector(".prixTTC[data-index='"+id+"']").innerText);
+        let quantite = el.value;
+        let prixTTC = document.querySelector(".prixTTC[data-index='"+id+"']").innerText;
         let total = quantite * prixTTC;
         document.querySelector(".sousTotal[data-index='"+id+"']").innerText = parseFloat(total).toFixed(2);
     })
@@ -52,7 +52,7 @@ function calculSousTotal(){
 function calculAvantRemise(){
     let total = 0;
     quantitysEl.forEach(el => {
-        total += parseInt(el.value) * parseInt(document.querySelector(".prixHT[data-index='"+el.dataset.index+"']").innerText);
+        total += el.value * document.querySelector(".prixHT[data-index='"+el.dataset.index+"']").innerText;
     });
 
     document.querySelector(".totalAvantHT").innerText = parseFloat(total).toFixed(2);
@@ -92,13 +92,17 @@ function calculRemiseE(){
 }
 
 function calculTotalHT(){
-    let total = +document.querySelector(".totalAvantHT").innerText - +document.querySelector(".remiseE").value;
+    let total = document.querySelector(".totalAvantHT").innerText - document.querySelector(".remiseE").value;
 
     document.querySelector(".totalHT").innerText = parseFloat(total).toFixed(2);
 }
 
 function calculTaxes(){
-    let total = +document.querySelector(".totalAvantHT").innerText  * 0.20;
+    let total = 0;
+    document.querySelectorAll(".taxe").forEach(el => {
+        ht = document.querySelector(".prixHT[data-index='"+el.dataset.index+"']").innerText;
+       total += ( ht * el.innerText / 100 * document.querySelector(".quantite[data-index='"+el.dataset.index+"']").value);
+    });
     document.querySelector(".totalTaxes").innerText = parseFloat(total).toFixed(2);
 }
 
@@ -113,8 +117,6 @@ calculAll();
 
 const form = document.querySelector("#upload-form");
 
-console.log(form);
-
 form.addEventListener("submit", (e) => {
     e.preventDefault();
     let formData = new FormData(form);
@@ -125,11 +127,11 @@ form.addEventListener("submit", (e) => {
         .then(res => res.json())
         .then(data => {
             if(data.error === true){
-                console.log(data.errortext);
+                errorHandler(data.errortext);
             }else{
                 const url = new URL(window.location.href);
                 const id = url.searchParams.get('id')
-                location.href = "../ventes/vente.php?id="+id;
+                location.href = "./pdf.php?id="+data.content+"";
             }
         })
 })

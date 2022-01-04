@@ -12,7 +12,7 @@ if($com_ID["error"] === true){
 require "../../server/vendor/autoload.php";
 
 $dompdf = new \Dompdf\Dompdf();
-$html = file_get_contents("http://localhost/uvlight/template_html_facture/index.html");
+$html = file_get_contents("http://localhost/uvlight/tables/facture/template.php?id=$doc_ID");
 $dompdf->loadHtml($html);
 
 // (Optional) Setup the paper size and orientation
@@ -32,6 +32,3 @@ if (!file_exists("factures/$com_ID")) {
 
 
 file_put_contents("factures/$com_ID/$doc_ID.pdf", $output);
-
-
-var_dump($com_ID);

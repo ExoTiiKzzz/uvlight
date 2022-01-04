@@ -238,7 +238,7 @@ class Commande
             $response["error"] = true;
             $response["errortext"] = $docs["errortext"];
         }else{
-            $request = "SELECT SUM(Lignr_quantite) as total, art_nom, art_ID
+            $request = "SELECT SUM(Lignr_quantite) as total, art_nom, art_ID, art_taxe
                     FROM ".DB_TABLE_LIGNES_RECEPTION." LR
                     INNER JOIN ".DB_TABLE_ARTICLE." A ON LR.fk_art_ID = A.art_ID
                     WHERE fk_doc_ID IN(";
@@ -318,6 +318,30 @@ class Commande
 
     public function updateCommand(int $com_ID, array $lignes) : array {
 
+    }
+
+    public function db_get_document_by_id(int $id) : array
+    {
+        global $conn;
+        $request = "SELECT * FROM ".DB_TABLE_DOCUMENT." WHERE doc_ID = :doc_ID";
+        $sql = $conn->prepare($request);
+        $sql->bindParam(":doc_ID",$id);
+        try{
+            $sql->execute();
+            $res = $sql->fetch(PDO::FETCH_ASSOC);
+            if($res !== false){
+                $response["error"] = false;
+                $response["content"] = $res;
+                return $response;
+            }
+            $response["error"] = true;
+            $response["errortext"] = "Pas de données";
+            return $response;
+        }catch (PDOException $e){
+            $response["error"] = true;
+            $response["errortext"] = $e->getMessage();
+            return $response;
+        }
     }
 
     private function updateLigne(int $com_ID, int $article_ID, int $quantite) : array {
