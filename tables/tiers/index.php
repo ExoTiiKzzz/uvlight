@@ -5,7 +5,7 @@ $oLogin->validate_SESSION();
     require '../../lib/includes/sidenav.php';
     require '../../lib/includes/doctype.php';
 
-    echo doctype("Article", $path);
+    echo doctype("Tiers", $path);
     echo navbar($path);
     echo sidenav($path);
 
@@ -44,7 +44,7 @@ $oLogin->validate_SESSION();
         </datalist>
         <form action="trait.php" method="post">
             <div class="form-group row col-4 p-4">
-                <button type='button' class='btn btn-success' data-toggle='modal' data-target='#modalcreate'>
+                <button type='button' class='btn btn-success' data-toggle='modal' data-target='#createModal'>
                     Ajouter un tiers
                 </button>
             </div>
@@ -62,66 +62,47 @@ $oLogin->validate_SESSION();
                     <th>Code Tarif</th>
                     <th>Actions</th>
                 </thead>
-                <tbody>
-                    <?php 
-                        foreach ($data as $key) {
-                            $id = $key["tie_ID"]; ?>
-                            <tr data-value="<?php echo $id ?>">
-                            <td style='width: 5%'>
-                            <input type='checkbox' class='checkbox' data-index="<?php echo $id ?>" checked='false'></td>
-                            <td><center><?php echo $id ?></center></td>
-                            <td><center><?php echo $key["tie_raison_sociale"] ?></center></td>
-                            <td><center><?php echo $key["typso_acronym"] ?></center></td>
-                            <td><center><?php echo $key["c_name"] ?></center></td>
-                            <td><center><?php echo $key["tie_tel"] ?></center></td>
-                            <td><center><?php echo $key["tar_lib"] ?></center></td>
-                            <td style='display:flex; justify-content: space-evenly;'>
-                                <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modal<?php echo $id ?>'>
-                                    Voir plus
-                                </button>
-                                <form action="trait.php" method="post">
-                                    <input type="hidden" name="tiers_id" value="<?php echo $id ?>">
-                                    <button type="submit" name="delete" class="delete-btn btn btn-danger">Supprimer</button>
-                                </form>
-                            </td>
-                            </tr>
-                            <?php
-                        }
-                    ?>
-                </tbody>
+
             </table>
             <input type="checkbox" class="select-all" id="select-all">
             <label for="select-all" class="form-check-label">Tout sélectionner</label>
 
-        
-        <div class="operations-div" style="display: flex; justify-content: space-evenly">
-            <button class="btn btn-danger delete-all" style="display: none">
-                Supprimer les éléments selectionnés.
-            </button>
-        </div>
+
+
+
+
+            <div class="operations-div" style="display: flex; justify-content: space-evenly">
+                <button class="btn btn-danger delete-all" style="display: none">
+                    Supprimer les éléments selectionnés.
+                </button>
+            </div>
     </div>
 
-        <div class="modal fade" id="modalcreate" tabindex="-1" role="dialog" aria-hidden="true">
+<!--        Create Form-->
+        <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Créer un tiers</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <h5 class="modal-title">Informations du tiers : <span class="updateRaison"></span></h5>
+                        <button type="button" class="close createCloseBtn" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="trait.php" method="post">
+                        <form class="createForm">
+                            <input type="hidden" name="tiers_id" value="">
                             <div class="row form-group">
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="Raison sociale" name="raison_sociale" required>
+                                    <label class="form-label">Raison sociale</label>
+                                    <input type="text" class="form-control createRaisonSociale" placeholder="Raison sociale" name="raison_sociale" required value="">
                                 </div>
                                 <div class="col">
+                                    <label class="form-label">Type société</label>
                                     <select type="text" class="form-control" placeholder="Type société" name="type_societe" required>
-                                        <?php 
+                                        <?php
                                         foreach ($types_societes as $key) {?>
                                             <option value="<?php echo $key["typso_ID"] ?>"><?php echo $key["typso_acronym"]." (".$key["typso_lib"].")" ?></option>
-                                        <?php
+                                            <?php
                                         }
                                         ?>
                                     </select>
@@ -130,85 +111,94 @@ $oLogin->validate_SESSION();
 
                             <div class="row form-group">
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="Telephone" name="telephone" required>
+                                    <label class="form-label">Téléphone</label>
+                                    <input type="text" class="form-control createTel" placeholder="Telephone" name="telephone" required value="">
                                 </div>
                                 <div class="col">
-                                    <input type="email" class="form-control" placeholder="Adresse mail" name="email" required>
+                                    <label class="form-label">Adresse mail</label>
+                                    <input type="email" class="form-control createMail " placeholder="Adresse mail" name="email" required value="">
                                 </div>
                             </div>
-                            
-                            
+
+
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Adresse" name="adresse" required>
+                                <label class="form-label">Adresse</label>
+                                <input type="text" class="form-control createAdresse" placeholder="Adresse" name="adresse" required value="">
                             </div>
-                            
+
                             <div class="row form-group">
                                 <div class="col">
-                                    <input class="villeinput form-control" list="suggestionList" id="answerInput" placeholder="Ville">
-                                        <datalist id="suggestionList">
-                                            <?php 
-                                            echo $citiesdatalist;                                        
-                                            ?>
-                                        </datalist>
-                                    <input type="hidden" name="ville" id="answerInput-hidden" required>
+                                    <label class="form-label">Ville</label>
+                                    <input class="form-control createVille" placeholder="Ville" type="text" name="ville">
                                 </div>
                                 <div class="col">
+                                    <label class="form-label">Type tiers</label>
                                     <select type="text" class="form-control" placeholder="Type tiers" name="type_tiers" required>
-                                        <?php 
+                                        <?php
                                         foreach ($types_tiers as $key) {?>
                                             <option value="<?php echo $key["typti_ID"] ?>"><?php echo $key["typti_lib"] ?></option>
-                                        <?php
+                                            <?php
                                         }
                                         ?>
                                     </select>
                                 </div>
-                                
+
                             </div>
 
                             <div class="row form-group">
                                 <div class="col">
+                                    <label class="form-label">Type de réglement</label>
                                     <select type="text" class="form-control" placeholder="Type réglement" name="type_reglement" required>
-                                        <?php 
+                                        <?php
                                         foreach ($types_reglement as $key) {?>
                                             <option value="<?php echo $key["typre_ID"] ?>"><?php echo $key["typre_lib"] ?></option>
-                                        <?php
+                                            <?php
                                         }
                                         ?>
-                                    </select>   
+                                    </select>
                                 </div>
+
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="IBAN" name="iban" required>
+                                    <label class="form-label">Numéro compte</label>
+                                    <input type="text" class="form-control createNumCompte" placeholder="Numéro compte" name="numero_compte">
                                 </div>
                             </div>
 
                             <div class="row form-group">
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="BIC" name="bic" required>
+                                    <label class="form-label">IBAN</label>
+                                    <input type="text" class="form-control createIBAN" placeholder="IBAN" name="iban">
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="Code Banque" name="code_banque" required>
+                                    <label class="form-label">BIC</label>
+                                    <input type="text" class="form-control createBIC" placeholder="BIC" name="bic">
+                                </div>
+
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col">
+                                    <label class="form-label">Code Banque</label>
+                                    <input type="text" class="form-control createBanque" placeholder="Code Banque" name="code_banque">
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Code guichet</label>
+                                    <input type="text" class="form-control createGuichet" placeholder="Code guichet" name="code_guichet">
                                 </div>
                             </div>
 
                             <div class="row form-group">
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="Code guichet" name="code_guichet" required>
+                                    <label class="form-label">Cle RIB</label>
+                                    <input type="text" class="form-control createCle" placeholder="Cle RIB" name="cle_rib">
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="Numéro compte" name="numero_compte" required>
-                                </div>
-                            </div>
-                            
-                            <div class="row form-group">
-                                <div class="col">
-                                    <input type="text" class="form-control" placeholder="Cle RIB" name="cle_rib" required>
-                                </div>
-                                <div class="col">
+                                    <label class="form-label">Code Tarif</label>
                                     <select type="text" class="form-control" placeholder="Code tarif" name="code_tarif" required>
-                                        <?php 
+                                        <?php
                                         foreach ($tarifs as $key) {?>
                                             <option value="<?php echo $key["tar_ID"] ?>"><?php echo "Tarif ".$key["tar_lib"] ?></option>
-                                        <?php
+                                            <?php
                                         }
                                         ?>
                                     </select>
@@ -216,252 +206,212 @@ $oLogin->validate_SESSION();
                             </div>
 
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Domiciliation" name="domiciliation" required>
+                                <label class="form-label">Domicialitation</label>
+                                <input type="text" class="form-control createDomi" placeholder="Domiciliation" name="domiciliation">
                             </div>
-                            <center><button type="submit" name="create" class="btn btn-success btn-lg">Ajouter un tiers</button></center>
+                            <center><input type="button" name="create" class="btn btn-success btn-lg createBtn" value="Ajouter"></center>
                         </form>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
-        
-
-        <?php 
-        
-            foreach($data as $key){ 
-                $id = $key["tie_ID"];
-                ?>
-                <!-- Modal -->
-                <div class="modal fade" id="modal<?php echo $id ?>" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog modal-xl" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Informations du tiers : <b> <?php echo $key["tie_raison_sociale"] ?></b></h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="trait.php" method="post">
-                                    <input type="hidden" name="tiers_id" value="<?php echo $id ?>">
-                                    <div class="row form-group">
-                                        <div class="col">
-                                            <label class="form-label">Raison sociales</label>
-                                            <input type="text" class="form-control" placeholder="Raison sociale" name="raison_sociale" required value="<?php echo $key["tie_raison_sociale"] ?>">
-                                        </div>
-                                        <div class="col">
-                                            <label class="form-label">Type société</label>
-                                            <select type="text" class="form-control" placeholder="Type société" name="type_societe" required autocomplete="off">
-                                                <?php 
-                                                foreach ($types_societes as $subkey) {?>
-                                                    <option value="<?php echo $subkey["typso_ID"] ?>" <?php if($subkey["typso_ID"] === $key["fk_typso_ID"]) echo "selected" ?>><?php echo $subkey["typso_acronym"]." (".$subkey["typso_lib"].")" ?></option>
-                                                <?php
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="row form-group">
-                                        <div class="col">
-                                            <label class="form-label">Téléphone</label>
-                                            <input type="text" class="form-control" placeholder="Telephone" name="telephone" required value="<?php echo $key["tie_tel"] ?>">
-                                        </div>
-                                        <div class="col">
-                                            <label class="form-label">Adresse mail</label>
-                                            <input type="email" class="form-control" placeholder="Adresse mail" name="email" required value="<?php echo $key["tie_email"] ?>">
-                                        </div>
-                                    </div>
-                                    
-                                    
-                                    <div class="form-group">
-                                        <label class="form-label">Adresse</label>
-                                        <input type="text" class="form-control" placeholder="Adresse" name="adresse" required value="<?php echo $key["tie_adresse"] ?>">
-                                    </div>
-                                    
-                                    <div class="row form-group">
-                                        <div class="col">
-                                            <label class="form-label">Ville</label>
-                                            <input class="villeinputupdate form-control" list="suggestionList" id="villeinputupdate<?php echo $id ?>" placeholder="Ville" autocomplete="off" value="<?php echo $key["fk_com_ID"]." ".$key["zip_code"]." ".$key["c_name"] ?>">
-                                                
-                                            <input type="hidden" name="ville" id="villeinputupdate<?php echo $id ?>-hidden" required value="<?php echo $key["fk_com_ID"] ?>">
-                                        </div>
-                                        <div class="col">
-                                            <label class="form-label">Tiers</label>
-                                            <select type="text" class="form-control" placeholder="Type tiers" name="type_tiers" required autocomplete="off">
-                                                <?php 
-                                                foreach ($types_tiers as $subkey) {?>
-                                                    <option value="<?php echo $subkey["typti_ID"] ?>" <?php if($subkey["typti_ID"] === $key["fk_typti_ID"]) echo "selected" ?>><?php echo $subkey["typti_lib"] ?></option>
-                                                <?php
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                        
-                                    </div>
-
-                                    <div class="row form-group">
-                                        <div class="col">
-                                            <label class="form-label">Type de réglement</label>
-                                            <select type="text" class="form-control" placeholder="Type réglement" name="type_reglement" required autocomplete="off">
-                                                <?php 
-                                                foreach ($types_reglement as $subkey) {?>
-                                                    <option value="<?php echo $subkey["typre_ID"] ?>" <?php if($subkey["typre_ID"] === $key["fk_typre_ID"]) echo "selected" ?>>
-                                                        <?php echo $subkey["typre_lib"] ?>
-                                                    </option>
-                                                <?php
-                                                }
-                                                ?>
-                                            </select>   
-                                        </div>
-                                        <div class="col">
-                                            <label class="form-label">IBAN</label>
-                                            <input type="text" class="form-control" placeholder="IBAN" name="iban" required value="<?php echo $key["tie_IBAN"] ?>">
-                                        </div>
-                                    </div>
-
-                                    <div class="row form-group">
-                                        <div class="col">
-                                            <label class="form-label">BIC</label>
-                                            <input type="text" class="form-control" placeholder="BIC" name="bic" required value="<?php echo $key["tie_BIC"] ?>">
-                                        </div>
-                                        <div class="col">
-                                            <label class="form-label">Code Banque</label>
-                                            <input type="text" class="form-control" placeholder="Code Banque" name="code_banque" required value="<?php echo $key["tie_code_banque"] ?>">
-                                        </div>
-                                    </div>
-
-                                    <div class="row form-group">
-                                        <div class="col">
-                                            <label class="form-label">Code guichet</label>
-                                            <input type="text" class="form-control" placeholder="Code guichet" name="code_guichet" required value="<?php echo $key["tie_code_guichet"] ?>">
-                                        </div>
-                                        <div class="col">
-                                            <label class="form-label">Numéro compte</label>
-                                            <input type="text" class="form-control" placeholder="Numéro compte" name="numero_compte" required value="<?php echo $key["tie_num_compte"] ?>">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="row form-group">
-                                        <div class="col">
-                                            <label class="form-label">Cle RIB</label>
-                                            <input type="text" class="form-control" placeholder="Cle RIB" name="cle_rib" required value="<?php echo $key["tie_cle_rib"] ?>">
-                                        </div>
-                                        <div class="col">
-                                            <label class="form-label">Code Tarif</label>
-                                            <select type="text" class="form-control" placeholder="Code tarif" name="code_tarif" required autocomplete="off">
-                                                <?php 
-                                                foreach ($tarifs as $subkey) {?>
-                                                    <option value="<?php echo $subkey["tar_ID"] ?>" <?php if($subkey["tar_ID"] === $key["fk_tar_id"]) echo "selected" ?>><?php echo "Tarif ".$subkey["tar_lib"] ?></option>
-                                                <?php
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="form-label">Domicialitation</label>
-                                        <input type="text" class="form-control" placeholder="Domiciliation" name="domiciliation" required value="<?php echo $key["tie_domiciliation"] ?>">
-                                    </div>
-                                    <center><button type="submit" name="update" class="btn btn-success btn-lg">Sauvegarder</button></center>
-                                </form>
-                            </div>
-                            
-                        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Informations du tiers : <span class="updateRaison"></span></h5>
+                        <button type="button" class="close updateCloseBtn" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                </div>
-            
-            <?php    
-            }
+                    <div class="modal-body">
+                        <form class="updateForm">
+                            <input class="updateId" type="hidden" name="id" value="">
+                            <div class="row form-group">
+                                <div class="col">
+                                    <label class="form-label">Raison sociale</label>
+                                    <input type="text" class="form-control updateRaisonSociale" placeholder="Raison sociale" name="raison_sociale" required value="">
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Type société</label>
+                                    <select type="text" class="form-control updateTypso" placeholder="Type société" name="type_societe" required>
+                                        <?php
+                                        foreach ($types_societes as $key) {?>
+                                            <option class="typsoOption" data-index="<?php echo $key["typso_ID"] ?>" value="<?php echo $key["typso_ID"] ?>"><?php echo $key["typso_acronym"]." (".$key["typso_lib"].")" ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
 
-        ?>
+                            <div class="row form-group">
+                                <div class="col">
+                                    <label class="form-label">Téléphone</label>
+                                    <input type="text" class="form-control updateTel" placeholder="Telephone" name="telephone" required value="">
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Adresse mail</label>
+                                    <input type="email" class="form-control updateMail " placeholder="Adresse mail" name="email" required value="">
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="form-label">Adresse</label>
+                                <input type="text" class="form-control updateAdresse" placeholder="Adresse" name="adresse" required value="">
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col">
+                                    <label class="form-label">Région</label>
+                                    <input class="form-control updateRegion" placeholder="Région" type="text" list="liste_regions" name="region">
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Départements</label>
+                                    <input type="text" list="liste_departements" placeholder="Départements" class="form-control updateDepartement" name="departement" value="a" readonly="readonly">
+                                </div>
+
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col">
+                                    <label class="form-label">Ville</label>
+                                    <input class="form-control updateVille" placeholder="Ville" type="text" list="liste_villes" name="ville" value="a" readonly="readonly">
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Type tiers</label>
+                                    <select type="text" class="form-control" placeholder="Type tiers" name="type_tiers" required>
+                                        <?php
+                                        foreach ($types_tiers as $key) {?>
+                                            <option class="typtiOption" data-index="<?php echo $key["typti_ID"] ?>" value="<?php echo $key["typti_ID"] ?>"><?php echo $key["typti_lib"] ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col">
+                                    <label class="form-label">Type de réglement</label>
+
+                                    <select type="text" class="form-control" placeholder="Type réglement" name="type_reglement" required>
+                                        <?php
+                                        foreach ($types_reglement as $key) {?>
+                                            <option class="typreOption" data-index="<?php echo $key["typre_ID"] ?>" value="<?php echo $key["typre_ID"] ?>"><?php echo $key["typre_lib"] ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="col">
+                                    <label class="form-label">Numéro compte</label>
+                                    <input type="text" class="form-control updateNumCompte" placeholder="Numéro compte" name="numero_compte">
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col">
+                                    <label class="form-label">IBAN</label>
+                                    <input type="text" class="form-control updateIBAN" placeholder="IBAN" name="iban">
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">BIC</label>
+                                    <input type="text" class="form-control updateBIC" placeholder="BIC" name="bic">
+                                </div>
+
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col">
+                                    <label class="form-label">Code Banque</label>
+                                    <input type="text" class="form-control updateBanque" placeholder="Code Banque" name="code_banque">
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Code guichet</label>
+                                    <input type="text" class="form-control updateGuichet" placeholder="Code guichet" name="code_guichet">
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col">
+                                    <label class="form-label">Cle RIB</label>
+                                    <input type="text" class="form-control updateCle" placeholder="Cle RIB" name="cle_rib">
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Code Tarif</label>
+                                    <select type="text" class="form-control" placeholder="Code tarif" name="code_tarif" required>
+                                        <?php
+                                        foreach ($tarifs as $key) {?>
+                                            <option class="codetarOption" data-index="<?php echo $key["tar_ID"] ?>" value="<?php echo $key["tar_ID"] ?>"><?php echo "Tarif ".$key["tar_lib"] ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Domicialitation</label>
+                                <input type="text" class="form-control updateDomi" placeholder="Domiciliation" name="domiciliation">
+                            </div>
+                            <center><input type="button" name="update" value="Enregistrer" class="btn btn-success btn-lg updateBtn"></center>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </main>
     
 
     <!-- Datatable JS -->
     <script src="../script/jquery.dataTables.min.js"></script>
     <script src="../../script/js/sidenav.js"></script>
+<script src="./js/index.js"></script>
+<script src="./js/updateRow.js"></script>
 
-    <script src="../script/checkboxes.js"></script>
-    <script src="../script/index.js"></script>
+<script src="../script/checkboxes.js"></script>
+<script src="../script/table.js"></script>
+<script src="../script/deleteRow.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-    <script> //initialisation datatable
-        $(document).ready(function(){
-            $('#table').DataTable();
+<script>
+    const liste_tarifs = <?php echo json_encode($tarifs)  ?>;
+    const liste_types_reglement = <?php echo json_encode($types_reglement) ?>;
+    const liste_types_societe = <?php echo json_encode($types_societes) ?>;
+    const liste_types_tiers = <?php echo json_encode($types_tiers) ?>;
+    let table = $('#table');
+    console.log(liste_types_reglement);
+    $(document).ready(function(){
+        table.dataTable({
+            'processing': true,
+            'serverSide': true,
+            'serverMethod': 'post',
+            'ajax': {
+                'url':'ajaxfile.php'
+            },
+            'columns': [
+                { data: 'checkbox' },
+                { data: 'ID' },
+                { data: 'lib' },
+                { data: 'typso' },
+                { data: 'ville'},
+                { data: 'tel'},
+                { data: 'tarif'},
+                { data: 'actions' }
+            ],
+            deferRender:    true,
+            scrollCollapse: true,
+            scroller:       true
         });
-
-        const logoutBtn = document.querySelector(".logout");
-
-        var cookieName = "user_jwt";
-
-        logoutBtn.addEventListener("click", () => {
-            delete_cookie(cookieName);
-            window.location.replace("../../login.php");
-        })
-
-        function getCookie(name) {
-            var match = document.cookie.match(RegExp('(?:^|;\\s*)' + name + '=([^;]*)')); 
-            return match ? match[1] : null;
-        }
-
-        function delete_cookie(name) {
-            document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        }
-
-        // if(getCookie(cookieName)){
-        //     var formData = new FormData();
-        //     formData.append("checkjwt", "jhvh");
-        //     fetch("../../lib/includes/db/classes/trait.php", {
-        //         method: 'POST',
-        //         body: formData
-        //     })
-        //     .then((response) => response.json())
-        //     .then((text) => {
-        //         if(text != true){
-        //             window.location.replace("../../login.php");
-        //             delete_cookie(cookieName);
-        //         }
-        //     })
-        // }else{
-        //     window.location.replace("../../login.php");
-        // }
-
-
-        //datalist cities
-        $(document).ready(function(){
-            var test = document.querySelectorAll('.villeinput[list], .villeinputupdate[list]');
-            console.log(test)
-            test.forEach(element => {
-                element.addEventListener('input', function(e) {
-                    var input = e.target,
-                        list = input.getAttribute('list'),
-                        options = document.querySelectorAll('#' + list + ' option'),
-                        hiddenInput = document.getElementById(input.getAttribute('id') + '-hidden'),
-                        inputValue = input.value.split(" ")[0];
-
-                    hiddenInput.value = inputValue;
-
-                    for(var i = 0; i < options.length; i++) {
-                        var option = options[i];
-
-                        if(option.innerText === inputValue) {
-                            hiddenInput.value = option.dataset.value;
-                            break;
-                        }
-                    }
-                });
-            });
-
-            document.querySelector("main").style.display = "block";
-            document.querySelector(".loader").style.display = "none";
-        });
-        
-
-
-        //Create modals
-    </script>
+    });
+</script>
 </body>
 </html>

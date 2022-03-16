@@ -75,7 +75,9 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
                         <span class="font-weight-bold border-bottom border-white">Récapitulatif de la commande : </span>
                     </div>
                     <div class="ml-auto">
-                        <button data-toggle="modal" data-target="#command" class="btn btn-primary">Créer un bon de livraison</button>
+                        <?php if(!$oCommande->check_if_complete($_GET["id"])){ ?>
+                            <button data-toggle="modal" data-target="#command" class="btn btn-primary">Créer un bon de livraison</button>
+                        <?php } ?>
                     </div>
                 </div>
 

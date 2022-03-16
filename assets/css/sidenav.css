@@ -64,7 +64,8 @@
     transition: all 300ms ease-in-out;
 }
 
-.sidenav ul a:hover{
+.sidenav ul a:hover,
+.sidenav ul a.active{
     background: var(--white);
     color: var(--light-dark);
 }

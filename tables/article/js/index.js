@@ -39,13 +39,17 @@ const createBtn = document.querySelector(".createBtn");
 const openCreateBtn = document.querySelector(".openCreateBtn");
 openCreateBtn.addEventListener("click", openCreateModalListener);
 function openCreateModalListener(){
+    document.querySelector(".modalTitle").innerText = "Créer un article";
     document.querySelector(".createBtn").innerText = "Créer";
     document.querySelector(".createBtn").dataset.action = "create";
+    document.querySelector(".createFourni").disabled = false;
     document.querySelector(".createIsProduit").disabled = false;
     document.querySelector(".createIsProduit").checked = false;
     document.querySelector(".produitArticleContainer").classList.remove("active");
     document.querySelector(".seeTarifs").style.display = "none";
     document.querySelector(".articlesContainer").innerHTML = "";
+    document.querySelector(".createComment").value = "";
+    emptyInputs();
     addArticleListener();
 }
 createBtn.addEventListener("click", (e) =>{

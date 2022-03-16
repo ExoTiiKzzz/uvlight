@@ -54,6 +54,10 @@ class Login{
         die;
     }
 
+    public function is_user_connected(){
+        return isset($_SESSION["session_user_ID"]);
+    }
+
 }
 
 ?>

@@ -21,7 +21,6 @@ $oLogin->validate_SESSION();
 <?php
 
         $data = $oCategorie->db_get_all();
-        $scat_data = $oSousCategorie->db_get_all();
 
   ?>
 
@@ -67,36 +66,6 @@ $oLogin->validate_SESSION();
                     <th style='text-align :center'>Description</th>
                     <th style='text-align :center'>Actions</th>
                 </thead>
-                <tbody>
-                    <?php 
-                        foreach ($data as $key) {
-                            $id = $key["cat_ID"]; ?>
-                            <tr data-value="<?php echo $id ?>" data-rowindex="<?php echo $id ?>">
-                                <td style='width: 5%'>
-                                    <input type='checkbox' class='checkbox' data-index="<?php echo $id ?>" checked='false'>
-                                </td>
-                                <td>
-                                    <center><?php echo $id ?></center>
-                                </td>
-                                <td>
-                                    <center><?php echo $key["cat_nom"] ?></center>
-                                </td>
-                                <td>
-                                    <center><?php echo $key["cat_description"] ?></center>
-                                </td>
-                                <td style='display:flex; justify-content: space-evenly;'>
-                                    <button type='button' data-index="<?php echo $id ?>" class='btn btn-primary updateBtn' data-toggle='modal' data-target='#updateModal'>
-                                        Modifier
-                                    </button>
-                                    <button type="button" data-index="<?php echo $id ?>" name="delete" class="delete-btn btn btn-danger">
-                                        Supprimer
-                                    </button>
-                                </td>
-                            </tr>
-                            <?php
-                        }
-                    ?>
-                </tbody>
             </table>
             
             <input type="checkbox" class="select-all" id="select-all">
@@ -107,55 +76,6 @@ $oLogin->validate_SESSION();
             <button class="btn btn-danger delete-all" style="display: none">
                 Supprimer les éléments selectionnés.
             </button>
-        </div>
-        <button type="button" data-target='#scat_modal' data-toggle='modal' name="scat" class="mt-3 btn btn-primary">Voir les sous-catégories</button>
-    </div>
-
-
-    <div class="modal fade" id="scat_modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Sous catégories</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="trait.php" method="post" class="update_form" onsubmit="return checkForm(0)">
-                    <div class="mx-auto modal-body col-10">
-                        <table id="table">
-                            <thead>
-                                <th style='text-align :center'>ID</th>
-                                <th style='text-align :center'>Lib</th>
-                                <th style='text-align :center'>Catégorie Référente</th>
-                            </thead>
-                            <tbody>
-                                <?php 
-                                    foreach ($scat_data as $key) {
-                                        $id = $key["scat_ID"]; ?>
-                                        <tr data-value="<?php echo $id ?>" data-rowindex="<?php echo $id ?>">
-                                            <td>
-                                                <center><?php echo $id ?></center>
-                                            </td>
-                                            <td>
-                                                <center><?php echo $key["scat_lib"] ?></center>
-                                            </td>
-                                            <td>
-                                                <center><?php echo $key["cat_nom"] ?></center>
-                                            </td>
-                                        </tr>
-                                        <?php
-                                    }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                
-                    <div class="modal-footer">
-                        <button type="submit" name="scat" class="mt-3 btn btn-primary">Consulter les sous-catégories</button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
 
@@ -174,12 +94,14 @@ $oLogin->validate_SESSION();
                     <div class="mx-auto modal-body col-10">
                         <div class="form-group">
                             <div class="alert alert-danger" style="display: none">Le nom de la catégorie doit faire entre 1 et 50 charactères maximum</div>
-                            <input class="form-control updateLib" style="margin: 0 auto" type="text" name="categorie_name">
+                            <label for="lib">Libellé : </label>
+                            <input class="form-control updateLib" style="margin: 0 auto" type="text" name="categorie_name" id="lib">
                             <input type="hidden" class="updateId">
                         </div>
                         
                         <div class="form-group">
-                            <textarea placeholder="Description de la catégorie" class="form-control updateComment" rows="3" name="categorie_description"></textarea>
+                            <label for="description">Description : </label>
+                            <textarea id="description" placeholder="Description de la catégorie" class="form-control updateComment" rows="3" name="categorie_description"></textarea>
                         </div>
                     </div>
 
@@ -203,6 +125,8 @@ $oLogin->validate_SESSION();
     <!-- Datatable JS -->
     <script src="../script/jquery.dataTables.min.js"></script>
     <script src="../../script/js/sidenav.js"></script>
+    <script src="../../script/js/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
 
     <script src="../script/checkboxes.js"></script>
     <script src="./js/index.js"></script>
@@ -215,7 +139,24 @@ $oLogin->validate_SESSION();
     <script> //initialisation datatable
         var table = $('#table');
         $(document).ready(function(){
-            table.dataTable();
+            table.dataTable({
+                'processing': true,
+                'serverSide': true,
+                'serverMethod': 'post',
+                'ajax': {
+                    'url':'ajaxfile.php'
+                },
+                'columns': [
+                    { data: 'checkbox' },
+                    { data: 'ID' },
+                    { data: 'lib' },
+                    { data: 'description' },
+                    { data: 'actions' }
+                ],
+                deferRender:    true,
+                scrollCollapse: true,
+                scroller:       true
+            });
         });
 
         function checkForm(formid){

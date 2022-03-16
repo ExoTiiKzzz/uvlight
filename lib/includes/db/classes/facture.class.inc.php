@@ -43,10 +43,9 @@ class Facture
         $i = 0;
         $forbidden = [];
         foreach ($articles as $el) {
-//            $sql = $conn->prepare("INSERT INTO " . DB_TABLE_LIGNES_FACTURE ." VALUES(NULL,  0, :art, $doc_ID)");
-//            $sql->bindValue(":art", $articles[$i]);
-//            $sql->bindValue(":art_id", $articles[$i]);
-//            $sql->execute();
+            $sql = $conn->prepare("INSERT INTO " . DB_TABLE_LIGNES_FACTURE ." VALUES(NULL,  0, 0, :art, $doc_ID)");
+            $sql->bindValue(":art", $articles[$i]);
+            $sql->execute();
             if($this->db_check_max_value($com_ID, $articles[$i], $quantitys[$i])){
                 $request .= ",(:quantite$i, (SELECT art_taxe FROM ".DB_TABLE_ARTICLE." WHERE art_ID = :art$i), :article$i, $doc_ID) ";
             }else{
@@ -126,12 +125,12 @@ class Facture
     public function db_get_lignes_facture($doc_ID) : array{
         global $conn;
 
-        $request = "SELECT art_nom, A.art_ID, Lignf_taxe,
+        $request = "SELECT art_nom, A.art_ID, SUM(Lignf_taxe) as Lignf_taxe,
                         SUM(Lignf_quantite) as quantite, 
                         P.pay_tarif_vente as HT, 
-                        ROUND(( P.pay_tarif_vente * (1 + (Lignf_taxe / 100))),2) as TTC, 
+                        ROUND(( P.pay_tarif_vente * (1 + (SUM(Lignf_taxe) / 100))),2) as TTC, 
                         (SUM(Lignf_quantite) * P.pay_tarif_vente) as TotalHT, 
-                        ROUND((SUM(Lignf_quantite) * P.pay_tarif_vente * (1 + (Lignf_taxe / 100))),2) as TotalTTC 
+                        ROUND((SUM(Lignf_quantite) * P.pay_tarif_vente * (1 + (SUM(Lignf_taxe) / 100))),2) as TotalTTC 
                     FROM lignes_facture LF 
                     INNER JOIN article A ON LF.fk_art_ID = A.art_ID 
                     INNER JOIN paye P ON LF.fk_art_ID = P.art_ID 
@@ -182,7 +181,9 @@ class Facture
         if($sql === false){
             return false;
         }else {
-            return ((int) $sql->fetch(PDO::FETCH_ASSOC)["total"] - (int) $quantite >= 0);
+            $res = $sql->fetch(PDO::FETCH_ASSOC)["total"];
+            if(((int) $res - (int) $quantite) < 0) return false;
+            return true;
         }
 
     }

@@ -4,17 +4,15 @@ const createBtn = document.querySelector(".createBtn");
 
 createBtn.addEventListener("click", (e) =>{
 
-    var lib = document.querySelector(".createLib").value;
-    var categorie = document.querySelector(".categorie").value;
-    var id = document.querySelector(".updateId").value;
+    let lib = document.querySelector(".createLib").value;
+    let comment = document.querySelector(".createComment").value;
+    let catref = document.querySelector(".ccatref").value;
 
-    console.log(categorie);
-
-    var formData = new FormData();
+    let formData = new FormData();
     formData.append("create", "1");
-    formData.append("id", id);
     formData.append("lib", lib);
-    formData.append("categorie", categorie);
+    formData.append("comment", comment);
+    formData.append("catref", catref);
 
     fetch(url,
         {
@@ -36,17 +34,10 @@ createBtn.addEventListener("click", (e) =>{
 
 //updates buttons
 
-const updateBtns = document.querySelectorAll(".updateBtn");
-
-updateBtns.forEach(element => {
-    element.addEventListener("click", openUpdateModalListener);
-});
-
-function openUpdateModalListener(event){
+function updateModal(event){
     const id = event.target.dataset.index;
-    console.log(id)
 
-    var formData = new FormData();
+    let formData = new FormData();
     formData.append("getData", "1");
     formData.append("id", id);
 
@@ -58,16 +49,13 @@ function openUpdateModalListener(event){
     )
     .then(response => response.json())
     .then(result => {
-        console.log(result)
         if(result.error === true){
             errorHandler(result.errortext);
         }else{
-            var lib = result.content.lib;
-            var categorie = result.content.categorie;
-
-            document.querySelector(".updateLib").value = lib;
-            document.querySelector(".updateCat").value = categorie;
             document.querySelector(".updateId").value = id;
+            document.querySelector(".updateLib").value = result.content.cat_nom;
+            document.querySelector(".updateComment").value = result.content.cat_description;
+            document.querySelector(".ucatref").value = result.content.catref;
         }
     }).catch(err => errorHandler(err));
 }

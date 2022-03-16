@@ -1,8 +1,8 @@
 <?php
 include '../../lib/includes/defines.inc.php';
 
-$categories = $oCategorie->db_get_all();
-$casiers = $oCasier->db_get_all();
+$categories = $oCategorie->db_get_each();
+$casiers = $oCasier->db_get_each();
 $fournisseurs = $oTiers->db_get_all_fournisseurs();
 
 ## Read value

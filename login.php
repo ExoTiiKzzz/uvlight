@@ -1,3 +1,13 @@
+<?php
+require "./lib/includes/defines.inc.php";
+
+if($oLogin->is_user_connected()){
+    header("Location: ./");
+    die;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -26,7 +36,8 @@
 
     <form class="log-form">
         <div class="indication goodlogin">
-            Login / Mot de passe correct : cool / glbipassword
+            Logins : admin, Directeur, Responsable, Commercial, Ingénieur, Comptable, Employé <br>
+            Mot de passe : glbipassword
         </div>
         <div class="alert alert-danger error" role="alert" style="display: none"></div>
         <div class="log-section">
@@ -43,3 +54,5 @@
     <script src="script/js/login.js"></script>
 </body>
 </html>
+
+<?php include "lib/includes/errorManager.php";

@@ -1,7 +1,6 @@
 <?php
-include '../../../lib/includes/defines.inc.php';
+include '../../lib/includes/defines.inc.php';
 ## Read value
-$articles = $oArticle->db_get_all();
 $draw = $_POST['draw'];
 $row = $_POST['start'];
 $rowperpage = $_POST['length']; // Rows display per page
@@ -9,42 +8,40 @@ $columnIndex = $_POST['order'][0]['column']; // Column index
 $columnName = $_POST['columns'][$columnIndex]['data']; // Column name
 $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
 $searchValue = $_POST['search']['value']; // Search value
-$id = $_POST["com_ID"];
+
+if($columnName === "checkbox" || $columnName === "actions") $columnName = "cat_ID";
 
 $searchArray = array();
 
 ## Search 
 $searchQuery = " ";
 if($searchValue != ''){
-   $searchQuery = " AND (fk_art_ID IN (SELECT art_ID FROM ".DB_TABLE_ARTICLE." WHERE art_nom LIKE :article)) ";
+   $searchQuery = " AND (ip LIKE :ip OR 
+                         query LIKE :query OR
+                         datetime LIKE :datetime) ";
    $searchArray = array( 
-        'article'=>"%$searchValue%"
+        'ip' => "%$searchValue%",
+        'query' => "%$searchValue%",
+       'datetime' => "%$searchValue%",
    );
 }
-$searchArray["com_ID"] = $id;
 
 ## Total number of records without filtering
-$stmt = $conn->prepare("SELECT COUNT(*) AS allcount
-                              FROM ".DB_TABLE_LIGNES_COMMANDE."
-                              WHERE fk_com_ID = :com_ID AND Lign_is_received = 0");
-$stmt->bindValue(":com_ID", $id, PDO::PARAM_INT);
+$stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ".DB_TABLE_LOGS);
 $stmt->execute();
 $records = $stmt->fetch();
 $totalRecords = $records['allcount'];
 
 ## Total number of records with filtering
-$stmt = $conn->prepare("SELECT COUNT(*) AS allcount
-                              FROM ".DB_TABLE_LIGNES_COMMANDE."
-                              WHERE fk_com_ID = :com_ID AND Lign_is_received = 0 ".$searchQuery);
+$stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ".DB_TABLE_LOGS." WHERE 1 ".$searchQuery);
 $stmt->execute($searchArray);
 $records = $stmt->fetch();
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$stmt = $conn->prepare("SELECT *, SUM(Lign_quantite - Lign_received_quantity) as difference 
-                              FROM ".DB_TABLE_LIGNES_COMMANDE."
-                              WHERE fk_com_ID = :com_ID AND fk_art_ID != 0 ".$searchQuery." 
-                              GROUP BY fk_art_ID  
+$stmt = $conn->prepare("SELECT id, query, datetime, ip 
+                              FROM ".DB_TABLE_LOGS." 
+                              WHERE 1 ".$searchQuery." 
                               ORDER BY ".$columnName." ".$columnSortOrder." 
                               LIMIT :limit,:offset");
 
@@ -52,6 +49,7 @@ $stmt = $conn->prepare("SELECT *, SUM(Lign_quantite - Lign_received_quantity) as
 foreach($searchArray as $key=>$search){
    $stmt->bindValue(':'.$key, $search,PDO::PARAM_STR);
 }
+
 $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
 $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
 $stmt->execute();
@@ -61,10 +59,10 @@ $data = array();
 
 foreach($empRecords as $row){
     $data[] = array(
-        "fk_art_ID"=>$articles[$row["fk_art_ID"]]["art_nom"],
-        "Lign_quantite"=>$row["Lign_quantite"],
-        "Lign_received_quantity"=>$row["Lign_received_quantity"],
-        "difference" => $row["difference"]
+        "id" => $row["id"],
+        "query"=>$row["query"],
+        "datetime"=>$row["datetime"],
+        "ip"=>$row["ip"],
    );
 }
 

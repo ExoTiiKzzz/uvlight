@@ -6,7 +6,19 @@ class Categorie{
 
     public function db_get_all(){
         global $conn;
-        $request = "SELECT cat_ID as arrkey, cat_ID, cat_nom, cat_description FROM ".DB_TABLE_CATEGORIE." WHERE cat_is_visible = 1;";
+        $request = "SELECT cat_ID as arrkey, cat_ID, cat_nom, cat_description FROM ".DB_TABLE_CATEGORIE." WHERE cat_is_visible = 1 AND cat_is_scat = 0;";
+
+        try{
+            $sql = $conn->query($request);
+            return $sql->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE|\PDO::FETCH_ASSOC);
+        }catch(PDOException $e){
+            return $this->errmessage.$e->getMessage();
+        }
+    }
+
+    public function db_get_all_without_filter(){
+        global $conn;
+        $request = "SELECT cat_ID as arrkey, cat_ID, cat_nom, cat_description FROM ".DB_TABLE_CATEGORIE." WHERE cat_is_scat = 0;";
 
         try{
             $sql = $conn->query($request);
@@ -109,11 +121,6 @@ class Categorie{
     }
 
     public function db_soft_delete_one($casier_id=0){
-        $casier_id = (int) $casier_id;
-
-        if(!$casier_id) {
-            return false;
-        }
 
         global $conn;
 
@@ -122,9 +129,17 @@ class Categorie{
         $sql->bindValue(':id', $casier_id, PDO::PARAM_INT);
         try{
             $sql->execute();
-            return true;
+            if($sql === false){
+                $return["error"] = true;
+                $return["errortext"] = "Une erreur s'est produite";
+                return $return;
+            }
+            $return["error"] = false;
+            return $return;
         }catch(PDOException $e){
-            return $this->errmessage.$e->getMessage();
+            $return["error"] = true;
+            $return["errortext"] = $e->getMessage();
+            return $return;
         }
     }
 
@@ -161,6 +176,19 @@ class Categorie{
         try{
             $sql->execute();
             return true;
+        }catch(PDOException $e){
+            return $this->errmessage.$e->getMessage();
+        }
+    }
+
+    public function db_get_each()
+    {
+        global $conn;
+        $request = "SELECT cat_ID as arrkey, cat_ID, cat_nom, cat_description FROM ".DB_TABLE_CATEGORIE." WHERE cat_is_scat = 0;";
+
+        try{
+            $sql = $conn->query($request);
+            return $sql->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE|\PDO::FETCH_ASSOC);
         }catch(PDOException $e){
             return $this->errmessage.$e->getMessage();
         }

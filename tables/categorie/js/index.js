@@ -23,7 +23,7 @@ createBtn.addEventListener("click", (e) =>{
         if(result.error === true){
             errorHandler(result.errortext);
         }else{
-            location.reload();
+            drawTable();
         }
     })
     .catch(err => errorHandler(err));
@@ -31,14 +31,8 @@ createBtn.addEventListener("click", (e) =>{
 
 //updates buttons
 
-const updateBtns = document.querySelectorAll(".updateBtn");
-
-updateBtns.forEach(element => {
-    element.addEventListener("click", openUpdateModalListener);
-});
-
-function openUpdateModalListener(e){
-    const id = e.target.dataset.index;
+function updateModal(event){
+    const id = event.target.dataset.index;
 
     var formData = new FormData();
     formData.append("getData", "1");

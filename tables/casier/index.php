@@ -109,10 +109,12 @@ $oLogin->validate_SESSION();
 
     <!-- jQuery Library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
 
     <!-- Datatable JS -->
     <script src="../script/jquery.dataTables.min.js"></script>
     <script src="../../script/js/sidenav.js"></script>
+    <script src="../../script/js/index.js"></script>
 
     <script src="../script/checkboxes.js"></script>
     <script src="./js/index.js"></script>

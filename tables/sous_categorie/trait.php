@@ -4,34 +4,11 @@ require '../../lib/includes/defines.inc.php';
 
 
 if(isset($_POST["create"])){
-    $res = $oSousCategorie->db_create($_POST["lib"],$_POST["categorie"]);
-    if($res != false){
-        $response["error"] = false;
-    }else{
-        $response["error"] = true;
-        $response["errortext"] = $res;
-    }
-    echo json_encode($response);
+    echo json_encode($oSousCategorie->db_create($_POST["lib"],$_POST["comment"], $_POST["catref"]));
 }elseif(isset($_POST["getData"])){
-    $res = $oSousCategorie->db_get_by_id($_POST["id"]);
-    if($res != false){
-        $response["error"] = false;
-        $response["content"]["lib"] = $res["scat_lib"];
-        $response["content"]["categorie"] = $res["cat_nom"];
-    }else{
-        $response["error"] = true;
-        $response["errortext"] = $res;
-    }
-    echo json_encode($response);
+    echo json_encode($oSousCategorie->db_get_by_id($_POST["id"]));
 }elseif(isset($_POST["update"])){
-    $res = $oSousCategorie->db_update($_POST["id"], $_POST["lib"], $_POST["categorie"]);
-    if($res != false){
-        $response["error"] = false;
-    }else{
-        $response["error"] = true;
-        $response["errortext"] = $res;
-    }
-    echo json_encode($response);
+    echo json_encode($oSousCategorie->db_update($_POST["id"], $_POST["lib"], $_POST["comment"], $_POST["catref"]));
 }elseif(isset($_POST["delete"])){
     $id = (int) $_POST["id"];
 
@@ -66,6 +43,9 @@ if(isset($_POST["create"])){
         $response = "pb";
     }
     echo json_encode($response);
+}elseif(isset($_POST['scat'])){
+    $scat = '../sous_categorie/';
+    header("location: ${scat}");
 }else{
     // header("location: index.php");
     echo "coucou";

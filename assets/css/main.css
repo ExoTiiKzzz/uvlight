@@ -13,3 +13,20 @@
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
+
+.error{
+    position: absolute;
+    top: 11vh;
+    right: 20px;
+    width: fit-content;
+    background-color: rgba(227, 71, 71, 0.61);
+    color: var(--white);
+    transform: translateY(-20vh);
+    transition: 300ms transform linear;
+    padding: 20px 50px;
+    font-weight: 400;
+}
+
+.error.errorManager{
+    transform: translateY(0);
+}

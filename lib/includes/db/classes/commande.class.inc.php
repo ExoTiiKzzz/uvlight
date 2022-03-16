@@ -429,15 +429,18 @@ class Commande
                     $sql->bindValue(":com_ID", $com_ID, PDO::PARAM_INT);
                     $sql->bindValue(":art_ID", $ligne[0], PDO::PARAM_INT);
                     if($sql->execute() === false){
-                        $bool = true;
+                        $response["error"] = true;
                         $response["errortext"] = "Une erreur s'est produite";
+                        return $response;
                     }
                 } catch(PDOException $e){
-                    $bool = true;
+                    $response["error"] = true;
                     $response["errortext"] = $e->getMessage();
+                    return $response;
                 }
             }
         }
+        if($this->check_if_complete($com_ID)) $this->finish_command($com_ID);
         $request = "INSERT INTO ".DB_TABLE_LIGNES_RECEPTION."(Lignr_quantite, fk_art_ID, fk_doc_ID) 
                     VALUES(:quantity, :art_ID, :doc_ID)";
         $bool = false;
@@ -482,6 +485,41 @@ class Commande
             $response["errortext"] = $e->getMessage();
             return $response;
         }
+    }
+
+    public function check_if_complete($com_ID){
+        global $conn;
+        $request = "SELECT SUM(Lign_quantite - Lign_received_quantity) as difference 
+                      FROM ".DB_TABLE_LIGNES_COMMANDE."
+                      WHERE fk_com_ID = :com_ID 
+                      GROUP BY fk_art_ID";
+        $sql = $conn->prepare($request);
+        $sql->bindValue(":com_ID", $com_ID, PDO::PARAM_INT);
+        try{
+            $sql->execute();
+            $res = $sql->fetchAll(PDO::FETCH_ASSOC);
+            if($res){
+                $bool = true;
+                foreach($res as $ligne){
+                    if($ligne["difference"] > 0){
+                        $bool = false;
+                    }
+                }
+                return $bool;
+            }
+            return false;
+
+        }catch(PDOException $e){
+            return false;
+        }
+    }
+
+    public function finish_command($com_ID){
+        global $conn;
+        $request = "UPDATE ".DB_TABLE_COMMANDE." SET fk_etat_ID = 2 WHERE com_ID = :com_ID";
+        $sql = $conn->prepare($request);
+        $sql->bindValue(":com_ID", $com_ID, PDO::PARAM_INT);
+        $sql->execute();
     }
 
 

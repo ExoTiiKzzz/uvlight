@@ -1,17 +1,10 @@
-const updateBtn = document.querySelector('.updateRowBtn');
+const updateBtn = document.querySelector('.updateBtn');
 
 function updateRow(){
-    var id = document.querySelector(".updateId").value;
-    var lib = document.querySelector(".updateLib").value;
-    var comment = document.querySelector(".updateComment").value;
-
-    var formData = new FormData();
+    let updateForm = document.querySelector(".updateForm");
+    let formData = new FormData(updateForm);
 
     formData.append("update","1");
-    formData.append("id", id);
-    formData.append("lib", lib);
-    formData.append("comment", comment);
-
     fetch(url, 
         {
             method: "POST",

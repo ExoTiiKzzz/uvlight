@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 session_start();
 
@@ -31,6 +31,7 @@ define('DB_TABLE_LIGNES_RECEPTION', 'lignes_mouvement');
 define('DB_TABLE_RECEPTION', 'reception');
 define('DB_TABLE_LIGNES_FACTURE', 'lignes_facture');
 define('DB_TABLE_INFORMATIONS_FACTURE', 'informations_factures');
+define('DB_TABLE_LOGS', 'logs');
 
 // err message
 define('BASIC_ERROR', 'Une erreur s\'est produite, signalez la à l\'administrateur \n');
@@ -64,6 +65,7 @@ include_once DB_CLASS_DIR.'liste'.INC;
 include_once DB_CLASS_DIR.'sous_categorie'.INC;
 include_once DB_CLASS_DIR.'commande'.INC;
 include_once DB_CLASS_DIR.'facture'.INC;
+include_once DB_CLASS_DIR.'logs'.INC;
 //include_once DB_CLASS_DIR.'../../../../server/bootstrap.php';
 
 // get main objects
@@ -88,6 +90,7 @@ $oListe = new Liste();
 $oSousCategorie = new Sous_categorie();
 $oCommande = new Commande();
 $oFacture = new Facture();
+$oLogs = new Logs();
 
 $isProd = false;
 
@@ -100,7 +103,7 @@ if(!$isProd){
 }else{
     $server = "db5005005670.hosting-data.io";
     $username = "dbu361051";
-    $password = "Hippo14campes440!";
+    $password = "e?'|WMT?;/1N=jVNU(0“QhpY?";
     $dbname = "dbs4185065";
     $path = "https://arthurlecompte.com/";
 }

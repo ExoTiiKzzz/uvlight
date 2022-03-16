@@ -5,7 +5,7 @@ $oLogin->validate_SESSION();
     require '../../lib/includes/sidenav.php';
     require '../../lib/includes/doctype.php';
 
-    echo doctype("Sous Catégorie", $path);
+    echo doctype("Sous-Catégories", $path);
     echo navbar($path);
     echo sidenav($path);
 ?>
@@ -20,32 +20,39 @@ $oLogin->validate_SESSION();
     </style>
 <?php
 
-        $data = $oSousCategorie->db_get_all();
-        echo $oListe->build_liste('list_categorie', $oCategorie->db_get_all(), 'cat_nom');
+        $data = $oCategorie->db_get_all();
+
+        echo $oListe->build_liste("liste_categories", $data, "cat_nom");
 
   ?>
 
   <div class="main-container sidenav-open">
-    <button type='button' class='my-3 btn btn-success' data-toggle='modal' data-target='#createmodal'> Créer une sous catégorie </button>
+    <button type='button' class='my-3 btn btn-success' data-toggle='modal' data-target='#createmodal'> Créer une sous-catégorie </button>
 
-    <!-- modal pour créer une sous catégorie -->
+    <!-- modal pour créer une catégorie -->
     <div class="modal fade" id="createmodal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Créer la sous catégorie</h5>
+                    <h5 class="modal-title">Créer la catégorie</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="mx-auto modal-body col-10">
                     <div class="form-group">
-                        <div data-index="0" class="alert alert-danger" style="display: none">Le nom de la sous catégorie doit faire entre 1 et 50 charactères maximum</div>
-                        <input placeholder="Nom de la sous catégorie" class="form-control name_input createLib" data-index="0" 
-                        style="margin: 0 auto" type="text" name="sous_categorie_name">
+                        <label for="catref">Catégorie référente :</label>
+                        <input id="catref" type="text" class="form-control ccatref" list="liste_categories" placeholder="Commencer à écrire puis sélectionner">
                     </div>
                     <div class="form-group">
-                        <input placeholder="Catégorie référente" class="form-control categorie" rows="3" name="sous_categorie_description" list="list_categorie">
+                        <div data-index="0" class="alert alert-danger" style="display: none">Le nom de la catégorie doit faire entre 1 et 50 charactères maximum</div>
+                        <label for="clib">Libellé :</label>
+                        <input placeholder="Nom de la catégorie" class="form-control name_input createLib" data-index="0" 
+                        style="margin: 0 auto" type="text" name="categorie_name" id="clib">
+                    </div>
+                    <div class="form-group">
+                        <label for="cdesc">Description :</label>
+                        <textarea placeholder="Description de la catégorie" class="form-control createComment" rows="3" name="categorie_description" id="cdesc"></textarea>
                     </div>                    
                 </div>
             
@@ -64,39 +71,10 @@ $oLogin->validate_SESSION();
                     <th>Selectionner</th>
                     <th style='text-align :center'>ID</th>
                     <th style='text-align :center'>Lib</th>
-                    <th style='text-align :center'>Catégorie Référente</th>
+                    <th style='text-align :center'>Description</th>
+                    <th style='text-align :center'>Catégorie référente</th>
                     <th style='text-align :center'>Actions</th>
                 </thead>
-                <tbody>
-                    <?php 
-                        foreach ($data as $key) {
-                            $id = $key["scat_ID"]; ?>
-                            <tr data-value="<?php echo $id ?>" data-rowindex="<?php echo $id ?>">
-                                <td style='width: 5%'>
-                                    <input type='checkbox' class='checkbox' data-index="<?php echo $id ?>" checked='false'>
-                                </td>
-                                <td>
-                                    <center><?php echo $id ?></center>
-                                </td>
-                                <td>
-                                    <center><?php echo $key["scat_lib"] ?></center>
-                                </td>
-                                <td>
-                                    <center><?php echo $key["cat_nom"] ?></center>
-                                </td>
-                                <td style='display:flex; justify-content: space-evenly;'>
-                                    <button type='button' data-index="<?php echo $id ?>" class='btn btn-primary updateBtn' data-toggle='modal' data-target='#updateModal'>
-                                        Modifier
-                                    </button>   
-                                    <button type="button" data-index="<?php echo $id ?>" name="delete" class="delete-btn btn btn-danger">
-                                        Supprimer
-                                    </button>
-                                </td>
-                            </tr>
-                            <?php
-                        }
-                    ?>
-                </tbody>
             </table>
             
             <input type="checkbox" class="select-all" id="select-all">
@@ -116,7 +94,7 @@ $oLogin->validate_SESSION();
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modifier la sous catégorie</h5>
+                    <h5 class="modal-title">Modifier la catégorie</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -124,13 +102,19 @@ $oLogin->validate_SESSION();
                 <form action="trait.php" method="post" class="update_form">
                     <div class="mx-auto modal-body col-10">
                         <div class="form-group">
+                            <label for="catref">Catégorie référente :</label>
+                            <input type="text" list="liste_categories" class="form-control ucatref">
+                        </div>
+                        <div class="form-group">
                             <div class="alert alert-danger" style="display: none">Le nom de la catégorie doit faire entre 1 et 50 charactères maximum</div>
-                            <input class="form-control updateLib" style="margin: 0 auto" type="text" name="categorie_name">
+                            <label for="lib">Libellé : </label>
+                            <input class="form-control updateLib" style="margin: 0 auto" type="text" name="categorie_name" id="lib">
                             <input type="hidden" class="updateId">
                         </div>
                         
                         <div class="form-group">
-                            <input placeholder="Catégorie référente" class="form-control updateCat" name="categorie_ref" list="list_categorie">
+                            <label for="description">Description : </label>
+                            <textarea id="description" placeholder="Description de la catégorie" class="form-control updateComment" rows="3" name="categorie_description"></textarea>
                         </div>
                     </div>
 
@@ -162,10 +146,30 @@ $oLogin->validate_SESSION();
     <script src="../script/table.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <script> //initialisation datatable
-        var table = $('#table');
+        let table = $('#table');
         $(document).ready(function(){
-            table.dataTable();
+            table.dataTable({
+                'processing': true,
+                'serverSide': true,
+                'serverMethod': 'post',
+                'ajax': {
+                    'url':'ajaxfile.php'
+                },
+                'columns': [
+                    { data: 'checkbox' },
+                    { data: 'ID' },
+                    { data: 'lib' },
+                    { data: 'description' },
+                    { data: 'ref'},
+                    { data: 'actions' }
+                ],
+                deferRender:    true,
+                scrollCollapse: true,
+                scroller:       true
+            });
         });
 
         function checkForm(formid){

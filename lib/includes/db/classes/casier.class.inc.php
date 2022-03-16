@@ -82,7 +82,7 @@ class Casier{
             $res["lastid"] = $conn->lastInsertId();
             return $res;
         }catch(PDOException $e){
-            return $this->errmessage.$e->getMessage();
+            return self::errmessage.$e->getMessage();
         }
     }
 
@@ -159,6 +159,19 @@ class Casier{
         try{
             $sql->execute();
             return true;
+        }catch(PDOException $e){
+            return $this->errmessage.$e->getMessage();
+        }
+    }
+
+    public function db_get_each()
+    {
+        global $conn;
+        $request = "SELECT cas_ID AS arrkey, cas_ID, cas_lib FROM ".DB_TABLE_CASIER;
+
+        try{
+            $sql = $conn->query($request);
+            return $sql->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE|\PDO::FETCH_ASSOC);
         }catch(PDOException $e){
             return $this->errmessage.$e->getMessage();
         }

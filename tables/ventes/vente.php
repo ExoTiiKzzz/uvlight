@@ -76,7 +76,9 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
                     </div>
                     <div class="ml-auto">
                         <a href="../facture/?id=<?= $_GET['id'] ?>" class="btn btn-success">Facturer</a>
-                        <button data-toggle="modal" data-target="#command" class="btn btn-primary">Créer un bon de livraison</button>
+                       <?php if(!$oCommande->check_if_complete($_GET['id'])) { ?>
+                        <button data-toggle="modal" data-target="#command" class="btn btn-primary">Créer un bon d'expédition</button>
+                        <?php } ?>
                     </div>
                 </div>
 
@@ -92,7 +94,7 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
                 </div>
                 <div class="label mb-4 row d-flex p-3">
                     <div class="align">
-                        <span class="font-weight-bold border-bottom border-white">Bons de livraison : </span>
+                        <span class="font-weight-bold border-bottom border-white">Bons d'expéditions : </span>
                     </div>
                 </div>
                 <div class="accordion" id="accordionrecep">
@@ -111,7 +113,7 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="heading<?= $cpt ?>">
                                             <button class="accordion-button" type="button" data-index="<?= $cpt ?>" data-bs-toggle="collapse" data-bs-target="#collapse<?= $cpt ?>" aria-expanded="true" aria-controls="collapse<?= $cpt ?>">
-                                               <i data-index="<?= $cpt ?>" class="seeMore fal fa-plus"></i> Bon de livraison numéro <?= $cpt ?> (<?= $ligne["doc_create_datetime"] ?>)
+                                               <i data-index="<?= $cpt ?>" class="seeMore fal fa-plus"></i> Bon d'expédition numéro <?= $cpt ?> (<?= $ligne["doc_create_datetime"] ?>)
                                             </button>
                                         </h2>
                                         <div id="collapse<?= $cpt ?>" class="accordion-collapse collapse  accordion-flush" aria-labelledby="heading<?= $cpt ?>">
@@ -156,6 +158,25 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
                 ?>
                 </div>
 
+                <?php
+                    $id = $_GET['id'];
+                    $pdfs = array_diff(scandir("../facture/factures/$id"), array('..', '.'));
+                    if(!empty($pdfs)){
+                        ?>
+                        <div class="label mb-4 row d-flex p-3">
+                            <div class="align">
+                                <span class="font-weight-bold border-bottom border-white">Facture(s) : </span>
+                            </div>
+                        </div>
+                            <?php
+
+                        foreach($pdfs as $pdf){
+                            $link = "../facture/factures/$id/".$pdf;
+                            echo "<a target='_blank' href='$link'>$pdf</a>";
+                        }
+                    }
+                ?>
+
 
 
 
@@ -165,7 +186,7 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Bon de réception</h5>
+                                <h5 class="modal-title">Bon d'expédition</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -222,6 +243,7 @@ $lignes = $oCommande->db_get_lignes_commande($_GET["id"]);
 <script src="../script/jquery.dataTables.min.js"></script>
 <script src="../../script/js/sidenav.js"></script>
 <script src="./js/commande.js"></script>
+<script src="../../script/js/index.js"></script>
 
 <script src="../script/table.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>

@@ -1,16 +1,18 @@
 const updateBtn = document.querySelector('.updateRowBtn');
 
 function updateRow(){
-    var lib = document.querySelector(".updateLib").value;
-    var categorie = document.querySelector(".updateCat").value;
-    var id = document.querySelector(".updateId").value;
+    let id = document.querySelector(".updateId").value;
+    let lib = document.querySelector(".updateLib").value;
+    let comment = document.querySelector(".updateComment").value;
+    let catref = document.querySelector(".ucatref").value;
 
-    var formData = new FormData();
+    let formData = new FormData();
 
     formData.append("update","1");
     formData.append("id", id);
     formData.append("lib", lib);
-    formData.append("categorie", categorie);
+    formData.append("comment", comment);
+    formData.append("catref", catref);
 
     fetch(url, 
         {
