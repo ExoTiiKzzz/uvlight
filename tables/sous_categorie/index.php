@@ -160,10 +160,10 @@ $oLogin->validate_SESSION();
                 },
                 'columns': [
                     { data: 'checkbox' },
-                    { data: 'ID' },
-                    { data: 'lib' },
-                    { data: 'description' },
-                    { data: 'ref'},
+                    { data: 'cat_ID' },
+                    { data: 'cat_nom' },
+                    { data: 'cat_description' },
+                    { data: 'cat_ref'},
                     { data: 'actions' }
                 ],
                 deferRender:    true,

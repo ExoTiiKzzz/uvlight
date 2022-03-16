@@ -63,9 +63,9 @@ foreach($empRecords as $row){
     $actionrow = "<div style='display: flex; justify-content: space-evenly'><button type='button' class='btn btn-primary updateBtn' data-toggle='modal' onclick='updateModal(event)' data-target='#updateModal' data-index='$id'>Détails</button><button type='submit' name='delete' onclick='deleteEventListener(event)' class='delete-btn btn btn-danger' data-index='$id'>Supprimer</button></div>";
     $data[] = array(
       "checkbox" => $checkbox, 
-      "ID" => $id,
-      "lib"=>$row["cat_nom"],
-      "description"=>$row["cat_description"],
+      "cat_ID" => $id,
+      "cat_nom"=>$row["cat_nom"],
+      "cat_description"=>$row["cat_description"],
       "actions"=>$actionrow
    );
 }

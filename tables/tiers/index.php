@@ -399,12 +399,12 @@ $oLogin->validate_SESSION();
             },
             'columns': [
                 { data: 'checkbox' },
-                { data: 'ID' },
-                { data: 'lib' },
-                { data: 'typso' },
-                { data: 'ville'},
-                { data: 'tel'},
-                { data: 'tarif'},
+                { data: 'tie_ID' },
+                { data: 'tie_raison_sociale' },
+                { data: 'fk_typso_ID' },
+                { data: 'tie_ville'},
+                { data: 'tie_tel'},
+                { data: 'fk_tar_id'},
                 { data: 'actions' }
             ],
             deferRender:    true,

@@ -70,12 +70,12 @@ foreach($empRecords as $row){
     $actionrow = "<div style='display: flex; justify-content: space-evenly'><button type='button' class='btn btn-primary updateBtn' data-toggle='modal' onclick='updateModal(event)' data-target='#updateModal' data-index='$id'>Détails</button><button type='submit' name='delete' onclick='deleteEventListener(event)' class='delete-btn btn btn-danger' data-index='$id'>Supprimer</button></div>";
     $data[] = array(
       "checkbox" => $checkbox, 
-      "ID" => $id,
-      "lib"=>$row["tie_raison_sociale"],
-        "typso"=>$row["typso_acronym"],
-        "ville"=>$row["tie_ville"],
-        "tel"=>$row["tie_tel"],
-        "tarif"=>$row["fk_tar_ID"],
+      "tie_ID" => $id,
+      "tie_raison_sociale"=>$row["tie_raison_sociale"],
+        "fk_typso_ID"=>$row["typso_acronym"],
+        "tie_ville"=>$row["tie_ville"],
+        "tie_tel"=>$row["tie_tel"],
+        "fk_tar_id"=>$row["fk_tar_ID"],
       "actions"=>$actionrow
    );
 }

@@ -148,9 +148,9 @@ $oLogin->validate_SESSION();
                 },
                 'columns': [
                     { data: 'checkbox' },
-                    { data: 'ID' },
-                    { data: 'lib' },
-                    { data: 'description' },
+                    { data: 'cat_ID' },
+                    { data: 'cat_nom' },
+                    { data: 'cat_description' },
                     { data: 'actions' }
                 ],
                 deferRender:    true,
