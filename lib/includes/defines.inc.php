@@ -94,19 +94,11 @@ $oLogs = new Logs();
 
 $isProd = false;
 
-if(!$isProd){
     $server = "localhost";
     $username = "root";
     $password = "";
     $dbname = "glbi";
     $path = "/";
-}else{
-    $server = "db5005005670.hosting-data.io";
-    $username = "dbu361051";
-    $password = "e?'|WMT?;/1N=jVNU(0“QhpY?";
-    $dbname = "dbs4185065";
-    $path = "https://arthurlecompte.com/";
-}
 
 try {
     
